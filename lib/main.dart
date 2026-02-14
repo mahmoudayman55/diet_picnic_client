@@ -71,17 +71,17 @@ class MyApp extends StatelessWidget {
 
     return Sizer(
       builder: (context, orientation, deviceType) {
-        return GetMaterialApp(
-          scrollBehavior: MyCustomScrollBehavior(),
-          debugShowCheckedModeBanner: false,
-          textDirection: TextDirection.rtl,
-          locale: const Locale('ar', 'AE'),
-          theme: Themes.lightTheme,
-          darkTheme: Themes.darkTheme,
-          themeMode: ThemeController.to.themeMode,
-          initialRoute: AppConstants.updatePage,
-          getPages: GetRoutes.pages,
-        );
+        return Obx(() => GetMaterialApp(
+              scrollBehavior: MyCustomScrollBehavior(),
+              debugShowCheckedModeBanner: false,
+              textDirection: TextDirection.rtl,
+              locale: const Locale('ar', 'AE'),
+              theme: Themes.lightTheme,
+              darkTheme: Themes.darkTheme,
+              themeMode: ThemeController.to.themeMode,
+              initialRoute: AppConstants.updatePage,
+              getPages: GetRoutes.pages,
+            ));
       },
     );
   }
