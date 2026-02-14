@@ -1,0 +1,268 @@
+import 'dart:developer';
+import 'dart:io';
+
+import 'package:diet_picnic_client/components/custom_snack_bar.dart';
+import 'package:diet_picnic_client/controller/navigator_controller.dart';
+import 'package:diet_picnic_client/core/app_constants.dart';
+import 'package:diet_picnic_client/core/imgbb_uploader.dart';
+import 'package:diet_picnic_client/models/diet_system_model.dart';
+import 'package:diet_picnic_client/models/exercise_system_model.dart';
+import 'package:diet_picnic_client/models/follow_up_message_model.dart';
+import 'package:diet_picnic_client/models/package.dart';
+import 'package:diet_picnic_client/models/package_model.dart';
+import 'package:diet_picnic_client/models/week_progress_model.dart';
+import 'package:get/get.dart';
+import 'package:diet_picnic_client/models/client_profile_model.dart';
+import 'package:diet_picnic_client/core/user_storage.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:image_picker/image_picker.dart';
+
+class UserController extends GetxController {
+
+  static UserController get to => Get.find();
+
+  final currentUser = Rxn<ClientProfileModel>();
+  final FirebaseFirestore firestore = FirebaseFirestore.instance;
+
+  /// Called after login/register
+  Future<void> setUser(ClientProfileModel user) async {
+    currentUser.value = user;
+    await UserStorage.saveUserId(user.id);
+  }
+  bool get isLoggedIn => currentUser.value != null;
+  bool get isSubscribed => currentUser.value!.package != null;
+  bool get isSubscriptionActive => !currentUser.value!.isExpired;
+
+  /// Restore user if saved in storage
+  Future<void> restoreUser() async {
+    final userId = UserStorage.getUserId();
+    if (userId == null) return;
+
+    final doc = await firestore.collection("clients").doc(userId).get();
+    if (doc.exists) {
+      log(userId.toString());
+      currentUser.value = ClientProfileModel.fromJson(doc.data()!, doc.id);
+
+      // ✅ 1. Fetch all packages
+      final packagesSnapshot = await firestore.collection('packages').get();
+      final packagesMap = <String, Package>{};
+      for (var pkg in packagesSnapshot.docs) {
+        final pkgData = pkg.data();
+        final pkgId = pkgData['id'] ?? pkg.id;
+        final pkgName = pkgData['name'] ?? '';
+        packagesMap[pkgId] = Package(id: pkgId, name: pkgName);
+      }
+
+      // ✅ 2. Resolve package
+      final packageId = doc.data()!['package_id'] ?? '';
+
+      Package? package;
+     // log(packagesMap.toString());
+      if (packagesMap.containsKey(packageId)) {
+        // log("Founded!",name: "packageCHECK");
+        package = packagesMap[packageId]!;
+      } else {
+        package = null;
+      }
+
+      // ✅ 3. Resolve group if exists
+      PackageGroup? packageGroup;
+      final groupId = doc.data()!['group_id'];
+      if (groupId != null && (groupId as String).isNotEmpty) {
+        final groupDoc =
+        await firestore.collection('groups').doc(groupId).get();
+        if (groupDoc.exists) {
+          packageGroup = PackageGroup.fromJson(groupDoc.data()!);
+        }
+      }
+      // log(groupId.toString(),name: "groupID");
+      // log(packageGroup!.id.toString(),name: "group");
+      // log(packageGroup!.name.toString(),name: "group");
+
+      // ✅ 4. Fetch week progress
+      final weekProgressSnapshot = await firestore
+          .collection('clients')
+          .doc(currentUser.value!.id)
+          .collection('week_progress')
+          .get();
+      final weekProgressList = weekProgressSnapshot.docs
+          .map((wp) => WeekProgressModel.fromJson(wp.data()))
+          .toList();
+     // log(package!.name,name: "packageCHECK");
+      ClientProfileModel user = ClientProfileModel.fromJson(doc.data()!, doc.id).copyWith(
+        weekProgressList: weekProgressList,
+        group: packageGroup,
+        package: package,
+      );
+
+      Future<List<FollowUpMessageModel>> getFollowUpsForClient(
+          String clientId) async {
+        final snapshot = await firestore
+            .collection('clients')
+            .doc(clientId)
+            .collection('follow_ups')
+            .get();
+
+        return snapshot.docs.map((doc) {
+          final data = doc.data();
+          data['id'] = doc.id; // Add the document ID to the JSON
+          return FollowUpMessageModel.fromJson(data);
+        }).toList();
+      }
+      // ✅ 5. Fetch followUps
+      final followUpList = await getFollowUpsForClient(doc.id);
+      DietSystemModel? dietSystemModel;
+      final assignedDietSystems = user.assignedDietSystems;
+
+      if (assignedDietSystems.isNotEmpty) {
+        final activeDietSystem = assignedDietSystems.firstWhereOrNull(
+              (system) => system.isActive == true,
+        );
+
+        if (activeDietSystem != null) {
+          final doc = await firestore
+              .collection("diet_systems")
+              .doc(activeDietSystem.id)
+              .get();
+
+          if (doc.exists && doc.data() != null) {
+            dietSystemModel = DietSystemModel.fromJson(doc.data()!);
+          }
+        }
+      }
+
+// Get active exercise system
+      ExerciseSystemModel? exerciseSystemModel;
+      final assignedExerciseSystems = user.assignedExerciseSystems;
+
+      if (assignedExerciseSystems.isNotEmpty) {
+        final activeExerciseSystem = assignedExerciseSystems.firstWhereOrNull(
+              (system) => system.isActive == true,
+        );
+    //    log(activeExerciseSystem!.id,name: "ACTIVEONE");
+
+        if (activeExerciseSystem != null) {
+          final exerciseDoc = await firestore
+              .collection("exercise_systems")
+              .doc(activeExerciseSystem.id)
+              .get();
+
+          if (exerciseDoc.exists && exerciseDoc.data() != null) {
+            exerciseSystemModel = ExerciseSystemModel.fromJson(
+              exerciseDoc.data()!,
+              exerciseDoc.id,
+            );
+            log("EXISTEX");
+          }
+        }
+      }
+      user = ClientProfileModel.fromJson(doc.data()!, doc.id).copyWith(
+        weekProgressList: weekProgressList,
+        dietSystemModel: dietSystemModel,assignedDietSystems: assignedDietSystems,
+        assignedExerciseSystems: assignedExerciseSystems,
+        exerciseSystemModel: exerciseSystemModel,
+        group: packageGroup,
+        package: package,
+      );
+//log(user.package!.toString());
+      currentUser.value =user;
+     // log(currentUser.value!.dietSystemModel!.name.toString(),name: "sysysysysyssss");
+      update();
+
+    }
+  }
+
+
+
+
+
+  ///profile pic
+  final _firestore = FirebaseFirestore.instance;
+  final _picker = ImagePicker();
+
+
+  /// Pick image and update Firestore + local user
+  Future<void> pickAndUploadProfileImage() async {
+    try {
+      // Pick image from gallery
+      final pickedFile = await _picker.pickImage(source: ImageSource.gallery);
+      if (pickedFile == null || pickedFile.path.isEmpty) {
+        customSnackBar(
+          title: "لم يتم اختيار صورة",
+          message: "من فضلك اختر صورة صالحة من جهازك",
+          successful: false,
+        );
+        return;
+      }
+
+      final file = File(pickedFile.path);
+      if (!await file.exists()) {
+        customSnackBar(
+          title: "خطأ",
+          message: "تعذر الوصول إلى الملف المحدد",
+          successful: false,
+        );
+        return;
+      }
+
+      final userController = UserController.to;
+      final userId = userController.currentUser.value?.id;
+      if (userId == null || userId.isEmpty) {
+        customSnackBar(
+          title: "خطأ",
+          message: "لم يتم العثور على بيانات المستخدم",
+          successful: false,
+        );
+        return;
+      }
+
+      // Upload image to imgbb
+      customSnackBar(
+        title: "جاري التحميل",
+        message: "يتم الآن رفع الصورة...",
+        successful: true,
+      );
+
+      final imageUrl = await ImgbbUploader.uploadImage(file);
+      if (imageUrl == null) {
+        customSnackBar(
+          title: "خطأ",
+          message: "فشل رفع الصورة إلى الخادم",
+          successful: false,
+        );
+        return;
+      }
+
+      // Update Firestore
+      await _firestore.collection("clients").doc(userId).update({
+        "image": imageUrl,
+      });
+
+      // Update local user in controller
+      userController.currentUser.value =
+          userController.currentUser.value!.copyWith(image: imageUrl);
+      userController.currentUser.refresh();
+
+      customSnackBar(
+        title: "تم بنجاح 🎉",
+        message: "تم تحديث الصورة الشخصية بنجاح",
+        successful: true,
+      );
+    } catch (e) {
+      customSnackBar(
+        title: "خطأ",
+        message: "حدث خطأ أثناء تحديث الصورة: $e",
+        successful: false,
+      );
+    }
+  }
+  /// Logout
+  Future<void> logout() async {
+    currentUser.value = null;
+    await UserStorage.clearUser();
+    UserController.to.update();
+    Get.find<NavigatorController>().update();
+
+    Get.offAllNamed(AppConstants.loginPage);
+  }
+}
