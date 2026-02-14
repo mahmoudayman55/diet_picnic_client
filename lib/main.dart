@@ -3,6 +3,7 @@ import 'dart:ui';
 
 import 'dart:ui';
 
+import 'package:diet_picnic_client/controller/theme_controller.dart';
 import 'package:diet_picnic_client/controller/user_controller.dart';
 import 'package:diet_picnic_client/core/is_valid_phone.dart';
 import 'package:diet_picnic_client/core/notification_service.dart';
@@ -39,7 +40,7 @@ Future<void> main() async {
     options: DefaultFirebaseOptions.currentPlatform,
   );
   await UserStorage.init();
-  
+
   // Initialize notification service
   await NotificationService.initialize();
   // String hashPassword(String password) {
@@ -47,8 +48,9 @@ Future<void> main() async {
   //   final digest = sha256.convert(bytes);
   //   return digest.toString(); // return hex string
   // }
- //updateSubOffersOrderBasedOnLevel();
-  // Register UserController globally
+  //updateSubOffersOrderBasedOnLevel();
+  // Register controllers globally
+  Get.put(ThemeController());
   Get.put(UserController());
   // Restore user if already logged in
   await UserController.to.restoreUser();
@@ -75,20 +77,22 @@ class MyApp extends StatelessWidget {
           textDirection: TextDirection.rtl,
           locale: const Locale('ar', 'AE'),
           theme: Themes.lightTheme,
-          initialRoute:  AppConstants.updatePage,
-
+          darkTheme: Themes.darkTheme,
+          themeMode: ThemeController.to.themeMode,
+          initialRoute: AppConstants.updatePage,
           getPages: GetRoutes.pages,
         );
       },
     );
   }
 }
+
 class MyCustomScrollBehavior extends MaterialScrollBehavior {
   // Override behavior methods like buildOverscrollIndicator and buildScrollbar
   @override
   Set<PointerDeviceKind> get dragDevices => {
-    PointerDeviceKind.touch,
-    PointerDeviceKind.mouse,
-    // etc.
-  };
+        PointerDeviceKind.touch,
+        PointerDeviceKind.mouse,
+        // etc.
+      };
 }

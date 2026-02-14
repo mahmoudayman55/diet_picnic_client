@@ -34,7 +34,8 @@ class UserProfileView extends StatelessWidget {
 
       return Scaffold(
         appBar: AppBar(
-          title: Text("حسابي", style: Theme.of(context).textTheme.headlineMedium),
+          title:
+              Text("حسابي", style: Theme.of(context).textTheme.headlineMedium),
         ),
         body: Obx(() {
           final user = userController.currentUser.value;
@@ -47,8 +48,9 @@ class UserProfileView extends StatelessWidget {
           String _safe(String? value) =>
               (value != null && value.trim().isNotEmpty) ? value : "غير معروف";
 
-          String _formatDate(DateTime? date) =>
-              date != null ? DateFormat("dd/MM/yyyy").format(date) : "غير معروف";
+          String _formatDate(DateTime? date) => date != null
+              ? DateFormat("dd/MM/yyyy").format(date)
+              : "غير معروف";
 
           return Padding(
             padding: const EdgeInsets.all(16),
@@ -77,10 +79,11 @@ class UserProfileView extends StatelessWidget {
                               width: width * 0.3,
                               height: width * 0.3,
                               child: ClipOval(
-                                child:  CustomCachedNetworkImage(
-                                  imageUrl: UserController.to.currentUser.value!.image ??
-                                      AppConstants.dummyPerson1Image,fit: BoxFit.cover,
-
+                                child: CustomCachedNetworkImage(
+                                  imageUrl: UserController
+                                          .to.currentUser.value!.image ??
+                                      AppConstants.dummyPerson1Image,
+                                  fit: BoxFit.cover,
                                 ),
                               ),
                             ),
@@ -104,8 +107,8 @@ class UserProfileView extends StatelessWidget {
                                     .textTheme
                                     .displayMedium!
                                     .copyWith(
-                                    fontWeight: FontWeight.w400,
-                                    color: CustomColors.mainColor),
+                                        fontWeight: FontWeight.w400,
+                                        color: CustomColors.mainColor),
                               ),
                             ),
                           ],
@@ -113,26 +116,49 @@ class UserProfileView extends StatelessWidget {
                       ),
                     ),
                   ),
-                  SectionWidget(onTap: ()=>Get.to(UpdatePersonalInfoView()),
+                  SectionWidget(
+                    onTap: () => Get.to(UpdatePersonalInfoView()),
                     title: "معلوماتي الشخصية",
-                    sideWidget: Icon(Icons.edit_outlined, color: CustomColors.textBlack54),
+                    sideWidget: Icon(Icons.edit_outlined,
+                        color: CustomColors.textBlack54),
                     children: [
                       Divider(color: CustomColors.dividerLight),
-                      InformationRow(leftText: "الإسم", rightText: _safe(user.name)),
                       InformationRow(
-                          leftText: "تاريخ الميلاد", rightText: _formatDate(user.birthDate)),
-                      InformationRow(leftText: "السن", rightText: user.birthDate != null ? "${user.age}" : "غير معروف"),
-                      InformationRow(leftText: "رقم الهاتف", rightText: _safe(user.phone)),
-                      InformationRow(leftText: "العنوان", rightText: _safe(user.address)),
-                      InformationRow(leftText: "المؤهل", rightText: _safe(user.qualification)),
-                      InformationRow(leftText: "الحالة الإجتماعية", rightText: _safe(user.socialStatus)),
-                      InformationRow(leftText: "البريد الإلكتروني", rightText: _safe(user.email)),
-                      InformationRow(leftText: "الطول", rightText: _safe(user.height != null && user.height!.isNotEmpty ? "${user.height} cm" : null)),
-                      InformationRow(leftText: "النوع", rightText: _safe(user.gender)),
+                          leftText: "الإسم", rightText: _safe(user.name)),
+                      InformationRow(
+                          leftText: "تاريخ الميلاد",
+                          rightText: _formatDate(user.birthDate)),
+                      InformationRow(
+                          leftText: "السن",
+                          rightText: user.birthDate != null
+                              ? "${user.age}"
+                              : "غير معروف"),
+                      InformationRow(
+                          leftText: "رقم الهاتف", rightText: _safe(user.phone)),
+                      InformationRow(
+                          leftText: "العنوان", rightText: _safe(user.address)),
+                      InformationRow(
+                          leftText: "المؤهل",
+                          rightText: _safe(user.qualification)),
+                      InformationRow(
+                          leftText: "الحالة الإجتماعية",
+                          rightText: _safe(user.socialStatus)),
+                      InformationRow(
+                          leftText: "البريد الإلكتروني",
+                          rightText: _safe(user.email)),
+                      InformationRow(
+                          leftText: "الطول",
+                          rightText: _safe(
+                              user.height != null && user.height!.isNotEmpty
+                                  ? "${user.height} cm"
+                                  : null)),
+                      InformationRow(
+                          leftText: "النوع", rightText: _safe(user.gender)),
                     ],
                   ),
                   SizedBox(height: heigh * 0.03),
-                  SectionWidget(onTap: ()=>Get.to(NewCustomerQuestionnaireQuizView()),
+                  SectionWidget(
+                    onTap: () => Get.to(NewCustomerQuestionnaireQuizView()),
                     title: "التاريخ الطبى",
                     children: [
                       Divider(color: CustomColors.dividerLight),
@@ -148,52 +174,65 @@ class UserProfileView extends StatelessWidget {
                             ? "غير معروف"
                             : (user.isLactating! ? "نعم" : "لا"),
                       ),
-
                       InformationRow(
                         leftText: "أمراض مزمنة",
-                        rightText: (user.questionnaireAnswers?.chronicDiseases.isNotEmpty ?? false)
-                            ? user.questionnaireAnswers!.chronicDiseases.join(", ")
+                        rightText: (user.questionnaireAnswers?.chronicDiseases
+                                    .isNotEmpty ??
+                                false)
+                            ? user.questionnaireAnswers!.chronicDiseases
+                                .join(", ")
                             : "غير معروف",
                       ),
                       InformationRow(
                         leftText: "أمراض عائلية مزمنة",
-                        rightText: (user.questionnaireAnswers?.familyChronicDiseases.isNotEmpty ?? false)
-                            ? user.questionnaireAnswers!.familyChronicDiseases.join(", ")
+                        rightText: (user.questionnaireAnswers
+                                    ?.familyChronicDiseases.isNotEmpty ??
+                                false)
+                            ? user.questionnaireAnswers!.familyChronicDiseases
+                                .join(", ")
                             : "غير معروف",
                       ),
                       InformationRow(
                         leftText: "عمليات جراحية",
                         rightText: user.questionnaireAnswers?.hadSurgery == null
                             ? "غير معروف"
-                            : (user.questionnaireAnswers!.hadSurgery ? "نعم" : "لا"),
+                            : (user.questionnaireAnswers!.hadSurgery
+                                ? "نعم"
+                                : "لا"),
                       ),
-
-
                       InformationRow(
                         leftText: "إصابات سابقة",
-                        rightText: (user.questionnaireAnswers?.injuries.isNotEmpty ?? false)
-                            ? user.questionnaireAnswers!.injuries.join(", ")
-                            : "غير معروف",
+                        rightText:
+                            (user.questionnaireAnswers?.injuries.isNotEmpty ??
+                                    false)
+                                ? user.questionnaireAnswers!.injuries.join(", ")
+                                : "غير معروف",
                       ),
                       InformationRow(
                         leftText: "أدوية أو مكملات",
-                        rightText: (user.questionnaireAnswers?.medications.isNotEmpty ?? false)
+                        rightText: (user.questionnaireAnswers?.medications
+                                    .isNotEmpty ??
+                                false)
                             ? user.questionnaireAnswers!.medications.join(", ")
                             : "غير معروف",
                       ),
                       InformationRow(
                         leftText: "جوع عاطفى",
-                        rightText: _safe(user.questionnaireAnswers?.emotionalHanger),
+                        rightText:
+                            _safe(user.questionnaireAnswers?.emotionalHanger),
                       ),
                       InformationRow(
                         leftText: "تغير مفاجئ في الوزن",
-                        rightText: _safe(user.questionnaireAnswers?.weightChange),
+                        rightText:
+                            _safe(user.questionnaireAnswers?.weightChange),
                       ),
                     ],
-                    sideWidget: Icon(Icons.edit_outlined, color: CustomColors.textBlack54),
+                    sideWidget: Icon(Icons.edit_outlined,
+                        color: CustomColors.textBlack54),
                   ),
                   SizedBox(height: heigh * 0.03),
-                  SectionWidget(onTap: ()=>Get.to(NewCustomerQuestionnaireQuizView()),
+                  SectionWidget(
+                    onTap: () => Get.to(NewCustomerQuestionnaireQuizView()),
                     title: "معلومات عامة",
                     children: [
                       Divider(color: CustomColors.dividerLight),
@@ -201,22 +240,25 @@ class UserProfileView extends StatelessWidget {
                         leftText: "أدوات رياضية بالمنزل",
                         rightText: user.questionnaireAnswers == null
                             ? "غير معروف"
-                            : (user.questionnaireAnswers!.homeEquipment.isNotEmpty
-                            ? user.questionnaireAnswers!.homeEquipment.join(", ")
-                            : "لا يوجد"),
+                            : (user.questionnaireAnswers!.homeEquipment
+                                    .isNotEmpty
+                                ? user.questionnaireAnswers!.homeEquipment
+                                    .join(", ")
+                                : "لا يوجد"),
                       ),
-
-
                       InformationRow(
                           leftText: "مقدار شرب الماء",
-                          rightText: user.questionnaireAnswers?.waterIntake != null
+                          rightText: user.questionnaireAnswers?.waterIntake !=
+                                  null
                               ? "${user.questionnaireAnswers!.waterIntake} أكواب"
                               : "غير معروف"),
                       InformationRow(
                           leftText: "النشاط البدنى",
-                          rightText: _safe(user.questionnaireAnswers?.activityLevel)),
+                          rightText:
+                              _safe(user.questionnaireAnswers?.activityLevel)),
                     ],
-                    sideWidget: Icon(Icons.edit_outlined, color: CustomColors.textBlack54),
+                    sideWidget: Icon(Icons.edit_outlined,
+                        color: CustomColors.textBlack54),
                   ),
                 ],
               ),
