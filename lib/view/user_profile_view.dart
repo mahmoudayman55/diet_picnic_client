@@ -59,59 +59,62 @@ class UserProfileView extends StatelessWidget {
                 children: [
                   SizedBox(
                     width: width,
-                    child: Container(
-                      decoration: BoxDecoration(
-                        boxShadow: [
-                          BoxShadow(
-                            color: CustomColors.shadowLight,
-                            blurRadius: 3,
-                            spreadRadius: 2,
-                          )
-                        ],
-                        color: Colors.white,
-                        borderRadius: BorderRadius.circular(12),
-                      ),
-                      child: Padding(
-                        padding: const EdgeInsets.all(10),
-                        child: Column(
-                          children: [
-                            SizedBox(
-                              width: width * 0.3,
-                              height: width * 0.3,
-                              child: ClipOval(
-                                child: CustomCachedNetworkImage(
-                                  imageUrl: UserController
-                                          .to.currentUser.value!.image ??
-                                      AppConstants.dummyPerson1Image,
-                                  fit: BoxFit.cover,
+                    child: Padding(
+                      padding: const EdgeInsets.all(8.0),
+                      child: Container(
+                        decoration: BoxDecoration(
+                          boxShadow: [
+                            BoxShadow(
+                              color: CustomColors.shadowLight,
+                              blurRadius: 0,
+                              spreadRadius: 2,
+                            )
+                          ],
+                          // color: Colors.white,
+                          borderRadius: BorderRadius.circular(12),
+                        ),
+                        child: Padding(
+                          padding: const EdgeInsets.all(10),
+                          child: Column(
+                            children: [
+                              SizedBox(
+                                width: width * 0.3,
+                                height: width * 0.3,
+                                child: ClipOval(
+                                  child: CustomCachedNetworkImage(
+                                    imageUrl: UserController
+                                            .to.currentUser.value!.image ??
+                                        AppConstants.dummyPerson1Image,
+                                    fit: BoxFit.cover,
+                                  ),
                                 ),
                               ),
-                            ),
-                            SizedBox(
-                              height: heigh * 0.03,
-                            ),
-                            Text(
-                              UserController.to.currentUser.value!.name,
-                              style: Theme.of(context)
-                                  .textTheme
-                                  .headlineMedium!
-                                  .copyWith(fontWeight: FontWeight.w500),
-                            ),
-                            TextButton(
-                              onPressed: () {
-                                UserController.to.pickAndUploadProfileImage();
-                              },
-                              child: Text(
-                                "تغيير الصورة الشخصية",
+                              SizedBox(
+                                height: heigh * 0.03,
+                              ),
+                              Text(
+                                UserController.to.currentUser.value!.name,
                                 style: Theme.of(context)
                                     .textTheme
-                                    .displayMedium!
-                                    .copyWith(
-                                        fontWeight: FontWeight.w400,
-                                        color: CustomColors.mainColor),
+                                    .headlineMedium!
+                                    .copyWith(fontWeight: FontWeight.w500),
                               ),
-                            ),
-                          ],
+                              TextButton(
+                                onPressed: () {
+                                  UserController.to.pickAndUploadProfileImage();
+                                },
+                                child: Text(
+                                  "تغيير الصورة الشخصية",
+                                  style: Theme.of(context)
+                                      .textTheme
+                                      .displayMedium!
+                                      .copyWith(
+                                          fontWeight: FontWeight.w400,
+                                          color: CustomColors.mainColor),
+                                ),
+                              ),
+                            ],
+                          ),
                         ),
                       ),
                     ),

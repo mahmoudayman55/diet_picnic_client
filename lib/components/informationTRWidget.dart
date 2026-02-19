@@ -62,60 +62,62 @@ class _KnowledgeSectionState extends State<KnowledgeSection>
               ),
               borderRadius: BorderRadius.circular(22),
             ),
-            child: Stack(
-              children: [
-                // دوائر شفافة للديكور
-                Positioned(
-                  top: -30,
-                  left: -20,
-                  child: CircleAvatar(
-                    radius: 60,
-                    backgroundColor: Colors.white.withOpacity(0.1),
+            child: ClipRRect(borderRadius: BorderRadius.circular(22),
+              child: Stack(
+                children: [
+                  // دوائر شفافة للديكور
+                  Positioned(
+                    top: -30,
+                    left: -20,
+                    child: CircleAvatar(
+                      radius: 60,
+                      backgroundColor: Colors.white.withOpacity(0.1),
+                    ),
                   ),
-                ),
-                Positioned(
-                  bottom: -20,
-                  right: -40,
-                  child: CircleAvatar(
-                    radius: 100,
-                    backgroundColor: Colors.white.withOpacity(0.1),
+                  Positioned(
+                    bottom: -20,
+                    right: -40,
+                    child: CircleAvatar(
+                      radius: 100,
+                      backgroundColor: Colors.white.withOpacity(0.1),
+                    ),
                   ),
-                ),
-                Padding(
-                  padding: const EdgeInsets.all(16.0),
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      Text(
-                        "كنز المعلومات",
-                        style: Theme.of(context)
-                            .textTheme
-                            .headlineLarge!
-                            .copyWith(
-                          color: Colors.white,
-
-                          fontWeight: FontWeight.bold,
-                        ),
-                      ),
-                      const SizedBox(height: 8),
-                      SizedBox(
-                        width: width * 0.45,
-                        child: Text(
-                          "اكتشف مقالات ونصائح مهمة تعزز من معرفتك في مجالات الصحة والرياضة.",
+                  Padding(
+                    padding: const EdgeInsets.all(16.0),
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        Text(
+                          "كنز المعلومات",
                           style: Theme.of(context)
                               .textTheme
-                              .displayMedium!
+                              .headlineLarge!
                               .copyWith(
                             color: Colors.white,
 
+                            fontWeight: FontWeight.bold,
                           ),
                         ),
-                      ),
-                    ],
+                        const SizedBox(height: 8),
+                        SizedBox(
+                          width: width * 0.45,
+                          child: Text(
+                            "اكتشف مقالات ونصائح مهمة تعزز من معرفتك في مجالات الصحة والرياضة.",
+                            style: Theme.of(context)
+                                .textTheme
+                                .displayMedium!
+                                .copyWith(
+                              color: Colors.white,
+
+                            ),
+                          ),
+                        ),
+                      ],
+                    ),
                   ),
-                ),
-              ],
+                ],
+              ),
             ),
           ),
           // لوتي متحرك

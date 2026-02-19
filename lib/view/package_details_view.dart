@@ -20,7 +20,7 @@ import 'package:iconsax/iconsax.dart';
 import 'package:sizer/sizer.dart';
 
 class PackageDetailsView extends GetView<PackageDetailsController> {
-  PackageDetailsView();
+  PackageDetailsView({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -181,10 +181,7 @@ class PackageDetailsView extends GetView<PackageDetailsController> {
                             style: Theme.of(context)
                                 .textTheme
                                 .displayLarge
-                                ?.copyWith(
-                                  fontWeight: FontWeight.w600,
-                                  color: Colors.black87,
-                                ),
+                            ,
                           ),
                         ),
                         const SizedBox(height: 12),

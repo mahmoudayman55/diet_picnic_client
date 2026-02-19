@@ -1,3 +1,4 @@
+import 'package:diet_picnic_client/controller/theme_controller.dart';
 import 'package:diet_picnic_client/core/custom_colors.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -23,7 +24,8 @@ class CustomDropdownWidget<T> extends StatefulWidget {
   }) : super(key: key);
 
   @override
-  _CustomDropdownWidgetState<T> createState() => _CustomDropdownWidgetState<T>();
+  _CustomDropdownWidgetState<T> createState() =>
+      _CustomDropdownWidgetState<T>();
 }
 
 class _CustomDropdownWidgetState<T> extends State<CustomDropdownWidget<T>> {
@@ -40,23 +42,29 @@ class _CustomDropdownWidgetState<T> extends State<CustomDropdownWidget<T>> {
   @override
   Widget build(BuildContext context) {
     final width = MediaQuery.of(context).size.width;
+    final isAppDark = ThemeController.to.isDarkMode;
 
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         Text(
           widget.label.capitalizeFirst!.tr,
-          style: Theme.of(context)
-              .textTheme
-              .displayMedium!
-              .copyWith(color: widget.dark ? CustomColors.textBlack54 : Colors.white),
+          style: Theme.of(context).textTheme.displayMedium!.copyWith(
+              color: isAppDark
+                  ? Colors.white
+                  : (widget.dark ? CustomColors.textBlack54 : Colors.white)),
         ),
-        SizedBox(height: 5,),
+        SizedBox(
+          height: 5,
+        ),
         Container(
           width: width,
           decoration: BoxDecoration(
-            color: Colors.white.withOpacity(0.3),
-            border: Border.all(color: Colors.grey.shade200),
+            color: isAppDark
+                ? Colors.white.withOpacity(0.1)
+                : Colors.white.withOpacity(0.3),
+            border: Border.all(
+                color: isAppDark ? Colors.grey.shade700 : Colors.grey.shade200),
             borderRadius: BorderRadius.circular(8),
           ),
           child: Padding(
@@ -67,10 +75,12 @@ class _CustomDropdownWidgetState<T> extends State<CustomDropdownWidget<T>> {
                 widget.selectedItem == null
                     ? 'اختر' // Default hint text when selectedItem is null
                     : widget.selectedItem.toString().capitalizeFirst!.tr,
-                style: Theme.of(context)
-                    .textTheme
-                    .displayMedium!
-                    .copyWith(color: widget.dark ? CustomColors.textBlack54 : Colors.white),
+                style: Theme.of(context).textTheme.displayMedium!.copyWith(
+                    color: isAppDark
+                        ? Colors.white
+                        : (widget.dark
+                            ? CustomColors.textBlack54
+                            : Colors.white)),
               ),
               onChanged: (value) {
                 setState(() {
@@ -89,7 +99,12 @@ class _CustomDropdownWidgetState<T> extends State<CustomDropdownWidget<T>> {
                       style: Theme.of(context)
                           .textTheme
                           .displayMedium!
-                          .copyWith(color: widget.dark ? CustomColors.textBlack54 : Colors.white),
+                          .copyWith(
+                              color: isAppDark
+                                  ? Colors.white
+                                  : (widget.dark
+                                      ? CustomColors.textBlack54
+                                      : Colors.white)),
                     ),
                   );
                 }).toList();
@@ -100,7 +115,9 @@ class _CustomDropdownWidgetState<T> extends State<CustomDropdownWidget<T>> {
                   child: Text(
                     item.toString().capitalizeFirst!.tr,
                     style: Theme.of(context).textTheme.displayMedium!.copyWith(
-                        color: CustomColors.textBlack54),
+                        color: isAppDark
+                            ? Colors.white
+                            : CustomColors.textBlack54),
                   ),
                 );
               }).toList(),

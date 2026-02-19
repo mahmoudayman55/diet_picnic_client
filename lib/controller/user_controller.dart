@@ -126,7 +126,7 @@ class UserController extends GetxController {
               .get();
 
           if (doc.exists && doc.data() != null) {
-            dietSystemModel = DietSystemModel.fromJson(doc.data()!);
+            dietSystemModel = DietSystemModel.fromJson(doc.data()!,activeDietSystem.assignedAt);
           }
         }
       }
@@ -171,9 +171,127 @@ class UserController extends GetxController {
 
     }
   }
+  Future<void> refreshExerciseSystem() async {
+    if (currentUser.value == null) return;
 
+    final userId = currentUser.value!.id;
 
+    // Fetch fresh user data from Firestore
+    final userDoc = await firestore.collection("clients").doc(userId).get();
 
+    if (!userDoc.exists) return;
+
+    final userData = userDoc.data()!;
+
+    // ✅ Use the correct field name with underscore
+    final assignedExerciseSystems = (userData['assigned_exercise_systems'] as List?)
+        ?.map((e) => AssignedExerciseSystem.fromJson(e))
+        .toList() ?? [];
+
+    log("Parsed assignedExerciseSystems count: ${assignedExerciseSystems.length}");
+
+    ExerciseSystemModel? exerciseSystemModel;
+
+    if (assignedExerciseSystems.isNotEmpty) {
+      final activeExerciseSystem = assignedExerciseSystems.firstWhereOrNull(
+            (system) => system.isActive == true,
+      );
+
+      if (activeExerciseSystem != null) {
+        log("Active exercise system found with ID: ${activeExerciseSystem.id}");
+
+        final exerciseDoc = await firestore
+            .collection("exercise_systems")
+            .doc(activeExerciseSystem.id)
+            .get();
+
+        if (exerciseDoc.exists && exerciseDoc.data() != null) {
+          exerciseSystemModel = ExerciseSystemModel.fromJson(
+            exerciseDoc.data()!,
+            exerciseDoc.id,
+          );
+          log("Exercise system loaded: ${exerciseSystemModel.name}");
+        }
+      } else {
+        log("No active exercise system found");
+      }
+    } else {
+      log("No assigned exercise systems");
+    }
+
+    // Rebuild the entire user object from Firestore
+    currentUser.value = ClientProfileModel.fromJson(userData, userId).copyWith(
+      weekProgressList: currentUser.value!.weekProgressList,
+      dietSystemModel: currentUser.value!.dietSystemModel,
+      assignedDietSystems: currentUser.value!.assignedDietSystems,
+      assignedExerciseSystems: assignedExerciseSystems,
+      exerciseSystemModel: exerciseSystemModel,
+      group: currentUser.value!.group,
+      package: currentUser.value!.package,
+    );
+
+    update();
+    log("Final exercise system: ${currentUser.value!.exerciseSystemModel?.name ?? 'null'}");
+  }
+  Future<void> refreshDietSystem() async {
+    if (currentUser.value == null) return;
+
+    final userId = currentUser.value!.id;
+
+    // Fetch fresh user data from Firestore
+    final userDoc = await firestore.collection("clients").doc(userId).get();
+
+    if (!userDoc.exists) return;
+
+    final userData = userDoc.data()!;
+
+    // ✅ Use the correct field name with underscore
+    final assignedDietSystems = (userData['assigned_diet_systems'] as List?)
+        ?.map((e) => AssignedDietSystem.fromJson(e))
+        .toList() ?? [];
+
+    log("Parsed assignedDietSystems count: ${assignedDietSystems.length}");
+
+    DietSystemModel? dietSystemModel;
+
+    if (assignedDietSystems.isNotEmpty) {
+      final activeDietSystem = assignedDietSystems.firstWhereOrNull(
+            (system) => system.isActive == true,
+      );
+
+      if (activeDietSystem != null) {
+        log("Active diet system found with ID: ${activeDietSystem.id}");
+
+        final doc = await firestore
+            .collection("diet_systems")
+            .doc(activeDietSystem.id)
+            .get();
+        log("DATEIS${doc.data()}");
+        if (doc.exists && doc.data() != null) {
+          dietSystemModel = DietSystemModel.fromJson(doc.data()!,activeDietSystem.assignedAt);
+          log("Diet system loaded: ${dietSystemModel.name}");
+        }
+      } else {
+        log("No active diet system found");
+      }
+    } else {
+      log("No assigned diet systems");
+    }
+
+    // Rebuild the entire user object from Firestore
+    currentUser.value = ClientProfileModel.fromJson(userData, userId).copyWith(
+      weekProgressList: currentUser.value!.weekProgressList,
+      dietSystemModel: dietSystemModel,
+      assignedDietSystems: assignedDietSystems,
+      assignedExerciseSystems: currentUser.value!.assignedExerciseSystems,
+      exerciseSystemModel: currentUser.value!.exerciseSystemModel,
+      group: currentUser.value!.group,
+      package: currentUser.value!.package,
+    );
+
+    update();
+    log("Final diet system: ${currentUser.value!.dietSystemModel?.name ?? 'null'}");
+  }
 
 
   ///profile pic
@@ -185,7 +303,7 @@ class UserController extends GetxController {
   Future<void> pickAndUploadProfileImage() async {
     try {
       // Pick image from gallery
-      final pickedFile = await _picker.pickImage(source: ImageSource.gallery);
+      final pickedFile = await _picker.pickImage(source: ImageSource.gallery,imageQuality: 50);
       if (pickedFile == null || pickedFile.path.isEmpty) {
         customSnackBar(
           title: "لم يتم اختيار صورة",

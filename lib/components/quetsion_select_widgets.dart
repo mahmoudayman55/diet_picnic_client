@@ -1,6 +1,4 @@
-import 'package:diet_picnic_client/core/custom_colors.dart';
-import 'package:flutter/material.dart';
-
+import 'package:diet_picnic_client/controller/theme_controller.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import '../core/custom_colors.dart';
@@ -25,7 +23,8 @@ class QuestionMultiSelectWidget extends StatelessWidget {
       return Padding(
         padding: const EdgeInsets.all(16.0),
         child: Column(
-          crossAxisAlignment: CrossAxisAlignment.center,mainAxisAlignment: MainAxisAlignment.center,
+          crossAxisAlignment: CrossAxisAlignment.center,
+          mainAxisAlignment: MainAxisAlignment.center,
           children: [
             Text(
               question,
@@ -40,6 +39,7 @@ class QuestionMultiSelectWidget extends StatelessWidget {
               runSpacing: 10,
               children: options.map((option) {
                 final isSelected = selectedOptions.contains(option);
+                final isAppDark = ThemeController.to.isDarkMode;
                 return GestureDetector(
                   onTap: () => onSelect(option),
                   child: AnimatedContainer(
@@ -48,23 +48,37 @@ class QuestionMultiSelectWidget extends StatelessWidget {
                         horizontal: 18, vertical: 12),
                     decoration: BoxDecoration(
                       color: isSelected
-                          ? CustomColors.mainColor.withOpacity(0.15)
-                          : Colors.grey.shade100,
+                          ? (isAppDark
+                              ? CustomColors.mainColor.withOpacity(0.3)
+                              : CustomColors.mainColor.withOpacity(0.15))
+                          : (isAppDark
+                              ? Colors.white.withOpacity(0.1)
+                              : Colors.grey.shade100),
                       borderRadius: BorderRadius.circular(12),
                       border: Border.all(
                         color: isSelected
                             ? CustomColors.mainColor
-                            : Colors.grey.shade400,
+                            : (isAppDark
+                                ? Colors.grey.shade700
+                                : Colors.grey.shade400),
                         width: isSelected ? 2 : 1,
                       ),
                     ),
                     child: Text(
                       option,
-                      style: Theme.of(context).textTheme.displayMedium!.copyWith(   color: isSelected
-                          ? CustomColors.mainColor
-                          : Colors.grey.shade800,
-                        fontWeight:
-                        isSelected ? FontWeight.bold : FontWeight.normal,),
+                      style:
+                          Theme.of(context).textTheme.displayMedium!.copyWith(
+                                color: isSelected
+                                    ? (isAppDark
+                                        ? Colors.white
+                                        : CustomColors.mainColor)
+                                    : (isAppDark
+                                        ? Colors.white70
+                                        : Colors.grey.shade800),
+                                fontWeight: isSelected
+                                    ? FontWeight.bold
+                                    : FontWeight.normal,
+                              ),
                     ),
                   ),
                 );
@@ -76,7 +90,6 @@ class QuestionMultiSelectWidget extends StatelessWidget {
     });
   }
 }
-
 
 class QuestionSingleSelectWidget<T> extends StatelessWidget {
   final String question;
@@ -99,7 +112,8 @@ class QuestionSingleSelectWidget<T> extends StatelessWidget {
     return Padding(
       padding: const EdgeInsets.all(16.0),
       child: Column(
-        crossAxisAlignment: CrossAxisAlignment.center,mainAxisAlignment: MainAxisAlignment.center,
+        crossAxisAlignment: CrossAxisAlignment.center,
+        mainAxisAlignment: MainAxisAlignment.center,
         children: [
           Text(
             question,
@@ -114,31 +128,44 @@ class QuestionSingleSelectWidget<T> extends StatelessWidget {
             runSpacing: 10,
             children: options.map((option) {
               final isSelected = selectedOption == option;
+              final isAppDark = ThemeController.to.isDarkMode;
               return GestureDetector(
                 onTap: () => onSelect(option),
                 child: AnimatedContainer(
                   duration: const Duration(milliseconds: 250),
                   padding:
-                  const EdgeInsets.symmetric(horizontal: 18, vertical: 12),
+                      const EdgeInsets.symmetric(horizontal: 18, vertical: 12),
                   decoration: BoxDecoration(
                     color: isSelected
-                        ? CustomColors.mainColor.withOpacity(0.15)
-                        : Colors.grey.shade100,
+                        ? (isAppDark
+                            ? CustomColors.mainColor.withOpacity(0.3)
+                            : CustomColors.mainColor.withOpacity(0.15))
+                        : (isAppDark
+                            ? Colors.white.withOpacity(0.1)
+                            : Colors.grey.shade100),
                     borderRadius: BorderRadius.circular(12),
                     border: Border.all(
                       color: isSelected
                           ? CustomColors.mainColor
-                          : Colors.grey.shade400,
+                          : (isAppDark
+                              ? Colors.grey.shade700
+                              : Colors.grey.shade400),
                       width: isSelected ? 2 : 1,
                     ),
                   ),
                   child: Text(
                     labelBuilder(option),
-                    style: Theme.of(context).textTheme.displayMedium!.copyWith(   color: isSelected
-                        ? CustomColors.mainColor
-                        : Colors.grey.shade800,
-                      fontWeight:
-                      isSelected ? FontWeight.bold : FontWeight.normal,),
+                    style: Theme.of(context).textTheme.displayMedium!.copyWith(
+                          color: isSelected
+                              ? (isAppDark
+                                  ? Colors.white
+                                  : CustomColors.mainColor)
+                              : (isAppDark
+                                  ? Colors.white70
+                                  : Colors.grey.shade800),
+                          fontWeight:
+                              isSelected ? FontWeight.bold : FontWeight.normal,
+                        ),
                   ),
                 ),
               );

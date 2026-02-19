@@ -58,11 +58,12 @@ class _LogoLoadingWidgetState extends State<LogoLoadingWidget>
                   startAngle: 0.0,
                   endAngle: math.pi * 2,
                   colors: [
-                    Colors.white,
+                    CustomColors.borderColor,
                     CustomColors.mainColor,
-                    Colors.white,
-                    CustomColors.mintGreen,
-                    Colors.white,
+                    CustomColors.borderColor,
+                    CustomColors.mintGold,
+                    CustomColors.borderColor,
+
                   ],
                   stops: const [0.1, 0.3, 0.5, 0.8, 1.0],
                   transform: GradientRotation(-math.pi / 2),

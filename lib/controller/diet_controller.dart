@@ -11,19 +11,27 @@ class DietController extends GetxController {
   bool showAppBar= false;
 
   @override
-  void onInit() {
-    log("message");
+  void onInit()async {
     super.onInit();
-    log( Get.arguments.toString());
 
 if(Get.arguments!=null) {
   showAppBar=Get.arguments;
-  log( showAppBar.toString());
 }
+checkDietSystem();
 
-    dietSystem = UserController.to.currentUser.value!.dietSystemModel!;
   }
+  Rx<bool> hasDietSystem=Rx(false);
+  Rx<bool> loading=Rx(false);
 
+  checkDietSystem()async{
+    loading.value =true;
+  await UserController.to.refreshDietSystem();
+  hasDietSystem.value=UserController.to.currentUser.value!.hasActiveDiet();
+    if (hasDietSystem.value) {
+      dietSystem = UserController.to.currentUser.value!.dietSystemModel!;
+    }
+  loading.value=false;
+}
   void openUrl() {
     log(UserController.to.currentUser.value!.assignedDietSystems.toString(),name: "TETSTTT");
     UserController.to.currentUser.value!.assignedDietSystems.forEach((e){

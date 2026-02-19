@@ -69,6 +69,11 @@ class Themes {
       fontWeight: FontWeight.w600,
       fontSize: 18.0.sp,
       color: CustomColors.textWhite,
+    ),    headlineSmall: TextStyle(
+      fontFamily: AppConstants.fontFamily,
+      fontWeight: FontWeight.w500,
+      fontSize: 17.0.sp,
+      color: CustomColors.textWhite,
     ),
     displayLarge: TextStyle(
       fontFamily: AppConstants.fontFamily,

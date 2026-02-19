@@ -21,15 +21,9 @@ class VideoWidget extends StatelessWidget {
       margin: const EdgeInsets.all(5),
 
       decoration: BoxDecoration(
-        color: Colors.white,
+        color:CustomColors.dividerLight.withOpacity(0.1),
         borderRadius: BorderRadius.circular(16),
-        boxShadow: [
-          BoxShadow(
-            color: Colors.black.withOpacity(0.08),
-            blurRadius: 8,
-            offset: const Offset(0, 4),
-          ),
-        ],
+
       ),
       // responsive width
       child: IntrinsicHeight(

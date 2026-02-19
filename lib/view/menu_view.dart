@@ -65,54 +65,66 @@ class MenuView extends StatelessWidget {
                               boxShadow: [
                                 BoxShadow(
                                     color: CustomColors.shadowLight,
-                                    blurRadius: 3,
+                                    blurRadius: 0,
                                     spreadRadius: 2)
                               ],
-                              color: Colors.white,
+                              // color: Colors.white,
                               borderRadius: BorderRadius.circular(12)),
-                          child: Padding(
-                            padding: const EdgeInsets.all(10),
-                            child: Column(
-                              children: [
-                                SizedBox(
-                                  width: width * 0.3,
-                                  height: width * 0.3,
-                                  child: ClipOval(
-                                    child: CustomCachedNetworkImage(
-                                      imageUrl: UserController
-                                              .to.currentUser.value!.image ??
-                                          AppConstants.dummyPerson1Image,
-                                      fit: BoxFit.cover,
+                          child: Stack(
+                            alignment: AlignmentGeometry.center,
+                            children: [
+                              Positioned(
+                                  top: 0,
+                                  child: SizedBox(width: width,height: heigh*0.2,
+                                    child: Image.asset(
+                                        "assets/images/lighter2.png",fit: BoxFit.fill,),
+                                  )),
+                              Padding(
+                                padding: const EdgeInsets.all(8.0),
+                                child: Column(
+                                  children: [
+                                    SizedBox(
+                                      width: width * 0.3,
+                                      height: width * 0.3,
+                                      child: ClipOval(
+                                        child: CustomCachedNetworkImage(
+                                          imageUrl: UserController.to
+                                                  .currentUser.value!.image ??
+                                              AppConstants.dummyPerson1Image,
+                                          fit: BoxFit.cover,
+                                        ),
+                                      ),
                                     ),
-                                  ),
+                                    SizedBox(
+                                      height: heigh * 0.03,
+                                    ),
+                                    Text(
+                                      UserController.to.currentUser.value!.name,
+                                      style: Theme.of(context)
+                                          .textTheme
+                                          .headlineMedium!
+                                          .copyWith(
+                                              fontWeight: FontWeight.w500),
+                                    ),
+                                    TextButton(
+                                      onPressed: () {
+                                        UserController.to
+                                            .pickAndUploadProfileImage();
+                                      },
+                                      child: Text(
+                                        "تغيير الصورة الشخصية",
+                                        style: Theme.of(context)
+                                            .textTheme
+                                            .displayMedium!
+                                            .copyWith(
+                                                fontWeight: FontWeight.w400,
+                                                color: CustomColors.mainColor),
+                                      ),
+                                    ),
+                                  ],
                                 ),
-                                SizedBox(
-                                  height: heigh * 0.03,
-                                ),
-                                Text(
-                                  UserController.to.currentUser.value!.name,
-                                  style: Theme.of(context)
-                                      .textTheme
-                                      .headlineMedium!
-                                      .copyWith(fontWeight: FontWeight.w500),
-                                ),
-                                TextButton(
-                                  onPressed: () {
-                                    UserController.to
-                                        .pickAndUploadProfileImage();
-                                  },
-                                  child: Text(
-                                    "تغيير الصورة الشخصية",
-                                    style: Theme.of(context)
-                                        .textTheme
-                                        .displayMedium!
-                                        .copyWith(
-                                            fontWeight: FontWeight.w400,
-                                            color: CustomColors.mainColor),
-                                  ),
-                                ),
-                              ],
-                            ),
+                              ),
+                            ],
                           ),
                         ),
                       ),
@@ -122,7 +134,7 @@ class MenuView extends StatelessWidget {
                     if (UserController.to.isLoggedIn)
                       SectionWidget(
                           title: "حسابى",
-                          color: Color(0xFFFAFAFB),
+                          // color: Color(0xFFFAFAFB),
                           elevation: 0,
                           children: [
                             InkWell(
@@ -158,16 +170,16 @@ class MenuView extends StatelessWidget {
                                   );
                                   return;
                                 }
-                                if (!UserController.to.currentUser.value!
-                                    .hasActiveDiet()) {
-                                  customSnackBar(
-                                    title: "تنبيه",
-                                    message:
-                                        "لم يتم تعيين نظام غذائى حتى الأن.",
-                                    successful: false,
-                                  );
-                                  return;
-                                }
+                                // if (!UserController.to.currentUser.value!
+                                //     .hasActiveDiet()) {
+                                //   customSnackBar(
+                                //     title: "تنبيه",
+                                //     message:
+                                //         "لم يتم تعيين نظام غذائى حتى الأن.",
+                                //     successful: false,
+                                //   );
+                                //   return;
+                                // }
 
                                 Get.toNamed(AppConstants.dietPage,
                                     arguments: true);
@@ -222,17 +234,42 @@ class MenuView extends StatelessWidget {
                             ),
                             InkWell(
                               onTap: () {
-                                UserController.to.isSubscribed
-                                    ? Get.to(FollowingCardView())
-                                    : customSnackBar(
-                                        title: "تنبيه",
-                                        message: "انت غير مشترك في أي باقة",
-                                        successful: false,
-                                      );
+                                final userController = UserController.to;
+
+                                final isSubscribed =
+                                    userController.isSubscribed;
+
+                                final hasEnoughFoloowings = userController
+                                        .currentUser.value!.weekProgressList
+                                        .where((f) => f.excuse.isEmpty)
+                                        .length >=
+                                    2;
+
+                                if (!isSubscribed) {
+                                  customSnackBar(
+                                    title: "تنبيه",
+                                    message: "انت غير مشترك في أي باقة",
+                                    successful: false,
+                                  );
+                                  return;
+                                }
+
+                                if (!hasEnoughFoloowings) {
+                                  customSnackBar(
+                                    title: "تنبيه",
+                                    message:
+                                        "يجب ان يحتوي سجلك علي متابعتين اسبوعيتين علي الأقل",
+                                    successful: false,
+                                  );
+                                  return;
+                                }
+
+                                Get.to(FollowingCardView());
                               },
                               child: MenuButtonWidget(
-                                  leadingIcon: Icons.task_outlined,
-                                  title: "كارت المتابعة"),
+                                leadingIcon: Icons.task_outlined,
+                                title: "كارت المتابعة",
+                              ),
                             ),
                             InkWell(
                               onTap: () =>
@@ -321,7 +358,7 @@ class MenuView extends StatelessWidget {
                             },
                             child: MenuButtonWidget(
                                 leadingIcon: Icons.privacy_tip_outlined,
-                                title: "البيانات وسياسة الخصوية"),
+                                title: "البيانات وسياسة الخصوصية"),
                           ),
 
                           InkWell(
@@ -331,10 +368,7 @@ class MenuView extends StatelessWidget {
                               title: "عن Diet Picnic",
                               sideWidget: Text(
                                 "Version ${AppUpdateController.to.appVersion}",
-                                style: Theme.of(context)
-                                    .textTheme
-                                    .bodyMedium!
-                                    .copyWith(color: CustomColors.textBlack54),
+                                style: Theme.of(context).textTheme.bodyMedium,
                               ),
                             ),
                           ),

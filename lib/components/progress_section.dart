@@ -1,4 +1,5 @@
 import 'package:diet_picnic_client/components/section_card.dart';
+import 'package:diet_picnic_client/controller/theme_controller.dart';
 import 'package:diet_picnic_client/controller/user_controller.dart';
 import 'package:diet_picnic_client/core/custom_colors.dart';
 import 'package:diet_picnic_client/core/date_time_formater.dart';
@@ -18,15 +19,9 @@ class ProgressSection extends StatelessWidget {
       margin: const EdgeInsets.only(bottom: 12),
       padding: const EdgeInsets.all(16),
       decoration: BoxDecoration(
-        color: Colors.white,
+        color: ThemeController.to.isDarkMode?CustomColors.shadowLight:Colors.white,
         borderRadius: BorderRadius.circular(12),
-        boxShadow: [
-          BoxShadow(
-            color: Colors.black.withOpacity(0.05),
-            blurRadius: 6,
-            offset: const Offset(0, 3),
-          ),
-        ],
+
         border: Border.all(
           color: CustomColors.borderColor,
           width: 1,
@@ -43,7 +38,7 @@ class ProgressSection extends StatelessWidget {
                   child: Text(
                     DateTimeFormatter.dateTimeToFullDate(progress.date),
                     style: Theme.of(context).textTheme.titleMedium?.copyWith(
-                      color: CustomColors.selectedNavBarColor,
+                      color:ThemeController.to.isDarkMode?CustomColors.mainColor: CustomColors.selectedNavBarColor,
                       fontWeight: FontWeight.bold,
                     ),
                   ),
@@ -108,7 +103,7 @@ class ProgressSection extends StatelessWidget {
                     width: double.infinity,
                     padding: const EdgeInsets.all(12),
                     decoration: BoxDecoration(
-                      color: Colors.white,
+                      // color: Colors.white,
                       borderRadius: BorderRadius.circular(8),
                       border: Border(
                         right: BorderSide(
@@ -119,8 +114,8 @@ class ProgressSection extends StatelessWidget {
                     ),
                     child: Text(
                       progress.notes!,
-                      style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-                        color: CustomColors.textBlack87,
+                      style: Theme.of(context).textTheme.displaySmall?.copyWith(
+
                         fontStyle: FontStyle.italic,
                       ),
                     ),
@@ -132,7 +127,7 @@ class ProgressSection extends StatelessWidget {
                     width: double.infinity,
                     padding: const EdgeInsets.all(12),
                     decoration: BoxDecoration(
-                      color: Colors.white,
+                      // color: Colors.white,
                       borderRadius: BorderRadius.circular(8),
                       border: Border(
                         right: BorderSide(
@@ -144,7 +139,7 @@ class ProgressSection extends StatelessWidget {
                     child: Text(
                       progress.excuse,
                       style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-                        color: CustomColors.textBlack87,
+
                         fontStyle: FontStyle.italic,
                       ),
                     ),
@@ -181,7 +176,7 @@ class ProgressSection extends StatelessWidget {
     return Container(
       padding: const EdgeInsets.symmetric(vertical: 12, horizontal: 10),
       decoration: BoxDecoration(
-        color: Colors.grey.shade50,
+        // color: Colors.grey.shade50,
         borderRadius: BorderRadius.circular(8),
         border: Border.all(
           color: Colors.grey.shade300,
@@ -194,21 +189,19 @@ class ProgressSection extends StatelessWidget {
             width: 26,
             height: 26,
             fit: BoxFit.contain,
-            color: CustomColors.selectedNavBarColor, // Optional tint
+            color:ThemeController.to.isDarkMode?CustomColors.mainColor: CustomColors.selectedNavBarColor, // Optional tint
           ),
           const SizedBox(height: 6),
           Text(
             label,
-            style: Theme.of(context).textTheme.bodySmall?.copyWith(
-              color: CustomColors.textBlack54,
-            ),
+            style: Theme.of(context).textTheme.displaySmall,
             textAlign: TextAlign.center,
           ),
           const SizedBox(height: 4),
           Text(
             value,
             style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-              color: CustomColors.selectedNavBarColor,
+              color:ThemeController.to.isDarkMode?CustomColors.mainColor: CustomColors.selectedNavBarColor,
               fontWeight: FontWeight.bold,
             ),
             textAlign: TextAlign.center,
@@ -247,7 +240,7 @@ class ProgressSection extends StatelessWidget {
                   icon: const Icon(Icons.add),
                     label: const Text('إضافة تقدم أسبوعي'),
                   style: ElevatedButton.styleFrom(
-                    backgroundColor: CustomColors.mintGreen,
+                    backgroundColor: CustomColors.mintGold,
                     foregroundColor: Colors.white,
                     shape: RoundedRectangleBorder(
                       borderRadius: BorderRadius.circular(12),

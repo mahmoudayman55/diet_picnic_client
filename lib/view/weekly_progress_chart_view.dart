@@ -54,8 +54,8 @@ class _WeeklyProgressChartViewState extends State<WeeklyProgressChartView> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: CustomAppBar(title: "التقدم اللأسبوعى"),
-      backgroundColor: Colors.white,
+      appBar: CustomAppBar(title: "التقدم الأسبوعى"),
+      // backgroundColor: Colors.white,
       body: Padding(
         padding: const EdgeInsets.all(16.0),
         child: Column(
@@ -160,7 +160,7 @@ class _WeeklyProgressChartViewState extends State<WeeklyProgressChartView> {
                         ),
                       ),
                       const SizedBox(width: 6),
-                      Text(_labels[field]!),
+                      Text(_labels[field]!,style: Theme.of(context).textTheme.displayMedium,),
                     ],
                   ),
                   selected: _selected[field]!,
@@ -171,7 +171,7 @@ class _WeeklyProgressChartViewState extends State<WeeklyProgressChartView> {
                   },
                   selectedColor: _lineColors[field]!.withOpacity(0.15),
                   checkmarkColor: _lineColors[field],
-                  backgroundColor: Colors.white,
+                  // backgroundColor: Colors.white,
                   shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
                 );
               }).toList(),

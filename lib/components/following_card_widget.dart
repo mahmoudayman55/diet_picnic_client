@@ -1,4 +1,5 @@
 import 'package:diet_picnic_client/components/animated_column.dart';
+import 'package:diet_picnic_client/controller/theme_controller.dart';
 import 'package:diet_picnic_client/core/date_time_formater.dart';
 import 'package:diet_picnic_client/models/week_progress_model.dart';
 import 'package:flutter/material.dart';
@@ -14,7 +15,7 @@ Widget buildCompareProgressWidget(
     margin: const EdgeInsets.symmetric(vertical: 12),
     padding: const EdgeInsets.all(16),
     decoration: BoxDecoration(
-      color: Colors.white,
+      color:ThemeController.to.isDarkMode?CustomColors.shadowLight:Colors.white,
       borderRadius: BorderRadius.circular(12),
       boxShadow: [
         BoxShadow(
@@ -98,7 +99,7 @@ Widget _buildComparisonRow(
     margin: const EdgeInsets.only(bottom: 8),
     padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 12),
     decoration: BoxDecoration(
-      color: Colors.grey.shade50,
+      color: CustomColors.shadowLight,
       borderRadius: BorderRadius.circular(8),
       border: Border.all(color: Colors.grey.shade300),
     ),

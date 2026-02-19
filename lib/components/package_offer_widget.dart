@@ -25,7 +25,7 @@ class PackageOfferWidget extends StatelessWidget {
       margin: const EdgeInsets.all(5),
       padding: const EdgeInsets.all(12),
       decoration: BoxDecoration(
-        color: Colors.white,
+        color: CustomColors.shadowLight,
         borderRadius: BorderRadius.circular(16),
         boxShadow: [
           BoxShadow(

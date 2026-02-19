@@ -76,7 +76,7 @@ class PackageInfoSection extends StatelessWidget {
               decoration: BoxDecoration(
                 color: client.isExpired
                     ? Colors.red
-                    : CustomColors.mintGreen,
+                    : CustomColors.mintGold,
                 borderRadius: BorderRadius.circular(12),
               ),
               child: Text(

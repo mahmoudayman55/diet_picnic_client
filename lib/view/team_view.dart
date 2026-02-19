@@ -9,15 +9,14 @@ class TeamworkScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      backgroundColor: Colors.white,
+    return const Scaffold(
+      // backgroundColor: Colors.white,
       appBar: CustomAppBar(title: "فريق العمل"),
       body: SingleChildScrollView(
         child: AnimatedColumn(
-          children: const [
+          children: [
             DoctorCard(
-              imageUrl:
-              "drayman.jpg",
+              imageUrl: "drayman.jpg",
               name: "د. أيمن سعد العزاوي",
               title: "أخصائي الروماتيزم والتغذية العلاجية",
               description: """
@@ -28,10 +27,8 @@ class TeamworkScreen extends StatelessWidget {
 📚 دبلومة التغذية العلاجية - المعهد القومي
 """,
             ),
-
             DoctorCard(
-              imageUrl:
-                  "drlobna.jpg",
+              imageUrl: "drlobna.jpg",
               name: "د. لبنى يادم أبوقمير",
               title: "أخصائية السمنة والنحافة والتأهيل الرياضي",
               description: """
@@ -69,7 +66,7 @@ class DoctorCard extends StatelessWidget {
     return Container(
       margin: const EdgeInsets.all(12),
       decoration: BoxDecoration(
-        color: Colors.white,
+        color: CustomColors.shadowLight,
         borderRadius: BorderRadius.circular(20),
         boxShadow: [
           BoxShadow(
@@ -93,7 +90,7 @@ class DoctorCard extends StatelessWidget {
             ),
             const SizedBox(height: 16),
             Text(
-              name,
+              name,textAlign: TextAlign.center,
               style: Theme.of(context)
                   .textTheme
                   .headlineMedium
@@ -101,7 +98,7 @@ class DoctorCard extends StatelessWidget {
             ),
             const SizedBox(height: 6),
             Text(
-              title,
+              title,textAlign: TextAlign.center,
               style: Theme.of(context)
                   .textTheme
                   .displayLarge
@@ -114,7 +111,7 @@ class DoctorCard extends StatelessWidget {
               style: Theme.of(context)
                   .textTheme
                   .displayMedium
-                  ?.copyWith(color: Colors.grey[700]),
+              ,
             ),
           ],
         ),

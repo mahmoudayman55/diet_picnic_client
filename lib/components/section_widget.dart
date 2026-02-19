@@ -25,7 +25,7 @@ class SectionWidget extends StatelessWidget {
   Widget build(BuildContext context) {
     return Card(
       elevation: elevation,
-      color: color,
+      // color: color,
       child: Padding(
         padding: const EdgeInsets.all(16),
         child: Column(
@@ -39,8 +39,8 @@ class SectionWidget extends StatelessWidget {
                 children: [
                   Text(
                     optional ? "$title (Optional)" : title,
-                    style: Theme.of(context).textTheme.headlineSmall?.copyWith(
-                      color: CustomColors.textBlack87,
+                    style: Theme.of(context).textTheme.headlineMedium?.copyWith(
+                      // color: CustomColors.textBlack87,
                     ),
                   ),
                   if (sideWidget != null)

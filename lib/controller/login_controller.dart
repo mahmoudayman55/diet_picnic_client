@@ -153,7 +153,7 @@ final formKey = GlobalKey<FormState>();
                 .get();
 
             if (doc.exists && doc.data() != null) {
-              dietSystemModel = DietSystemModel.fromJson(doc.data()!);
+              dietSystemModel = DietSystemModel.fromJson(doc.data()!,activeDietSystem.assignedAt);
             }
           }
         }

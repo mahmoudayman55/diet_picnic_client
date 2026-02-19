@@ -20,7 +20,7 @@ class AddWeekProgressView extends StatelessWidget {
         title: Text(isEditing ? 'تعديل التقدم الأسبوعي' : 'إضافة تقدم أسبوعي',style: Theme.of(context).textTheme.displayLarge,),
         foregroundColor: Colors.white,
       ),
-      backgroundColor: Colors.white,
+      // backgroundColor: Colors.white,
       body: Padding(
         padding: const EdgeInsets.all(16.0),
         child: Form(
@@ -135,7 +135,7 @@ class AddWeekProgressView extends StatelessWidget {
                       ? Container(
                     padding: const EdgeInsets.all(12),
                     decoration: BoxDecoration(
-                      color: CustomColors.mintGreen,
+                      color: CustomColors.mintGold,
                       borderRadius: BorderRadius.circular(8),
                     ),
                     child: Row(

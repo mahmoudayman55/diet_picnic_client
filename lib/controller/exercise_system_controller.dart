@@ -14,9 +14,19 @@ bool showAppBar= false;
       showAppBar=Get.arguments;
     }
     // Dummy Data للتجربة
-    exerciseSystem = UserController.to.currentUser.value!.exerciseSystemModel!;
-  }
+checkExerciseSystem();  }
+  Rx<bool> hasDietSystem=Rx(false);
+  Rx<bool> loading=Rx(false);
 
+  checkExerciseSystem()async{
+    loading.value =true;
+    await UserController.to.refreshExerciseSystem();
+    hasDietSystem.value=UserController.to.currentUser.value!.hasActiveExercise();
+    if (hasDietSystem.value) {
+      exerciseSystem = UserController.to.currentUser.value!.exerciseSystemModel!;
+    }
+    loading.value=false;
+  }
   void openExercise(String url) {
 CustomUrlLauncher.launchGoogleDriveFolder(url);
     // هنا تضيف url_launcher

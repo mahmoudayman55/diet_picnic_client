@@ -17,7 +17,7 @@ class BodyCompositionView extends StatelessWidget {
       init: BodyCompositionController(),
       builder: (controller) {
         return Scaffold(
-          backgroundColor: Themes.lightTheme.scaffoldBackgroundColor,
+         //    backgroundColor: Themes.lightTheme.scaffoldBackgroundColor,
           appBar: CustomAppBar(
             title: 'صحتك في أرقام',
           ),
@@ -50,7 +50,7 @@ class BodyCompositionView extends StatelessWidget {
                    
                    // Results Section
                    if (controller.showResults.value && controller.bodyCompositionResult.value != null)
-                     _buildResultsSection(controller),
+                     _buildResultsSection(controller,context),
                    
                    const SizedBox(height: 24),
                    
@@ -129,15 +129,9 @@ class BodyCompositionView extends StatelessWidget {
     return Container(
       padding: const EdgeInsets.all(16),
       decoration: BoxDecoration(
-        color: Colors.white,
+        color: CustomColors.shadowLight,
         borderRadius: BorderRadius.circular(12),
-        boxShadow: [
-          BoxShadow(
-            color: Colors.grey.shade200,
-            blurRadius: 8,
-            offset: const Offset(0, 2),
-          ),
-        ],
+
       ),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
@@ -146,9 +140,7 @@ class BodyCompositionView extends StatelessWidget {
              children: [
                Text(
                  'البيانات المطلوبة',
-                 style: Themes.lightTheme.textTheme.displayLarge?.copyWith(
-                   fontWeight: FontWeight.bold,
-                 ),
+                 style: Theme.of(context).textTheme.displayLarge!.copyWith(fontWeight: FontWeight.bold)
                ),
                const SizedBox(width: 8),
                GestureDetector(
@@ -301,7 +293,7 @@ class BodyCompositionView extends StatelessWidget {
     );
   }
 
-  Widget _buildResultsSection(BodyCompositionController controller) {
+  Widget _buildResultsSection(BodyCompositionController controller,BuildContext context) {
     final result = controller.bodyCompositionResult.value!;
     
     return AnimatedContainer(
@@ -309,15 +301,15 @@ class BodyCompositionView extends StatelessWidget {
       curve: Curves.easeInOut,
       padding: const EdgeInsets.all(16),
       decoration: BoxDecoration(
-        color: Colors.white,
+        color: CustomColors.shadowLight,
         borderRadius: BorderRadius.circular(12),
-        boxShadow: [
-          BoxShadow(
-            color: Colors.grey.shade200,
-            blurRadius: 8,
-            offset: const Offset(0, 2),
-          ),
-        ],
+        // boxShadow: [
+        //   BoxShadow(
+        //     color: Colors.grey.shade200,
+        //     blurRadius: 8,
+        //     offset: const Offset(0, 2),
+        //   ),
+        // ],
       ),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
@@ -334,7 +326,7 @@ class BodyCompositionView extends StatelessWidget {
                 'النتائج',
                 style: Themes.lightTheme.textTheme.displayLarge?.copyWith(
                   fontWeight: FontWeight.bold,
-                  color: Colors.green.shade800,
+                  color: Colors.green,
                 ),
               ),
             ],
@@ -342,7 +334,7 @@ class BodyCompositionView extends StatelessWidget {
           const SizedBox(height: 16),
           
           // Ideal Body Weight
-          _buildResultCard(
+          _buildResultCard(context: context,
             icon: Icons.straighten,
             title: 'الوزن المثالي',
             value: '${result.idealBodyWeight.toStringAsFixed(1)} كجم',
@@ -352,7 +344,7 @@ class BodyCompositionView extends StatelessWidget {
           const SizedBox(height: 16),
           
           // BMI
-          _buildResultCard(
+          _buildResultCard(context: context,
             icon: Icons.monitor_weight,
             title: 'مؤشر كتلة الجسم (BMI)',
             value: '${result.bmi.toStringAsFixed(1)}',
@@ -364,7 +356,7 @@ class BodyCompositionView extends StatelessWidget {
           const SizedBox(height: 16),
           
           // Waist Circumference
-          _buildResultCard(
+          _buildResultCard(context: context,
             icon: Icons.accessibility_new,
             title: 'محيط الوسط',
             value: '${result.waistCircumference.toStringAsFixed(1)} سم',
@@ -376,7 +368,7 @@ class BodyCompositionView extends StatelessWidget {
           const SizedBox(height: 16),
           
           // Waist-to-Hip Ratio
-          _buildResultCard(
+          _buildResultCard(context: context,
             icon: Icons.compare_arrows,
             title: 'نسبة الوسط إلى الحوض',
             value: '${result.waistToHipRatio.toStringAsFixed(2)}',
@@ -396,11 +388,12 @@ class BodyCompositionView extends StatelessWidget {
     String? subtitle,
     Color? subtitleColor,
     required Color color,
+    required BuildContext context,
   }) {
     return Container(
       padding: const EdgeInsets.all(12),
       decoration: BoxDecoration(
-        color: color.withOpacity(0.1),
+        color: color.withOpacity(0.3),
         borderRadius: BorderRadius.circular(8),
         border: Border.all(color: color.withOpacity(0.3)),
       ),
@@ -425,9 +418,9 @@ class BodyCompositionView extends StatelessWidget {
               children: [
                 Text(
                   title,
-                  style: Themes.lightTheme.textTheme.displaySmall?.copyWith(
+                  style: Theme.of(context).textTheme.displaySmall?.copyWith(
                     fontWeight: FontWeight.w600,
-                    color: Colors.grey.shade700,
+
                   ),
                 ),
                 const SizedBox(height: 4),
@@ -505,7 +498,7 @@ class BodyCompositionView extends StatelessWidget {
     showDialog(
       context: context,
       builder: (BuildContext context) {
-        return Dialog(backgroundColor: Colors.white,
+        return Dialog(
           shape: RoundedRectangleBorder(
             borderRadius: BorderRadius.circular(16),
           ),
@@ -561,7 +554,7 @@ class BodyCompositionView extends StatelessWidget {
                       children: [
                         // Height Measurement
                         _buildInstructionSection(
-                          icon: '🧍‍♂️',
+                          icon: '🧍‍♂️',context: context,
                           title: 'أولاً: قياس الطول',
                           content: [
                             'الأدوات: مقياس طول (مسطرة حائطية أو شريط متر معدني مثبت على الحائط)',
@@ -581,7 +574,7 @@ class BodyCompositionView extends StatelessWidget {
                         
                         // Weight Measurement
                         _buildInstructionSection(
-                          icon: '⚖️',
+                          icon: '⚖️',context: context,
                           title: 'ثانيًا: قياس الوزن',
                           content: [
                             'الأدوات: ميزان رقمي أو ميكانيكي',
@@ -602,7 +595,7 @@ class BodyCompositionView extends StatelessWidget {
                         
                         // Waist Measurement
                         _buildInstructionSection(
-                          icon: '📏',
+                          icon: '📏',context: context,
                           title: 'ثالثًا: قياس محيط الوسط (Waist Circumference)',
                           content: [
                             'الأدوات: شريط قياس مرن (مثل شريط الخياطة - مازورة)',
@@ -623,7 +616,7 @@ class BodyCompositionView extends StatelessWidget {
                         
                         // Hip Measurement
                         _buildInstructionSection(
-                          icon: '',
+                          icon: '',context: context,
                           title: 'رابعًا: قياس محيط الحوض (Hip Circumference)',
                           content: [
                             'الأدوات: شريط قياس مرن (مثل شريط الخياطة - مازورة)',
@@ -684,11 +677,12 @@ class BodyCompositionView extends StatelessWidget {
     required String icon,
     required String title,
     required List<String> content,
+    required BuildContext context,
   }) {
     return Container(
       padding: const EdgeInsets.all(16),
       decoration: BoxDecoration(
-        color: Colors.grey.shade50,
+
         borderRadius: BorderRadius.circular(12),
         border: Border.all(color: Colors.grey.shade200),
       ),
@@ -718,8 +712,8 @@ class BodyCompositionView extends StatelessWidget {
             padding: const EdgeInsets.only(bottom: 4),
             child: Text(
               line,
-              style: Themes.lightTheme.textTheme.displaySmall?.copyWith(
-                color: Colors.grey.shade700,
+              style: Theme.of(context).textTheme.displaySmall?.copyWith(
+
                 height: 1.4,
               ),
             ),

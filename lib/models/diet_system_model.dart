@@ -6,10 +6,12 @@ class DietSystemModel {
   final String category2Link;
   final String category3Link;
   final List<String> instructions;
+  final DateTime? assignedAt;
 
   DietSystemModel({
     required this.id,
     required this.name,
+    required this.assignedAt,
     required this.order,
     required this.category1Link,
     required this.category2Link,
@@ -27,13 +29,14 @@ class DietSystemModel {
     'instructions': instructions,
   };
 
-  factory DietSystemModel.fromJson(Map<String, dynamic> json) {
+  factory DietSystemModel.fromJson(Map<String, dynamic> json,DateTime? assignedAt) {
     return DietSystemModel(
       id: json['id'] ?? '',
       name: json['name'] ?? '',
       category1Link: json['category1Link'] ?? '',
       category2Link: json['category2Link'] ?? '',
       category3Link: json['category3Link'] ?? '',
+      assignedAt: assignedAt ,
       instructions: List<String>.from(json['instructions'] ?? []), order: json['order'],
     );
   }

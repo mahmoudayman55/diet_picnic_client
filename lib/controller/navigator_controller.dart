@@ -69,14 +69,14 @@ class NavigatorController extends GetxController {
               );
               return;
             }
-            if(!UserController.to.currentUser.value!.hasActiveDiet()){
-              customSnackBar(
-                title: "تنبيه",
-                message: "لم يتم تعيين نظام غذائى حتى الأن.",
-                successful: false,
-              );
-              return;
-            }
+            // if(!UserController.to.currentUser.value!.hasActiveDiet()){
+            //   customSnackBar(
+            //     title: "تنبيه",
+            //     message: "لم يتم تعيين نظام غذائى.",
+            //     successful: false,
+            //   );
+            //   return;
+            // }
             await Get.put(DietController());
             selectedScreenTitle = "النظام الغذائى";
             currentScreen = DietView();
@@ -112,15 +112,15 @@ class NavigatorController extends GetxController {
               );
               return;
             }
-            if(!UserController.to.currentUser.value!.hasActiveExercise()){
-             // log(UserController.to.currentUser.value!.assignedExerciseSystems.join("-"));
-              customSnackBar(
-                title: "تنبيه",
-                message: "لم يتم تعيين نظام رياضى حتى الأن.",
-                successful: false,
-              );
-              return;
-            }
+            // if(!UserController.to.currentUser.value!.hasActiveExercise()){
+            //  // log(UserController.to.currentUser.value!.assignedExerciseSystems.join("-"));
+            //   customSnackBar(
+            //     title: "تنبيه",
+            //     message: "لم يتم تعيين نظام رياضى حتى الأن.",
+            //     successful: false,
+            //   );
+            //   return;
+            // }
             await Get.put(ExerciseSystemController());
             selectedScreenTitle = "النظام الرياضي";
             currentScreen = ExerciseSystemView();

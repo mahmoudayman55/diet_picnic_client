@@ -98,9 +98,9 @@ class LoginView extends GetView<LoginController> {
                         AlertDialog(
                           shape: RoundedRectangleBorder(
                               borderRadius: BorderRadius.circular(16)),
-                          title: const Text(
+                          title:  Text(
                             "إعادة تعيين كلمة المرور",
-                            textAlign: TextAlign.center,
+                            textAlign: TextAlign.center,style: Theme.of(context).textTheme.displayLarge,
                           ),
                           content: Text(
                             "لإعادة تعيين كلمة المرور، يرجى التواصل مع فريق الدعم على واتساب.",

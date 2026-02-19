@@ -53,59 +53,61 @@ class _ReadingSectionState extends State<ReadingSection>
             decoration: BoxDecoration(
               gradient: LinearGradient(
                 colors: [
-                  CustomColors.selectedNavBarColor,
-                  CustomColors.mainColor.withOpacity(0.8),
+                  Colors.redAccent.withOpacity(0.7),
+                  Colors.red,
                 ],
                 begin: Alignment.topLeft,
                 end: Alignment.bottomRight,
               ),
               borderRadius:  BorderRadius.circular(22),
             ),
-            child: Stack(
-              children: [
-                // دوائر ديكورية شفافة
-                Positioned(
-                  top: -30,
-                  left: -20,
-                  child: CircleAvatar(
-                    radius: 60,
-                    backgroundColor: Colors.white.withOpacity(0.1),
+            child: ClipRRect(borderRadius: BorderRadius.circular(22),
+              child: Stack(
+                children: [
+                  // دوائر ديكورية شفافة
+                  Positioned(
+                    top: -30,
+                    left: -20,
+                    child: CircleAvatar(
+                      radius: 60,
+                      backgroundColor: Colors.white.withOpacity(0.1),
+                    ),
                   ),
-                ),
-                Positioned(
-                  bottom: -20,
-                  right: -40,
-                  child: CircleAvatar(
-                    radius: 100,
-                    backgroundColor: Colors.white.withOpacity(0.1),
+                  Positioned(
+                    bottom: -20,
+                    right: -40,
+                    child: CircleAvatar(
+                      radius: 100,
+                      backgroundColor: Colors.white.withOpacity(0.1),
+                    ),
                   ),
-                ),
-                Padding(
-                  padding: const EdgeInsets.all(8.0),
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      Text(
-                        "المكتبة",
-                        style: Theme.of(context).textTheme.headlineLarge!.copyWith(
-                          color: Colors.white,
+                  Padding(
+                    padding: const EdgeInsets.all(8.0),
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        Text(
+                          "المكتبة",
+                          style: Theme.of(context).textTheme.headlineLarge!.copyWith(
+                            color: Colors.white,
 
-                          fontWeight: FontWeight.bold,
+                            fontWeight: FontWeight.bold,
+                          ),
                         ),
-                      ),
-                      SizedBox(height: 8),
-                      Text(
-                        "استمتع بقراءة كتب مميزة في الصحة والرياضة.",
-                        style: Theme.of(context).textTheme.displayMedium!.copyWith(
-                          color: Colors.white
+                        SizedBox(height: 8),
+                        Text(
+                          "استمتع بقراءة كتب مميزة في الصحة والرياضة.",
+                          style: Theme.of(context).textTheme.displayMedium!.copyWith(
+                            color: Colors.white
 
+                          ),
                         ),
-                      ),
-                    ],
+                      ],
+                    ),
                   ),
-                ),
-              ],
+                ],
+              ),
             ),
           ),
           // لوتي متحرك

@@ -14,7 +14,8 @@ class PackageHorizontalCard extends StatelessWidget {
     return Card(
       margin: const EdgeInsets.symmetric(vertical: 10, horizontal: 4),
       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
-      elevation: 8,color: Colors.white,
+      elevation:2,
+      //color: Colors.white,
       shadowColor: CustomColors.mainColor.withOpacity(0.15),
       child: InkWell(
         borderRadius: BorderRadius.circular(16),

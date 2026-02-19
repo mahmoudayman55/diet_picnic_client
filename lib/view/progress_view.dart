@@ -51,10 +51,10 @@ class ProgressView extends StatelessWidget {
                       Expanded(
                         child: ElevatedButton.icon(
                           onPressed:
-                          // UserController
-                          //         .to.currentUser.value!.weeklyFollowUpSent
-                          //     ? null
-                          //     :
+                          UserController
+                                  .to.currentUser.value!.weeklyFollowUpSent
+                              ? null
+                              :
                               () {
                                   Get.to(AddWeekProgressView());
                                 },

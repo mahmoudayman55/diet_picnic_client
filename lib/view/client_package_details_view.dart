@@ -155,12 +155,12 @@ class ClientPackageDetailsView extends StatelessWidget {
             Container(
               padding: const EdgeInsets.all(8),
               decoration: BoxDecoration(
-                color: CustomColors.mintGreen.withOpacity(0.3),
+                color: CustomColors.mintGold.withOpacity(0.3),
                 borderRadius: BorderRadius.circular(8),
               ),
               child: Icon(
                 icon,
-                color: CustomColors.mintGreen,
+                color: CustomColors.mintGold,
                 size: 20,
               ),
             ),

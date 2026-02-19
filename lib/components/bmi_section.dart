@@ -62,62 +62,64 @@ class _BmiSectionState extends State<BmiSection>
               ),
               borderRadius: BorderRadius.circular(22),
             ),
-            child: Stack(
-              children: [
-                // دوائر شفافة للديكور
-                Positioned(
-                  top: -30,
-                  left: -20,
-                  child: CircleAvatar(
-                    radius: 60,
-                    backgroundColor: Colors.white.withOpacity(0.1),
+            child: ClipRRect(borderRadius: BorderRadius.circular(22),
+              child: Stack(
+                children: [
+                  // دوائر شفافة للديكور
+                  Positioned(
+                    top: -30,
+                    left: -20,
+                    child: CircleAvatar(
+                      radius: 60,
+                      backgroundColor: Colors.white.withOpacity(0.1),
+                    ),
                   ),
-                ),
-                Positioned(
-                  bottom: -20,
-                  right: -40,
-                  child: CircleAvatar(
-                    radius: 100,
-                    backgroundColor: Colors.white.withOpacity(0.1),
+                  Positioned(
+                    bottom: -20,
+                    right: -40,
+                    child: CircleAvatar(
+                      radius: 100,
+                      backgroundColor: Colors.white.withOpacity(0.1),
+                    ),
                   ),
-                ),
-                Padding(
-                  padding: const EdgeInsets.all(16.0),
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      SizedBox(width: width * 0.5,
-                        child: Text(
-                          "صحتك في أرقام",
-                          style: Theme.of(context)
-                              .textTheme
-                              .headlineLarge!
-                              .copyWith(
-                            color: Colors.white,
+                  Padding(
+                    padding: const EdgeInsets.all(16.0),
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        SizedBox(width: width * 0.5,
+                          child: Text(
+                            "صحتك في أرقام",
+                            style: Theme.of(context)
+                                .textTheme
+                                .headlineLarge!
+                                .copyWith(
+                              color: Colors.white,
 
-                            fontWeight: FontWeight.bold,
+                              fontWeight: FontWeight.bold,
+                            ),
                           ),
                         ),
-                      ),
-                      const SizedBox(height: 8),
-                      SizedBox(
-                        width: width * 0.55,
-                        child: Text(
-                          "احسب مؤشر كتلة جسمك وتابع تقدمك نحو وزن صحي.",
-                          style: Theme.of(context)
-                              .textTheme
-                              .displayMedium!
-                              .copyWith(
-                            color: Colors.white
+                        const SizedBox(height: 8),
+                        SizedBox(
+                          width: width * 0.55,
+                          child: Text(
+                            "احسب مؤشر كتلة جسمك وتابع تقدمك نحو وزن صحي.",
+                            style: Theme.of(context)
+                                .textTheme
+                                .displayMedium!
+                                .copyWith(
+                              color: Colors.white
 
+                            ),
                           ),
                         ),
-                      ),
-                    ],
+                      ],
+                    ),
                   ),
-                ),
-              ],
+                ],
+              ),
             ),
           ),
           // لوتي متحرك

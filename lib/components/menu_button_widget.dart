@@ -24,7 +24,7 @@ class MenuButtonWidget extends StatelessWidget {
       child: Container(margin: EdgeInsets.symmetric(vertical: 4),
         padding: const EdgeInsets.all(8),
         decoration: BoxDecoration(
-          color: Colors.white,
+          // color: Colors.white,
           borderRadius: BorderRadius.circular(5),
         ),
         child: Row(
@@ -34,7 +34,7 @@ class MenuButtonWidget extends StatelessWidget {
               children: [
                 Padding(
                   padding: const EdgeInsets.only(left: 8.0),
-                  child: Icon(leadingIcon, color: Colors.black87),
+                  child: Icon(leadingIcon, ),
                 ),
                 Text(
                   title,

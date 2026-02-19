@@ -4,7 +4,7 @@ import 'package:get/get.dart';
 
 void showComingSoonDialog() {
   Get.dialog(
-    Dialog(backgroundColor: Colors.white,
+    Dialog(
       shape: RoundedRectangleBorder(
         borderRadius: BorderRadius.circular(20),
       ),
@@ -17,7 +17,7 @@ void showComingSoonDialog() {
             Text(
               "قريبًا 🔥",
               style: Get.textTheme.headlineLarge?.copyWith(
-                color: const Color(0xFF974B6A),
+
                 fontWeight: FontWeight.bold,
               ),
             ),
