@@ -21,7 +21,8 @@ class CustomColors {
 
   // Card colors
   static const Color lightCard = Colors.white;
-  static const Color darkCard = Color(0xFF1E1E1E);
+  static const Color darkCard =
+      Color(0xFF252525); // slightly elevated dark surface
 
   // Text
   static const Color textBlack = Colors.black;

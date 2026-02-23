@@ -6,6 +6,7 @@ import 'package:diet_picnic_client/components/informationTRWidget.dart';
 import 'package:diet_picnic_client/components/loading_widget.dart';
 import 'package:diet_picnic_client/components/logo_loading_widget.dart';
 import 'package:diet_picnic_client/components/lotti_widget.dart';
+import 'package:diet_picnic_client/components/meeting_banner_widget.dart';
 import 'package:diet_picnic_client/components/offer_widget.dart';
 import 'package:diet_picnic_client/components/offers_slider.dart';
 import 'package:diet_picnic_client/components/reading_section.dart';
@@ -14,13 +15,13 @@ import 'package:diet_picnic_client/components/review_widget.dart';
 import 'package:diet_picnic_client/components/section_widget.dart';
 import 'package:diet_picnic_client/components/package_widget.dart';
 import 'package:diet_picnic_client/components/visual_section.dart';
+import 'package:diet_picnic_client/components/weekly_follow_up_card.dart';
 import 'package:diet_picnic_client/components/welcome_card.dart';
 import 'package:diet_picnic_client/controller/home_controller.dart';
+import 'package:diet_picnic_client/controller/meetings_controller.dart';
 import 'package:diet_picnic_client/controller/user_controller.dart';
 import 'package:diet_picnic_client/core/app_constants.dart';
 import 'package:diet_picnic_client/core/custom_colors.dart';
-import 'package:diet_picnic_client/core/theme.dart';
-import 'package:diet_picnic_client/view/add_progrss_view.dart';
 import 'package:diet_picnic_client/view/progress_view.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -43,6 +44,7 @@ class HomeView extends GetView<HomeController> {
             child: RefreshIndicator(
               onRefresh: () async {
                 controller.onInit();
+                MeetingsController.to.onInit();
               },
               child: SingleChildScrollView(
                 child: Column(
@@ -51,103 +53,20 @@ class HomeView extends GetView<HomeController> {
                     if (UserController.to.isLoggedIn &&
                         UserController.to.isSubscribed &&
                         UserController.to.isSubscriptionActive &&
-                        !UserController.to.currentUser.value!.weeklyFollowUpSent)
-                      InkWell(
-                        onTap: () => Get.to(AddWeekProgressView()),
-                        child: Container(
-                          width: double.infinity,
-                          padding: EdgeInsets.all(width * 0.04),
+                        !UserController
+                            .to.currentUser.value!.weeklyFollowUpSent)
+                      const WeeklyFollowUpCard(),
 
-                          // اللون المؤثر على كل الودجت (الخلفية)
-                          decoration: BoxDecoration(
-                            color: DateTime.now().weekday == DateTime.thursday
-                                ? Colors.red.shade50
-                                : DateTime.now().weekday == DateTime.wednesday
-                                    ? Colors.orange.shade50
-                                    : Colors.blue.shade50,
-                            borderRadius: BorderRadius.circular(12),
-                          ),
-
-                          child: Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              Row(
-                                children: [
-                                  // أيقونة بلون حسب اليوم
-                                  Container(
-                                    padding: EdgeInsets.all(width * 0.02),
-                                    decoration: BoxDecoration(
-                                      color: DateTime.now().weekday ==
-                                              DateTime.thursday
-                                          ? Colors.red
-                                          : DateTime.now().weekday ==
-                                                  DateTime.wednesday
-                                              ? Colors.orange
-                                              : Colors.blue,
-                                      borderRadius: BorderRadius.circular(8),
-                                    ),
-                                    child: const Icon(
-                                      Icons.notifications_none,
-                                      color: Colors.white,
-                                      size: 24,
-                                    ),
-                                  ),
-
-                                  SizedBox(width: width * 0.03),
-
-                                  Expanded(
-                                    child: Column(
-                                      crossAxisAlignment:
-                                          CrossAxisAlignment.start,
-                                      children: [
-                                        // عنوان المتابعة
-                                        Text(
-                                          'المتابعة الأسبوعية',
-                                          style: Themes
-                                              .lightTheme.textTheme.displayLarge
-                                              ?.copyWith(
-                                            fontWeight: FontWeight.bold,
-                                            color: DateTime.now().weekday ==
-                                                    DateTime.thursday
-                                                ? Colors.red.shade700
-                                                : DateTime.now().weekday ==
-                                                        DateTime.wednesday
-                                                    ? Colors.orange.shade700
-                                                    : Colors.blue.shade700,
-                                          ),
-                                        ),
-
-                                        // الرسالة الديناميكية حسب اليوم
-                                        Text(
-                                          DateTime.now().weekday ==
-                                                  DateTime.thursday
-                                              ? "انهارده آخر فرصة — لازم تبعت المتابعة الأسبوعية اليوم"
-                                              : DateTime.now().weekday ==
-                                                      DateTime.wednesday
-                                                  ? "فاضل يومين بس — يفضل تبعت المتابعة الأسبوعية قبل نهاية الأسبوع"
-                                                  : "تذكير: لا تنسَ إرسال المتابعة الأسبوعية قبل نهاية الأسبوع",
-                                          style: Themes
-                                              .lightTheme.textTheme.displaySmall
-                                              ?.copyWith(
-                                            color: DateTime.now().weekday ==
-                                                    DateTime.thursday
-                                                ? Colors.red.shade600
-                                                : DateTime.now().weekday ==
-                                                        DateTime.wednesday
-                                                    ? Colors.orange.shade600
-                                                    : Colors.blue.shade600,
-                                            fontWeight: FontWeight.w600,
-                                          ),
-                                        ),
-                                      ],
-                                    ),
-                                  ),
-                                ],
-                              ),
-                            ],
-                          ),
+                    // Meeting banner — visible to everyone
+                    Column(
+                      children: [
+                        SizedBox(height: heigh * 0.03),
+                        const MeetingBannerWidget(),
+                        SizedBox(
+                          height: heigh * 0.03,
                         ),
-                      ),
+                      ],
+                    ),
 
                     WelcomeCard(),
                     SizedBox(

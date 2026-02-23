@@ -1,4 +1,3 @@
-
 import 'package:diet_picnic_client/controller/all_reviews_controller.dart';
 import 'package:diet_picnic_client/controller/app_update_controller.dart';
 import 'package:diet_picnic_client/controller/books_controller.dart';
@@ -7,6 +6,7 @@ import 'package:diet_picnic_client/controller/diet_controller.dart';
 import 'package:diet_picnic_client/controller/exercise_system_controller.dart';
 import 'package:diet_picnic_client/controller/home_controller.dart';
 import 'package:diet_picnic_client/controller/login_controller.dart';
+import 'package:diet_picnic_client/controller/meetings_controller.dart';
 import 'package:diet_picnic_client/controller/offer_details_controller.dart';
 import 'package:diet_picnic_client/controller/offer_packages_controller.dart';
 import 'package:diet_picnic_client/controller/on_boarding_controller.dart';
@@ -23,6 +23,7 @@ import 'package:diet_picnic_client/view/change_password_view.dart';
 import 'package:diet_picnic_client/view/diet_view.dart';
 import 'package:diet_picnic_client/view/exercise_system_view.dart';
 import 'package:diet_picnic_client/view/login_view.dart';
+import 'package:diet_picnic_client/view/meetings_view.dart';
 import 'package:diet_picnic_client/view/navigator_view.dart';
 import 'package:diet_picnic_client/view/offer_details_view.dart';
 import 'package:diet_picnic_client/view/offer_packages_view.dart';
@@ -35,8 +36,6 @@ import 'package:diet_picnic_client/view/body_composition_view.dart';
 import 'package:get/get.dart';
 
 import 'app_constants.dart';
-
-
 
 class GetRoutes {
   static const home = '/home';
@@ -59,22 +58,18 @@ class GetRoutes {
         );
       }),
       page: () => LoginView(),
-    ),     GetPage(
+    ),
+    GetPage(
       name: AppConstants.reviewsPage,
       binding: BindingsBuilder(() {
         Get.put(AllReviewsController());
-
       }),
       page: () => AllReviewsView(),
     ),
-
-
     GetPage(
       name: AppConstants.changePasswordPage,
       binding: BindingsBuilder(() {
         Get.put(ChangePasswordController());
-
-
       }),
       page: () => ChangePasswordView(),
     ),
@@ -82,30 +77,23 @@ class GetRoutes {
       name: AppConstants.videosPage,
       binding: BindingsBuilder(() {
         Get.put(VideosController());
-
-
       }),
       page: () => VideosView(),
-    ),    GetPage(
+    ),
+    GetPage(
       name: AppConstants.booksPage,
       binding: BindingsBuilder(() {
         Get.put(BooksController());
-
-
       }),
       page: () => BooksView(),
     ),
-
     GetPage(
       name: AppConstants.updatePage,
       binding: BindingsBuilder(() {
-        Get.put(
-          AppUpdateController(),permanent: true
-        );
+        Get.put(AppUpdateController(), permanent: true);
       }),
       page: () => AppUpdateView(),
     ),
-
     GetPage(
       name: AppConstants.registerPage,
       binding: BindingsBuilder(() {
@@ -114,15 +102,27 @@ class GetRoutes {
         );
       }),
       page: () => RegisterView(),
-    ),  GetPage(
+    ),
+    GetPage(
       name: AppConstants.navigatorPage,
       binding: BindingsBuilder(() {
-        Get.put(
-          HomeController(),
-        );
+        Get.put(HomeController());
+        Get.put(MeetingsController());
       }),
       page: () => NavigatorView(),
-    ),   GetPage(
+    ),
+    GetPage(
+      name: AppConstants.meetingsPage,
+      binding: BindingsBuilder(() {
+        // MeetingsController is already put by the navigator binding
+        // This ensures it's available if navigated directly
+        if (!Get.isRegistered<MeetingsController>()) {
+          Get.put(MeetingsController());
+        }
+      }),
+      page: () => const MeetingsView(),
+    ),
+    GetPage(
       name: AppConstants.packageDetailsPage,
       binding: BindingsBuilder(() {
         Get.put(
@@ -130,7 +130,8 @@ class GetRoutes {
         );
       }),
       page: () => PackageDetailsView(),
-    ), GetPage(
+    ),
+    GetPage(
       name: AppConstants.offerPackagesPage,
       binding: BindingsBuilder(() {
         Get.put(
@@ -138,7 +139,8 @@ class GetRoutes {
         );
       }),
       page: () => OfferPackagesView(),
-    ),    GetPage(
+    ),
+    GetPage(
       name: AppConstants.offersDetailsPage,
       binding: BindingsBuilder(() {
         Get.put(
@@ -148,22 +150,22 @@ class GetRoutes {
       page: () => OfferDetailsView(),
     ),
     GetPage(
-      name: AppConstants.dietPage,
-      binding: BindingsBuilder(() {
-        Get.put(
-          DietController(),
-        );
-      }),
-      page: () => DietView()
-    ),    GetPage(
-      name: AppConstants.exerciseSystemsPage,
-      binding: BindingsBuilder(() {
-        Get.put(
-          ExerciseSystemController(),
-        );
-      }),
-      page: () => ExerciseSystemView(),arguments: true
-    ),
+        name: AppConstants.dietPage,
+        binding: BindingsBuilder(() {
+          Get.put(
+            DietController(),
+          );
+        }),
+        page: () => DietView()),
+    GetPage(
+        name: AppConstants.exerciseSystemsPage,
+        binding: BindingsBuilder(() {
+          Get.put(
+            ExerciseSystemController(),
+          );
+        }),
+        page: () => ExerciseSystemView(),
+        arguments: true),
     GetPage(
       name: AppConstants.waterReminderPage,
       binding: BindingsBuilder(() {
