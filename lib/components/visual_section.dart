@@ -49,7 +49,7 @@ class _VisualSectionState extends State<VisualSection>
         children: [
           // خلفية منحنية بتدرج لوني
           Container(
-            width: width*0.44,
+            width: width*0.44,constraints: BoxConstraints(minHeight: 120),
             height: heigh * 0.16,
             decoration: BoxDecoration(
               gradient: LinearGradient(
@@ -99,7 +99,7 @@ class _VisualSectionState extends State<VisualSection>
                         SizedBox(height: 8),
                         Text(
                           "فيديوهات شيّقة عن الصحة والرياضة.",
-                          style: Theme.of(context).textTheme.displayMedium!.copyWith(
+                          style: Theme.of(context).textTheme.displaySmall!.copyWith(
                             color: Colors.white
 
                           ),

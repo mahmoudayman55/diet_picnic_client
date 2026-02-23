@@ -47,7 +47,7 @@ class OfferPackagesView extends GetView<OfferPackagesController> {
                                       .headlineSmall
                                       ?.copyWith(
                                         fontWeight: FontWeight.bold,
-                                        color: Colors.black87,
+
                                       ),
                                 ),
                               ),

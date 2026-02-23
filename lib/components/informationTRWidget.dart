@@ -50,7 +50,7 @@ class _KnowledgeSectionState extends State<KnowledgeSection>
           // الخلفية
           Container(
             width: width,
-            height: heigh * 0.18,
+            height: heigh * 0.2,constraints: BoxConstraints(minHeight: 145),
             decoration: BoxDecoration(
               gradient: LinearGradient(
                 colors: [

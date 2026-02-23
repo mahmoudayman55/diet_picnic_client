@@ -24,16 +24,16 @@ class PackageOfferWidget extends StatelessWidget {
     return Container(
       margin: const EdgeInsets.all(5),
       padding: const EdgeInsets.all(12),
-      decoration: BoxDecoration(
-        color: CustomColors.shadowLight,
+      decoration: BoxDecoration(border: Border.all(color: CustomColors.borderColor,width: 2),
+       // color: CustomColors.shadowLight,
         borderRadius: BorderRadius.circular(16),
-        boxShadow: [
-          BoxShadow(
-            color: Colors.black.withOpacity(0.08),
-            blurRadius: 8,
-            offset: const Offset(0, 4),
-          ),
-        ],
+        // boxShadow: [
+        //   BoxShadow(
+        //     color: Colors.black.withOpacity(0.08),
+        //     blurRadius: 8,
+        //     offset: const Offset(0, 4),
+        //   ),
+        // ],
       ),
       // responsive width
       child: IntrinsicHeight(

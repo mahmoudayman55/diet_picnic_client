@@ -47,7 +47,7 @@ class _ReadingSectionState extends State<ReadingSection>
         clipBehavior: Clip.none,
         children: [
           // خلفية منحنية بتدرج لوني
-          Container(
+          Container(constraints: BoxConstraints(minHeight: 120),
             width: width*0.44,
             height: heigh * 0.16,
             decoration: BoxDecoration(

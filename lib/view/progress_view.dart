@@ -75,7 +75,7 @@ class ProgressView extends StatelessWidget {
                             'إضافة تقدم أسبوعي',
                             style: Theme.of(context)
                                 .textTheme
-                                .displayMedium!
+                                .displaySmall!
                                 .copyWith(color: Colors.white),
                             textAlign: TextAlign.center,
                           ),
@@ -113,7 +113,7 @@ class ProgressView extends StatelessWidget {
                           style: ElevatedButton.styleFrom(
                             textStyle: Theme.of(context)
                                 .textTheme
-                                .displayMedium!
+                                .displaySmall!
                                 .copyWith(
                                     color: CustomColors.selectedNavBarColor),
                             foregroundColor: CustomColors.selectedNavBarColor,

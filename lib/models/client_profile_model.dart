@@ -383,9 +383,9 @@ class ClientProfileModel {
     days %= 7;
 
     final parts = <String>[];
-    if (months > 0) parts.add('$months شهر');
-    if (weeks > 0) parts.add('$weeks أسبوع');
-    if (days > 0) parts.add('$days أيام');
+    if (months > 0) parts.add('$months ش');
+    if (weeks > 0) parts.add('$weeks أ');
+    if (days > 0) parts.add('$days ي');
     return parts.isEmpty ? 'اليوم' : parts.join(' و ');
   }
 

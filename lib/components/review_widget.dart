@@ -39,7 +39,7 @@ class ReviewWidget extends StatelessWidget {
                   child:  CustomCachedNetworkImage(imageUrl: review.profileImage),
                 ),
               ),
-              const SizedBox(width: 12),
+              const SizedBox(width: 8),
           
               // نصوص المراجعة
               Expanded(
@@ -50,10 +50,12 @@ class ReviewWidget extends StatelessWidget {
                     Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
-                        Text(
-                          review.name,
-                          style: Theme.of(context).textTheme.displayMedium!.copyWith(
-                            fontWeight: FontWeight.bold,
+                        Flexible(
+                          child: Text(
+                            review.name,
+                            style: Theme.of(context).textTheme.displayMedium!.copyWith(
+                              fontWeight: FontWeight.bold,
+                            ),
                           ),
                         ),
                         Text(
@@ -66,7 +68,7 @@ class ReviewWidget extends StatelessWidget {
                       ],
                     ),
           
-                    const SizedBox(height: 6),
+                    const SizedBox(height: 2),
           
                     // النجوم
                     Row(
@@ -80,13 +82,13 @@ class ReviewWidget extends StatelessWidget {
                       ),
                     ),
           
-                    const SizedBox(height: 8),
+                    const SizedBox(height: 2),
           
                     // نص الريفيو
                     Flexible(
                       child: Text(
                         review.comment,overflow: TextOverflow.ellipsis,maxLines: maxLines,
-                        style: Theme.of(context).textTheme.displayMedium,
+                        style: Theme.of(context).textTheme.displaySmall,
                       ),
                     ),
                   ],

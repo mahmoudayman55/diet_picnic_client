@@ -249,7 +249,7 @@ class HomeView extends GetView<HomeController> {
                       ],
                     ),
                     SizedBox(
-                      height: heigh * 0.22,
+                      height: heigh * 0.24,
                       child: Obx(
                         () => controller.isLoadingReviews.value
                             ? LogoLoadingWidget()

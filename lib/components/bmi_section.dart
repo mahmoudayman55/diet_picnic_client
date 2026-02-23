@@ -50,7 +50,7 @@ class _BmiSectionState extends State<BmiSection>
           // الخلفية
           Container(
             width: width,
-            height: heigh * 0.18,
+            height: heigh * 0.2,
             decoration: BoxDecoration(
               gradient: LinearGradient(
                 colors: [

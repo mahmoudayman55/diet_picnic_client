@@ -147,7 +147,7 @@ class _WelcomeCardState extends State<WelcomeCard>
         elevation: 2,
         child: Stack(
           children: [
-            Container(
+            Container(constraints: BoxConstraints(minHeight: 160),
                 width: double.infinity,
                 height: MediaQuery.of(context).size.height * 0.22,
                 // Approximate height to match front content roughly

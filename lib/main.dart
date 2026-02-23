@@ -28,7 +28,8 @@ import 'package:sizer/sizer.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'dart:convert';
 
-import 'package:crypto/crypto.dart';
+import 'package:device_preview/device_preview.dart';
+import 'package:flutter/foundation.dart';
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -59,7 +60,12 @@ Future<void> main() async {
   initializeDateFormatting("ar_SA");
   await Hive.initFlutter();
   await Future.delayed(const Duration(milliseconds: 300));
-  runApp(const MyApp());
+  runApp(
+    DevicePreview(
+      enabled: !kReleaseMode,
+      builder: (context) => const MyApp(), // Wrap your app
+    ),
+  );
 }
 
 class MyApp extends StatelessWidget {
@@ -72,10 +78,13 @@ class MyApp extends StatelessWidget {
     return Sizer(
       builder: (context, orientation, deviceType) {
         return Obx(() => GetMaterialApp(
+              useInheritedMediaQuery: true,
+              locale: DevicePreview.locale(context),
+              builder: DevicePreview.appBuilder,
               scrollBehavior: MyCustomScrollBehavior(),
               debugShowCheckedModeBanner: false,
               textDirection: TextDirection.rtl,
-              locale: const Locale('ar', 'AE'),
+              // locale: const Locale('ar', 'AE'),
               theme: Themes.lightTheme,
               darkTheme: Themes.darkTheme,
               themeMode: ThemeController.to.themeMode,

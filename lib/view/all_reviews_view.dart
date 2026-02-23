@@ -30,9 +30,12 @@ class AllReviewsView extends GetView<AllReviewsController> {
                   child: ListView.builder(
                       itemCount: controller.reviews.length,
                       itemBuilder: (c, i) => SizedBox(width: width,
-                        child: ReviewWidget(
-                          review: controller.reviews[i],
-                          maxLines: 100,
+                        child: Padding(
+                          padding: const EdgeInsets.all(8.0),
+                          child: ReviewWidget(
+                            review: controller.reviews[i],
+                            maxLines: 100,
+                          ),
                         ),
                       ),
                     ),

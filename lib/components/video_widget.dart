@@ -48,7 +48,7 @@ class VideoWidget extends StatelessWidget {
                   ),
                   Text(
                     video.name,
-                    style: Theme.of(context).textTheme.displayLarge,
+                    style: Theme.of(context).textTheme.displayMedium,
                     textAlign: TextAlign.center,
                   ),
                   SizedBox(
@@ -64,10 +64,10 @@ class VideoWidget extends StatelessWidget {
                             CustomUrlLauncher.launchWebUrl(video.videoLink);
                           },
                           label: Text(
-                            "إستكشاف",
+                            "استكشاف",
                             style: Theme.of(context)
                                 .textTheme
-                                .displayMedium!
+                                .displaySmall!
                                 .copyWith(
                                     color: CustomColors.selectedNavBarColor),
                           )))

@@ -61,52 +61,52 @@ class Themes {
     headlineLarge: TextStyle(
       fontFamily: AppConstants.fontFamily,
       fontWeight: FontWeight.bold,
-      fontSize: 20.0.sp,
+      fontSize: 18.0.sp, // ✅ نفس Light Mode
       color: CustomColors.textWhite,
     ),
     headlineMedium: TextStyle(
       fontFamily: AppConstants.fontFamily,
       fontWeight: FontWeight.w600,
-      fontSize: 18.0.sp,
+      fontSize: 16.0.sp, // ✅ نفس Light Mode
       color: CustomColors.textWhite,
-    ),    headlineSmall: TextStyle(
+    ),
+    headlineSmall: TextStyle(
       fontFamily: AppConstants.fontFamily,
-      fontWeight: FontWeight.w500,
-      fontSize: 17.0.sp,
+      fontWeight: FontWeight.w600, // ✅ نفس Light Mode
+      fontSize: 14.0.sp, // ✅ نفس Light Mode
       color: CustomColors.textWhite,
     ),
     displayLarge: TextStyle(
       fontFamily: AppConstants.fontFamily,
       fontWeight: FontWeight.w600,
-      fontSize: 16.0.sp,
+      fontSize: 13.0.sp, // ✅ نفس Light Mode
       color: CustomColors.textWhite70,
     ),
     displayMedium: TextStyle(
       fontFamily: AppConstants.fontFamily,
       fontWeight: FontWeight.w500,
-      fontSize: 12.0.sp,
+      fontSize: 11.2.sp, // ✅ نفس Light Mode
       color: CustomColors.textWhite70,
     ),
     displaySmall: TextStyle(
       fontFamily: AppConstants.fontFamily,
       fontWeight: FontWeight.w500,
-      fontSize: 10.0.sp,
+      fontSize: 8.0.sp, // ✅ نفس Light Mode
       color: CustomColors.textWhite60,
     ),
     bodyMedium: TextStyle(
       fontFamily: AppConstants.fontFamily,
       fontWeight: FontWeight.normal,
-      fontSize: 10.0.sp,
+      fontSize: 8.0.sp, // ✅ نفس Light Mode
       color: CustomColors.textWhite70,
     ),
     bodySmall: TextStyle(
       fontFamily: AppConstants.fontFamily,
       fontWeight: FontWeight.normal,
-      fontSize: 8.0.sp,
+      fontSize: 8.0.sp, // ✅ نفس Light Mode
       color: CustomColors.textWhite60,
     ),
   );
-
   // Tablet text theme (kept minimal)
   static final TextTheme _tabletTextTheme = TextTheme(
     headlineLarge: TextStyle(

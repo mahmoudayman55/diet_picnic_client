@@ -53,7 +53,7 @@ class BookWidget extends StatelessWidget {
                   ),
                   Text(
                     book.name,
-                    style: Theme.of(context).textTheme.displayLarge,
+                    style: Theme.of(context).textTheme.displayMedium,
                     textAlign: TextAlign.center,
                   ),
                   SizedBox(
@@ -72,7 +72,7 @@ class BookWidget extends StatelessWidget {
                             "إستكشاف",
                             style: Theme.of(context)
                                 .textTheme
-                                .displayMedium!
+                                .displaySmall!
                                 .copyWith(
                                     color: CustomColors.selectedNavBarColor),
                           )))
