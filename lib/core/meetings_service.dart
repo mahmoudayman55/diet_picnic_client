@@ -11,12 +11,17 @@ class MeetingsService {
         .map((doc) => MeetingModel.fromJson(doc.data(), doc.id))
         .toList();
 
-    // Sort ascending by date then time
-    meetings.sort((a, b) {
-      final dateCompare = a.date.compareTo(b.date);
-      if (dateCompare != 0) return dateCompare;
-      return a.time.compareTo(b.time);
-    });
+    // Sort ascending by actual date and time
+    try {
+      meetings.sort((a, b) => a.meetingDateTime.compareTo(b.meetingDateTime));
+    } catch (e) {
+      // Fallback sorting by string if parsing fails for any reason
+      meetings.sort((a, b) {
+        final dateCompare = a.date.compareTo(b.date);
+        if (dateCompare != 0) return dateCompare;
+        return a.time.compareTo(b.time);
+      });
+    }
 
     return meetings;
   }

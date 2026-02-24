@@ -40,8 +40,8 @@ class MeetingModel {
   /// Whether the meeting's scheduled time has been reached (can join now)
   bool get hasStarted {
     try {
-      return DateTime.now().isAfter(_meetingDateTime) ||
-          DateTime.now().isAtSameMomentAs(_meetingDateTime);
+      return DateTime.now().isAfter(meetingDateTime) ||
+          DateTime.now().isAtSameMomentAs(meetingDateTime);
     } catch (_) {
       return false;
     }
@@ -51,14 +51,14 @@ class MeetingModel {
   bool get hasExpired {
     try {
       return DateTime.now().isAfter(
-        _meetingDateTime.add(const Duration(minutes: 90)),
+        meetingDateTime.add(const Duration(minutes: 90)),
       );
     } catch (_) {
       return false;
     }
   }
 
-  DateTime get _meetingDateTime {
+  DateTime get meetingDateTime {
     final dateParts = date.split('-');
     final year = int.parse(dateParts[0]);
     final month = int.parse(dateParts[1]);

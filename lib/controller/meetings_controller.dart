@@ -18,29 +18,24 @@ class MeetingsController extends GetxController {
     fetchMeetings();
   }
 
-  /// All meetings where date >= today (upcoming)
+  /// All meetings that haven't expired yet (running or upcoming)
   List<MeetingModel> get upcomingMeetings =>
-      meetings.where((m) => m.isUpcoming).toList();
+      meetings.where((m) => !m.hasExpired).toList();
 
-  /// All meetings where date < today (past)
+  /// All meetings that have expired (past)
   List<MeetingModel> get pastMeetings =>
-      meetings.where((m) => m.isPast).toList();
+      meetings.where((m) => m.hasExpired).toList();
 
-  /// The very next upcoming meeting (closest date)
+  /// The very next available meeting (running or upcoming)
   MeetingModel? get nextMeeting =>
-      upcomingMeetings.isNotEmpty ? upcomingMeetings.first : null;
+      meetings.firstWhereOrNull((m) => !m.hasExpired);
 
   Future<void> fetchMeetings() async {
     try {
       isLoading.value = true;
       final result = await _service.getAllMeetings();
-      log("message");
-
 
       meetings.assignAll(result);
-      log(meetings.first.time.toString());
-     log( meetings.length.toString());
-      log(meetings.first.date.toString());
     } catch (e) {
       log('MeetingsController: error fetching meetings: $e');
     } finally {

@@ -3,7 +3,6 @@ import 'package:diet_picnic_client/components/custom_url_luncher.dart';
 import 'package:diet_picnic_client/components/logo_loading_widget.dart';
 import 'package:diet_picnic_client/controller/meetings_controller.dart';
 import 'package:diet_picnic_client/core/custom_colors.dart';
-import 'package:diet_picnic_client/core/theme.dart';
 import 'package:diet_picnic_client/models/meeting_model.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -156,13 +155,12 @@ class _MeetingCard extends StatelessWidget {
                   child: Text(
                     meeting.title,
                     style: Theme.of(context).textTheme.headlineSmall?.copyWith(
-                      fontWeight: FontWeight.bold,
-                    ),
+                          fontWeight: FontWeight.bold,
+                        ),
                     maxLines: 1,
                     overflow: TextOverflow.ellipsis,
                   ),
                 ),
-
               ],
             ),
 
@@ -172,8 +170,8 @@ class _MeetingCard extends StatelessWidget {
               Text(
                 meeting.description,
                 style: Theme.of(context).textTheme.displaySmall?.copyWith(
-                  color: Colors.grey.shade600,
-                ),
+                      color: Colors.grey.shade600,
+                    ),
                 maxLines: 2,
                 overflow: TextOverflow.ellipsis,
               ),
@@ -192,8 +190,8 @@ class _MeetingCard extends StatelessWidget {
                 Text(
                   meeting.date,
                   style: Theme.of(context).textTheme.displaySmall?.copyWith(
-                    fontWeight: FontWeight.w600,
-                  ),
+                        fontWeight: FontWeight.w600,
+                      ),
                 ),
                 const SizedBox(width: 16),
                 const Icon(Iconsax.clock,
@@ -202,8 +200,8 @@ class _MeetingCard extends StatelessWidget {
                 Text(
                   meeting.time,
                   style: Theme.of(context).textTheme.displaySmall?.copyWith(
-                    fontWeight: FontWeight.w600,
-                  ),
+                        fontWeight: FontWeight.w600,
+                      ),
                 ),
               ],
             ),
@@ -251,13 +249,13 @@ class _MeetingCard extends StatelessWidget {
                             ? 'انضم الآن'
                             : 'لم يبدأ بعد',
                     style: Theme.of(context).textTheme.displayLarge?.copyWith(
-                      color: meeting.hasExpired
-                          ? Colors.red.shade400
-                          : meeting.hasStarted
-                              ? Colors.white
-                              : Colors.grey.shade600,
-                      fontWeight: FontWeight.bold,
-                    ),
+                          color: meeting.hasExpired
+                              ? Colors.red.shade400
+                              : meeting.hasStarted
+                                  ? Colors.white
+                                  : Colors.grey.shade600,
+                          fontWeight: FontWeight.bold,
+                        ),
                   ),
                 ),
               ),
