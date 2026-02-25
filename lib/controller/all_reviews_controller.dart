@@ -29,7 +29,7 @@ class AllReviewsController extends GetxController{
           .toList();
 
     } catch (e) {
-      customSnackBar(
+      showCustomSnackbar(
         title: 'خطأ',
         message: 'تعذر تحميل التقييمات: $e',
         successful: false,

@@ -93,7 +93,7 @@ class BodyCompositionController extends GetxController {
     final hip = double.tryParse(hipController.text);
 
     if (height == null || height <= 0) {
-      customSnackBar(
+      showCustomSnackbar(
         title: 'خطأ في الإدخال',
         message: 'يرجى إدخال الطول بشكل صحيح (أكبر من 0)',
         successful: false,
@@ -102,7 +102,7 @@ class BodyCompositionController extends GetxController {
     }
 
     if (weight == null || weight <= 0) {
-      customSnackBar(
+      showCustomSnackbar(
         title: 'خطأ في الإدخال',
         message: 'يرجى إدخال الوزن بشكل صحيح (أكبر من 0)',
         successful: false,
@@ -111,7 +111,7 @@ class BodyCompositionController extends GetxController {
     }
 
     if (waist == null || waist <= 0) {
-      customSnackBar(
+      showCustomSnackbar(
         title: 'خطأ في الإدخال',
         message: 'يرجى إدخال محيط الوسط بشكل صحيح (أكبر من 0)',
         successful: false,
@@ -120,7 +120,7 @@ class BodyCompositionController extends GetxController {
     }
 
     if (hip == null || hip <= 0) {
-      customSnackBar(
+      showCustomSnackbar(
         title: 'خطأ في الإدخال',
         message: 'يرجى إدخال محيط الحوض بشكل صحيح (أكبر من 0)',
         successful: false,
@@ -129,7 +129,7 @@ class BodyCompositionController extends GetxController {
     }
 
     if (waist >= hip) {
-      customSnackBar(
+      showCustomSnackbar(
         title: 'خطأ في الإدخال',
         message: 'محيط الوسط يجب أن يكون أقل من محيط الحوض',
         successful: false,
@@ -162,13 +162,13 @@ class BodyCompositionController extends GetxController {
       showResults.value = true;
       _saveData();
 
-      customSnackBar(
+      showCustomSnackbar(
         title: 'تم الحساب بنجاح',
         message: 'تم حساب مؤشرات الجسم بنجاح',
         successful: true,
       );
     } catch (e) {
-      customSnackBar(
+      showCustomSnackbar(
         title: 'خطأ في الحساب',
         message: 'حدث خطأ أثناء حساب المؤشرات: $e',
         successful: false,
@@ -189,7 +189,7 @@ class BodyCompositionController extends GetxController {
     bodyCompositionResult.value = null;
     _storage.remove(_storageKey);
     
-    customSnackBar(
+    showCustomSnackbar(
       title: 'تم المسح',
       message: 'تم مسح جميع البيانات',
       successful: true,

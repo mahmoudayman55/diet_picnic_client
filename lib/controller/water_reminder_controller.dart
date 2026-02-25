@@ -142,7 +142,7 @@ class WaterReminderController extends GetxController {
       areNotificationsEnabled.value = permissionGranted;
 
       if (!permissionGranted) {
-        customSnackBar(
+        showCustomSnackbar(
           title: 'الإذن مرفوض',
           message: 'لن تتلقى تذكيرات شرب الماء بدون السماح بالإشعارات',
           successful: false,
@@ -151,7 +151,7 @@ class WaterReminderController extends GetxController {
 
       return permissionGranted;
     } catch (e) {
-      customSnackBar(
+      showCustomSnackbar(
         title: 'خطأ',
         message: 'حدث خطأ أثناء طلب الإذن: $e',
         successful: false,
@@ -221,7 +221,7 @@ class WaterReminderController extends GetxController {
 
         // Schedule all enabled reminders
         await _scheduleAllReminders();
-        customSnackBar(
+        showCustomSnackbar(
           title: 'تم التفعيل',
           message: 'تم تفعيل تذكيرات شرب الماء',
           successful: true,
@@ -229,7 +229,7 @@ class WaterReminderController extends GetxController {
       } else {
         // Cancel all reminders
         await NotificationService.cancelAllWaterReminders();
-        customSnackBar(
+        showCustomSnackbar(
           title: 'تم الإيقاف',
           message: 'تم إيقاف تذكيرات شرب الماء',
           successful: true,
@@ -239,7 +239,7 @@ class WaterReminderController extends GetxController {
       isEnabled.value = enabled;
       _saveSettings();
     } catch (e) {
-      customSnackBar(
+      showCustomSnackbar(
         title: 'خطأ',
         message: 'حدث خطأ أثناء تحديث الإعدادات: $e',
         successful: false,
@@ -283,7 +283,7 @@ class WaterReminderController extends GetxController {
 
       _saveSettings();
     } catch (e) {
-      customSnackBar(
+      showCustomSnackbar(
         title: 'خطأ',
         message: 'حدث خطأ أثناء تحديث التذكير: $e',
         successful: false,
@@ -370,7 +370,7 @@ class WaterReminderController extends GetxController {
 
     // If reminders were enabled but permission is now revoked
     if (isEnabled.value && !areNotificationsEnabled.value) {
-      customSnackBar(
+      showCustomSnackbar(
         title: 'تنبيه',
         message: 'الإشعارات معطلة. لن تتلقى تذكيرات شرب الماء',
         successful: false,

@@ -40,4 +40,7 @@ class AppConstants {
   static String waterReminderPage = "/water_reminder";
   static String bodyCompositionPage = "/body_composition";
   static String meetingsPage = "/meetings";
+  static String examsPage = "/exams";
+  static String examTestPage = "/exam-test";
+  static String examResultsPage = "/exam-results";
 }

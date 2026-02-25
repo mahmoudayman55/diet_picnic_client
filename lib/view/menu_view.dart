@@ -149,7 +149,7 @@ class MenuView extends StatelessWidget {
                               onTap: () {
                                 UserController.to.isSubscribed
                                     ? Get.to(ClientPackageDetailsView())
-                                    : customSnackBar(
+                                    : showCustomSnackbar(
                                         title: "تنبيه",
                                         message: "انت غير مشترك في أي باقة",
                                         successful: false,
@@ -162,7 +162,7 @@ class MenuView extends StatelessWidget {
                             InkWell(
                               onTap: () {
                                 if (!UserController.to.isSubscriptionActive) {
-                                  customSnackBar(
+                                  showCustomSnackbar(
                                     title: "تنبيه",
                                     message:
                                         "اشتراكك منتهي، جدد الاشتراك للاستمرار",
@@ -172,7 +172,7 @@ class MenuView extends StatelessWidget {
                                 }
                                 // if (!UserController.to.currentUser.value!
                                 //     .hasActiveDiet()) {
-                                //   customSnackBar(
+                                //   showCustomSnackbar(
                                 //     title: "تنبيه",
                                 //     message:
                                 //         "لم يتم تعيين نظام غذائى حتى الأن.",
@@ -194,7 +194,7 @@ class MenuView extends StatelessWidget {
                                   onTap: () {
                                     if (!UserController
                                         .to.isSubscriptionActive) {
-                                      customSnackBar(
+                                      showCustomSnackbar(
                                         title: "تنبيه",
                                         message:
                                             "اشتراكك منتهي، جدد الاشتراك للاستمرار",
@@ -204,7 +204,7 @@ class MenuView extends StatelessWidget {
                                     }
                                     if (!UserController.to.currentUser.value!
                                         .hasActiveExercise()) {
-                                      customSnackBar(
+                                      showCustomSnackbar(
                                         title: "تنبيه",
                                         message:
                                             "لم يتم تعيين نظام رياضى حتى الأن.",
@@ -222,7 +222,7 @@ class MenuView extends StatelessWidget {
                               onTap: () {
                                 UserController.to.isSubscribed
                                     ? Get.to(ProgressView())
-                                    : customSnackBar(
+                                    : showCustomSnackbar(
                                         title: "تنبيه",
                                         message: "انت غير مشترك في أي باقة",
                                         successful: false,
@@ -246,7 +246,7 @@ class MenuView extends StatelessWidget {
                                     2;
 
                                 if (!isSubscribed) {
-                                  customSnackBar(
+                                  showCustomSnackbar(
                                     title: "تنبيه",
                                     message: "انت غير مشترك في أي باقة",
                                     successful: false,
@@ -255,7 +255,7 @@ class MenuView extends StatelessWidget {
                                 }
 
                                 if (!hasEnoughFoloowings) {
-                                  customSnackBar(
+                                  showCustomSnackbar(
                                     title: "تنبيه",
                                     message:
                                         "يجب ان يحتوي سجلك علي متابعتين اسبوعيتين علي الأقل",

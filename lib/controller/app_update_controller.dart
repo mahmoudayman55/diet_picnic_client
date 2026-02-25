@@ -37,7 +37,7 @@ class AppUpdateController extends GetxService {
       // Get remote data
       final doc = await _firestore.collection("app").doc("e4bqcpJ89mMFZ8xx5Zhp").get();
       if (!doc.exists) {
-        customSnackBar(
+        showCustomSnackbar(
           title: "خطأ",
           message: "لم يتم العثور على إعدادات التطبيق في الخادم",
           successful: false,
@@ -75,7 +75,7 @@ class AppUpdateController extends GetxService {
       }
 
     } catch (e) {
-      customSnackBar(
+      showCustomSnackbar(
         title: "خطأ",
         message: "فشل التحقق من التحديث: $e",
         successful: false,
@@ -89,7 +89,7 @@ class AppUpdateController extends GetxService {
     if (await canLaunchUrl(Uri.parse(url))) {
       await launchUrl(Uri.parse(url), mode: LaunchMode.externalApplication);
     } else {
-      customSnackBar(
+      showCustomSnackbar(
         title: "خطأ",
         message: "تعذر فتح متجر Play",
         successful: false,

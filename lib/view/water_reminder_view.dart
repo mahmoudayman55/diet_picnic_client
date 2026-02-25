@@ -5,6 +5,7 @@ import 'package:diet_picnic_client/controller/water_reminder_controller.dart';
 import 'package:diet_picnic_client/core/notification_test_helper.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import '../../components/custom_snack_bar.dart';
 import 'package:get/get.dart';
 import 'package:sizer/sizer.dart';
 
@@ -505,11 +506,11 @@ class WaterReminderView extends StatelessWidget {
               ElevatedButton.icon(
                 onPressed: () async {
                   await NotificationTestHelper.testImmediateNotification();
-                  Get.snackbar(
-                    'Test Scheduled',
-                    'Test notification scheduled for 1 minute from now',
-                    backgroundColor: Colors.blue,
-                    colorText: Colors.white,
+                  showCustomSnackbar(
+                    title: 'Test Scheduled',
+                    message:
+                        'Test notification scheduled for 1 minute from now',
+                    successful: true,
                   );
                 },
                 icon: const Icon(Icons.notifications_active),
@@ -522,11 +523,10 @@ class WaterReminderView extends StatelessWidget {
               ElevatedButton.icon(
                 onPressed: () async {
                   await NotificationTestHelper.testAllWaterReminders();
-                  Get.snackbar(
-                    'Test Reminders',
-                    'Test reminders scheduled for 2, 4, and 6 minutes',
-                    backgroundColor: Colors.green,
-                    colorText: Colors.white,
+                  showCustomSnackbar(
+                    title: "تم الحفظ",
+                    message: "تم حفظ التذكير بنجاح",
+                    successful: true,
                   );
                 },
                 icon: const Icon(Icons.water_drop),
@@ -540,11 +540,10 @@ class WaterReminderView extends StatelessWidget {
                 onPressed: () async {
                   await NotificationTestHelper.checkNotificationStatus();
                   await NotificationTestHelper.verifyDailyRepetition();
-                  Get.snackbar(
-                    'Status Check',
-                    'Check console/debug output for status report',
-                    backgroundColor: Colors.purple,
-                    colorText: Colors.white,
+                  showCustomSnackbar(
+                    title: 'Status Check',
+                    message: 'Check console/debug output for status report',
+                    successful: true,
                   );
                 },
                 icon: const Icon(Icons.info),
@@ -557,11 +556,10 @@ class WaterReminderView extends StatelessWidget {
               ElevatedButton.icon(
                 onPressed: () async {
                   await NotificationTestHelper.verifyDailyRepetition();
-                  Get.snackbar(
-                    'Daily Repetition',
-                    'Check console for daily repetition verification',
-                    backgroundColor: Colors.teal,
-                    colorText: Colors.white,
+                  showCustomSnackbar(
+                    title: 'Daily Repetition',
+                    message: 'Check console for daily repetition verification',
+                    successful: true,
                   );
                 },
                 icon: const Icon(Icons.repeat),
@@ -574,11 +572,10 @@ class WaterReminderView extends StatelessWidget {
               ElevatedButton.icon(
                 onPressed: () async {
                   await NotificationTestHelper.cancelTestNotifications();
-                  Get.snackbar(
-                    'Test Cleared',
-                    'All test notifications cancelled',
-                    backgroundColor: Colors.red,
-                    colorText: Colors.white,
+                  showCustomSnackbar(
+                    title: 'Test Cleared',
+                    message: 'All test notifications cancelled',
+                    successful: true,
                   );
                 },
                 icon: const Icon(Icons.clear),

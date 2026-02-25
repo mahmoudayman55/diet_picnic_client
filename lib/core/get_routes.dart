@@ -33,6 +33,12 @@ import 'package:diet_picnic_client/view/register_view.dart';
 import 'package:diet_picnic_client/view/videos_view.dart';
 import 'package:diet_picnic_client/view/water_reminder_view.dart';
 import 'package:diet_picnic_client/view/body_composition_view.dart';
+import 'package:diet_picnic_client/modules/clients/data/repositories/firebase_exam_repository.dart';
+import 'package:diet_picnic_client/modules/clients/presentation/controllers/exam_test_controller.dart';
+import 'package:diet_picnic_client/modules/clients/presentation/controllers/exams_controller.dart';
+import 'package:diet_picnic_client/modules/clients/presentation/views/exam_results_view.dart';
+import 'package:diet_picnic_client/modules/clients/presentation/views/exam_test_view.dart';
+import 'package:diet_picnic_client/modules/clients/presentation/views/exams_view.dart';
 import 'package:get/get.dart';
 
 import 'app_constants.dart';
@@ -179,6 +185,27 @@ class GetRoutes {
         Get.put(BodyCompositionController());
       }),
       page: () => const BodyCompositionView(),
+    ),
+    GetPage(
+      name: AppConstants.examsPage,
+      binding: BindingsBuilder(() {
+        Get.lazyPut(() => FirebaseExamRepository());
+        Get.put(ExamsController(Get.find<FirebaseExamRepository>()));
+      }),
+      page: () => const ExamsView(),
+    ),
+    GetPage(
+      name: AppConstants.examTestPage,
+      binding: BindingsBuilder(() {
+        final exam = Get.arguments;
+        Get.lazyPut(() => FirebaseExamRepository());
+        Get.put(ExamTestController(Get.find<FirebaseExamRepository>(), exam));
+      }),
+      page: () => const ExamTestView(),
+    ),
+    GetPage(
+      name: AppConstants.examResultsPage,
+      page: () => const ExamResultsView(),
     ),
   ];
 }

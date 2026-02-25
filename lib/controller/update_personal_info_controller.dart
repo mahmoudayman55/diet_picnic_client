@@ -101,13 +101,13 @@ final formKey = GlobalKey<FormState>();
 log(user.package==null?"package is null":user.package!.name,name: "package checking");
       await UserController.to.setUser(updatedUser);
       Get.back();
-      customSnackBar(
+      showCustomSnackbar(
         title: "تم التحديث",
         message: "تم تحديث بياناتك الشخصية بنجاح ✅",
         successful: true,
       );
     } catch (e) {
-      customSnackBar(
+      showCustomSnackbar(
         title: "خطأ",
         message: "حدث خطأ أثناء تحديث البيانات: $e",
         successful: false,

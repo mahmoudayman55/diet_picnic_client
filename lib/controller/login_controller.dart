@@ -55,7 +55,7 @@ final formKey = GlobalKey<FormState>();
     final password = passwordController.text;
 
     if (phone.isEmpty || password.isEmpty) {
-      customSnackBar(
+      showCustomSnackbar(
         title: "تنبيه",
         message: "من فضلك أدخل رقم الهاتف وكلمة المرور",
         successful: false,
@@ -74,7 +74,7 @@ final formKey = GlobalKey<FormState>();
           .get();
 
       if (snapshot.docs.isEmpty) {
-        customSnackBar(
+        showCustomSnackbar(
           title: "خطأ",
           message: "رقم الهاتف غير مسجل",
           successful: false,
@@ -196,7 +196,7 @@ final formKey = GlobalKey<FormState>();
         // ✅ 7. Save in UserController + UserStorage
         await UserController.to.setUser(user);
          // log(UserController.to.currentUser.value!.dietSystemModel!.name);
-        customSnackBar(
+        showCustomSnackbar(
           title: "نجاح",
           message: "تم تسجيل الدخول بنجاح 🎉",
           successful: true,
@@ -205,7 +205,7 @@ final formKey = GlobalKey<FormState>();
         Get.offAllNamed(AppConstants.navigatorPage);
 
       } else {
-        customSnackBar(
+        showCustomSnackbar(
           title: "خطأ",
           message: "كلمة المرور غير صحيحة",
           successful: false,
@@ -213,7 +213,7 @@ final formKey = GlobalKey<FormState>();
       }
     } catch (e) {
 
-      customSnackBar(
+      showCustomSnackbar(
         title: "خطأ",
         message: "فشل تسجيل الدخول: $e",
         successful: false,

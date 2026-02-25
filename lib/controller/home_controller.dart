@@ -46,7 +46,7 @@ class HomeController extends GetxController {
       allReviews.shuffle();
       reviews.value = allReviews.take(5).toList();
     } catch (e) {
-      customSnackBar(
+      showCustomSnackbar(
         title: 'خطأ',
         message: 'تعذر تحميل التقييمات: $e',
         successful: false,
@@ -111,7 +111,7 @@ class HomeController extends GetxController {
       log(offers.value[0].order.toString(),name: "offerTest");
       log(offers.value[0].name.toString(),name: "offerTest");
     } catch (e) {
-      customSnackBar(
+      showCustomSnackbar(
         title: "خطأ",
         message: "حدث خطأ أثناء جلب العروض: $e",
         successful: false,
@@ -159,7 +159,7 @@ class HomeController extends GetxController {
       }
       packages.value.sort((a, b) => a.order.compareTo(b.order));
     } catch (e) {
-      customSnackBar(
+      showCustomSnackbar(
         title: "خطأ",
         message: "فشل في جلب الباقات: $e",
         successful: false,

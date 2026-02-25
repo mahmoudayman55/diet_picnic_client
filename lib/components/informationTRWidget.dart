@@ -1,19 +1,19 @@
 import 'package:diet_picnic_client/components/lotti_widget.dart';
+import 'package:diet_picnic_client/core/app_constants.dart';
 import 'package:diet_picnic_client/core/custom_colors.dart';
-import 'package:diet_picnic_client/core/show_coming_soon_dialog.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:sizer/sizer.dart';
 
-class KnowledgeSection extends StatefulWidget {
-  const KnowledgeSection({super.key});
+class ExamsSection extends StatefulWidget {
+  const ExamsSection({super.key});
 
   @override
-  State<KnowledgeSection> createState() => _KnowledgeSectionState();
+  State<ExamsSection> createState() => _ExamsSectionState();
 }
 
-class _KnowledgeSectionState extends State<KnowledgeSection>
+class _ExamsSectionState extends State<ExamsSection>
     with SingleTickerProviderStateMixin {
   late AnimationController _controller;
   late Animation<double> _animation;
@@ -43,16 +43,18 @@ class _KnowledgeSectionState extends State<KnowledgeSection>
     final width = MediaQuery.of(context).size.width;
     final heigh = MediaQuery.of(context).size.height;
 
-    return InkWell(onTap: ()=>showComingSoonDialog(),
+    return InkWell(
+      onTap: () => Get.toNamed(AppConstants.examsPage),
       child: Stack(
         clipBehavior: Clip.none,
         children: [
-          // الخلفية
+          // Background Gradient
           Container(
             width: width,
-            height: heigh * 0.2,constraints: BoxConstraints(minHeight: 145),
+            height: heigh * 0.2,
+            constraints: const BoxConstraints(minHeight: 145),
             decoration: BoxDecoration(
-              gradient: LinearGradient(
+              gradient: const LinearGradient(
                 colors: [
                   CupertinoColors.systemBlue,
                   Colors.purple,
@@ -62,10 +64,11 @@ class _KnowledgeSectionState extends State<KnowledgeSection>
               ),
               borderRadius: BorderRadius.circular(22),
             ),
-            child: ClipRRect(borderRadius: BorderRadius.circular(22),
+            child: ClipRRect(
+              borderRadius: BorderRadius.circular(22),
               child: Stack(
                 children: [
-                  // دوائر شفافة للديكور
+                  // Decorative Circles
                   Positioned(
                     top: -30,
                     left: -20,
@@ -89,28 +92,26 @@ class _KnowledgeSectionState extends State<KnowledgeSection>
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
                         Text(
-                          "كنز المعلومات",
+                          "اختبارات دايت بيكنك",
                           style: Theme.of(context)
                               .textTheme
                               .headlineLarge!
                               .copyWith(
-                            color: Colors.white,
-
-                            fontWeight: FontWeight.bold,
-                          ),
+                                color: Colors.white,
+                                fontWeight: FontWeight.bold,
+                              ),
                         ),
                         const SizedBox(height: 8),
                         SizedBox(
-                          width: width * 0.45,
+                          width: width * 0.55,
                           child: Text(
-                            "اكتشف مقالات ونصائح مهمة تعزز من معرفتك في مجالات الصحة والرياضة.",
+                            "أجب عن الأسئلة واكسب جوائز قيمة وحصرية من دايت بيكنك.",
                             style: Theme.of(context)
                                 .textTheme
                                 .displayMedium!
                                 .copyWith(
-                              color: Colors.white,
-
-                            ),
+                                  color: Colors.white,
+                                ),
                           ),
                         ),
                       ],
@@ -120,18 +121,19 @@ class _KnowledgeSectionState extends State<KnowledgeSection>
               ),
             ),
           ),
-          // لوتي متحرك
+          // Lottie Animation
           AnimatedBuilder(
             animation: _animation,
             builder: (context, child) {
               return Positioned(
                 top: _animation.value,
-                left: -20,bottom: -100,
+                left: -20,
+                bottom: -100,
                 child: SizedBox(
                   width: width * 0.4,
                   height: width * 0.4,
-                  child:
-                  LottieWidget("assets/animation/tr.png"), // لوتي خاصة بكنز المعلومات
+                  child: LottieWidget(
+                      "assets/animation/tr.png"), // tr = Treasure/Rewards
                 ),
               );
             },

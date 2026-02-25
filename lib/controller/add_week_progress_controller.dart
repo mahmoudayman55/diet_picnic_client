@@ -112,7 +112,8 @@ class AddWeekProgressController extends GetxController {
         await _updateWeekProgress(progress);
         successMessage.value = 'تم تحديث التقدم الأسبوعي بنجاح';
       }
-UserController.to.update();
+      UserController.to.update();
+      UserController.to.restoreUser();
       Get.back();
     } catch (e, stack) {
       log('Error saving progress', error: e, stackTrace: stack);

@@ -18,7 +18,6 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:image_picker/image_picker.dart';
 
 class UserController extends GetxController {
-
   static UserController get to => Get.find();
 
   final currentUser = Rxn<ClientProfileModel>();
@@ -29,6 +28,7 @@ class UserController extends GetxController {
     currentUser.value = user;
     await UserStorage.saveUserId(user.id);
   }
+
   bool get isLoggedIn => currentUser.value != null;
   bool get isSubscribed => currentUser.value!.package != null;
   bool get isSubscriptionActive => !currentUser.value!.isExpired;
@@ -57,7 +57,7 @@ class UserController extends GetxController {
       final packageId = doc.data()!['package_id'] ?? '';
 
       Package? package;
-     // log(packagesMap.toString());
+      // log(packagesMap.toString());
       if (packagesMap.containsKey(packageId)) {
         // log("Founded!",name: "packageCHECK");
         package = packagesMap[packageId]!;
@@ -70,7 +70,7 @@ class UserController extends GetxController {
       final groupId = doc.data()!['group_id'];
       if (groupId != null && (groupId as String).isNotEmpty) {
         final groupDoc =
-        await firestore.collection('groups').doc(groupId).get();
+            await firestore.collection('groups').doc(groupId).get();
         if (groupDoc.exists) {
           packageGroup = PackageGroup.fromJson(groupDoc.data()!);
         }
@@ -88,8 +88,9 @@ class UserController extends GetxController {
       final weekProgressList = weekProgressSnapshot.docs
           .map((wp) => WeekProgressModel.fromJson(wp.data()))
           .toList();
-     // log(package!.name,name: "packageCHECK");
-      ClientProfileModel user = ClientProfileModel.fromJson(doc.data()!, doc.id).copyWith(
+      // log(package!.name,name: "packageCHECK");
+      ClientProfileModel user =
+          ClientProfileModel.fromJson(doc.data()!, doc.id).copyWith(
         weekProgressList: weekProgressList,
         group: packageGroup,
         package: package,
@@ -109,6 +110,7 @@ class UserController extends GetxController {
           return FollowUpMessageModel.fromJson(data);
         }).toList();
       }
+
       // ✅ 5. Fetch followUps
       final followUpList = await getFollowUpsForClient(doc.id);
       DietSystemModel? dietSystemModel;
@@ -116,7 +118,7 @@ class UserController extends GetxController {
 
       if (assignedDietSystems.isNotEmpty) {
         final activeDietSystem = assignedDietSystems.firstWhereOrNull(
-              (system) => system.isActive == true,
+          (system) => system.isActive == true,
         );
 
         if (activeDietSystem != null) {
@@ -126,7 +128,8 @@ class UserController extends GetxController {
               .get();
 
           if (doc.exists && doc.data() != null) {
-            dietSystemModel = DietSystemModel.fromJson(doc.data()!,activeDietSystem.assignedAt);
+            dietSystemModel = DietSystemModel.fromJson(
+                doc.data()!, activeDietSystem.assignedAt);
           }
         }
       }
@@ -137,9 +140,9 @@ class UserController extends GetxController {
 
       if (assignedExerciseSystems.isNotEmpty) {
         final activeExerciseSystem = assignedExerciseSystems.firstWhereOrNull(
-              (system) => system.isActive == true,
+          (system) => system.isActive == true,
         );
-    //    log(activeExerciseSystem!.id,name: "ACTIVEONE");
+        //    log(activeExerciseSystem!.id,name: "ACTIVEONE");
 
         if (activeExerciseSystem != null) {
           final exerciseDoc = await firestore
@@ -158,19 +161,20 @@ class UserController extends GetxController {
       }
       user = ClientProfileModel.fromJson(doc.data()!, doc.id).copyWith(
         weekProgressList: weekProgressList,
-        dietSystemModel: dietSystemModel,assignedDietSystems: assignedDietSystems,
+        dietSystemModel: dietSystemModel,
+        assignedDietSystems: assignedDietSystems,
         assignedExerciseSystems: assignedExerciseSystems,
         exerciseSystemModel: exerciseSystemModel,
         group: packageGroup,
         package: package,
       );
 //log(user.package!.toString());
-      currentUser.value =user;
-     // log(currentUser.value!.dietSystemModel!.name.toString(),name: "sysysysysyssss");
+      currentUser.value = user;
+      // log(currentUser.value!.dietSystemModel!.name.toString(),name: "sysysysysyssss");
       update();
-
     }
   }
+
   Future<void> refreshExerciseSystem() async {
     if (currentUser.value == null) return;
 
@@ -184,9 +188,11 @@ class UserController extends GetxController {
     final userData = userDoc.data()!;
 
     // ✅ Use the correct field name with underscore
-    final assignedExerciseSystems = (userData['assigned_exercise_systems'] as List?)
-        ?.map((e) => AssignedExerciseSystem.fromJson(e))
-        .toList() ?? [];
+    final assignedExerciseSystems =
+        (userData['assigned_exercise_systems'] as List?)
+                ?.map((e) => AssignedExerciseSystem.fromJson(e))
+                .toList() ??
+            [];
 
     log("Parsed assignedExerciseSystems count: ${assignedExerciseSystems.length}");
 
@@ -194,7 +200,7 @@ class UserController extends GetxController {
 
     if (assignedExerciseSystems.isNotEmpty) {
       final activeExerciseSystem = assignedExerciseSystems.firstWhereOrNull(
-            (system) => system.isActive == true,
+        (system) => system.isActive == true,
       );
 
       if (activeExerciseSystem != null) {
@@ -233,6 +239,7 @@ class UserController extends GetxController {
     update();
     log("Final exercise system: ${currentUser.value!.exerciseSystemModel?.name ?? 'null'}");
   }
+
   Future<void> refreshDietSystem() async {
     if (currentUser.value == null) return;
 
@@ -247,8 +254,9 @@ class UserController extends GetxController {
 
     // ✅ Use the correct field name with underscore
     final assignedDietSystems = (userData['assigned_diet_systems'] as List?)
-        ?.map((e) => AssignedDietSystem.fromJson(e))
-        .toList() ?? [];
+            ?.map((e) => AssignedDietSystem.fromJson(e))
+            .toList() ??
+        [];
 
     log("Parsed assignedDietSystems count: ${assignedDietSystems.length}");
 
@@ -256,7 +264,7 @@ class UserController extends GetxController {
 
     if (assignedDietSystems.isNotEmpty) {
       final activeDietSystem = assignedDietSystems.firstWhereOrNull(
-            (system) => system.isActive == true,
+        (system) => system.isActive == true,
       );
 
       if (activeDietSystem != null) {
@@ -268,7 +276,8 @@ class UserController extends GetxController {
             .get();
         log("DATEIS${doc.data()}");
         if (doc.exists && doc.data() != null) {
-          dietSystemModel = DietSystemModel.fromJson(doc.data()!,activeDietSystem.assignedAt);
+          dietSystemModel = DietSystemModel.fromJson(
+              doc.data()!, activeDietSystem.assignedAt);
           log("Diet system loaded: ${dietSystemModel.name}");
         }
       } else {
@@ -293,19 +302,18 @@ class UserController extends GetxController {
     log("Final diet system: ${currentUser.value!.dietSystemModel?.name ?? 'null'}");
   }
 
-
   ///profile pic
   final _firestore = FirebaseFirestore.instance;
   final _picker = ImagePicker();
-
 
   /// Pick image and update Firestore + local user
   Future<void> pickAndUploadProfileImage() async {
     try {
       // Pick image from gallery
-      final pickedFile = await _picker.pickImage(source: ImageSource.gallery,imageQuality: 50);
+      final pickedFile = await _picker.pickImage(
+          source: ImageSource.gallery, imageQuality: 50);
       if (pickedFile == null || pickedFile.path.isEmpty) {
-        customSnackBar(
+        showCustomSnackbar(
           title: "لم يتم اختيار صورة",
           message: "من فضلك اختر صورة صالحة من جهازك",
           successful: false,
@@ -315,7 +323,7 @@ class UserController extends GetxController {
 
       final file = File(pickedFile.path);
       if (!await file.exists()) {
-        customSnackBar(
+        showCustomSnackbar(
           title: "خطأ",
           message: "تعذر الوصول إلى الملف المحدد",
           successful: false,
@@ -326,7 +334,7 @@ class UserController extends GetxController {
       final userController = UserController.to;
       final userId = userController.currentUser.value?.id;
       if (userId == null || userId.isEmpty) {
-        customSnackBar(
+        showCustomSnackbar(
           title: "خطأ",
           message: "لم يتم العثور على بيانات المستخدم",
           successful: false,
@@ -335,7 +343,7 @@ class UserController extends GetxController {
       }
 
       // Upload image to imgbb
-      customSnackBar(
+      showCustomSnackbar(
         title: "جاري التحميل",
         message: "يتم الآن رفع الصورة...",
         successful: true,
@@ -343,7 +351,7 @@ class UserController extends GetxController {
 
       final imageUrl = await ImgbbUploader.uploadImage(file);
       if (imageUrl == null) {
-        customSnackBar(
+        showCustomSnackbar(
           title: "خطأ",
           message: "فشل رفع الصورة إلى الخادم",
           successful: false,
@@ -361,19 +369,20 @@ class UserController extends GetxController {
           userController.currentUser.value!.copyWith(image: imageUrl);
       userController.currentUser.refresh();
 
-      customSnackBar(
+      showCustomSnackbar(
         title: "تم بنجاح 🎉",
         message: "تم تحديث الصورة الشخصية بنجاح",
         successful: true,
       );
     } catch (e) {
-      customSnackBar(
+      showCustomSnackbar(
         title: "خطأ",
         message: "حدث خطأ أثناء تحديث الصورة: $e",
         successful: false,
       );
     }
   }
+
   /// Logout
   Future<void> logout() async {
     currentUser.value = null;

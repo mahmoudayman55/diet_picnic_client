@@ -76,7 +76,7 @@ class PackageDetailsController extends GetxController {
       subOffers.sort((a, b) => (a.order ?? 0).compareTo(b.order ?? 0));
 
     } catch (e) {
-      customSnackBar(
+      showCustomSnackbar(
         title: "خطأ",
         message: "فشل تحميل العروض الفرعية: $e",
         successful: false,
@@ -113,7 +113,7 @@ class PackageDetailsController extends GetxController {
       offers.value = fetchedOffers;
       log(fetchedOffers.toString(), name: "OffersByPackage");
     } catch (e) {
-      customSnackBar(
+      showCustomSnackbar(
         title: "خطأ",
         message: "فشل في تحميل العروض: $e",
         successful: false,
@@ -147,14 +147,14 @@ class PackageDetailsController extends GetxController {
 
         package.value = pkg;
       } else {
-        customSnackBar(
+        showCustomSnackbar(
           title: "خطأ",
           message: "الباقة غير موجودة",
           successful: false,
         );
       }
     } catch (e) {
-      customSnackBar(
+      showCustomSnackbar(
         title: "خطأ",
         message: "فشل تحميل بيانات الباقة: $e",
         successful: false,

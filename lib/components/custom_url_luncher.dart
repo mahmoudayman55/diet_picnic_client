@@ -48,7 +48,7 @@ class CustomUrlLauncher {
       final uri = Uri.tryParse(url);
 
       if (uri == null) {
-        customSnackBar(
+        showCustomSnackbar(
           title: "خطأ",
           message: "الرابط غير صالح",
           successful: false,
@@ -59,7 +59,7 @@ class CustomUrlLauncher {
       // ✅ Check if it can be launched
       final canLaunch = await canLaunchUrl(uri);
       if (!canLaunch) {
-        customSnackBar(
+        showCustomSnackbar(
           title: "خطأ",
           message: "لا يمكن فتح الرابط حالياً",
           successful: false,
@@ -74,7 +74,7 @@ class CustomUrlLauncher {
       );
     } catch (e) {
       // ✅ Handle unexpected issues (e.g., malformed URLs or missing browser)
-      customSnackBar(
+      showCustomSnackbar(
         title: "خطأ",
         message: "حدث خطأ أثناء فتح الرابط: ${e.toString()}",
         successful: false,

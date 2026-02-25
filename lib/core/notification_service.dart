@@ -10,11 +10,12 @@ class NotificationService {
   NotificationService._internal();
 
   static final FlutterLocalNotificationsPlugin _notifications =
-  FlutterLocalNotificationsPlugin();
+      FlutterLocalNotificationsPlugin();
 
   static const String _channelId = 'water_reminder_channel';
   static const String _channelName = 'Water Reminder';
-  static const String _channelDescription = 'Reminds you to drink water throughout the day';
+  static const String _channelDescription =
+      'Reminds you to drink water throughout the day';
 
   /// Initialize the notification service
   static Future<void> initialize() async {
@@ -28,11 +29,11 @@ class NotificationService {
 
       // Android initialization settings
       const AndroidInitializationSettings androidSettings =
-      AndroidInitializationSettings('@mipmap/ic_launcher');
+          AndroidInitializationSettings('@mipmap/ic_launcher');
 
       // iOS initialization settings
       const DarwinInitializationSettings iosSettings =
-      DarwinInitializationSettings(
+          DarwinInitializationSettings(
         requestAlertPermission: true,
         requestBadgePermission: true,
         requestSoundPermission: true,
@@ -63,7 +64,8 @@ class NotificationService {
       // Check initial permission status
       if (kDebugMode) {
         final hasPermission = await areNotificationsEnabled();
-        print('📱 Initial notification permission status: ${hasPermission ? "✅ Granted" : "❌ Not granted"}');
+        print(
+            '📱 Initial notification permission status: ${hasPermission ? "✅ Granted" : "❌ Not granted"}');
       }
     } catch (e) {
       if (kDebugMode) {
@@ -85,7 +87,8 @@ class NotificationService {
     );
 
     await _notifications
-        .resolvePlatformSpecificImplementation<AndroidFlutterLocalNotificationsPlugin>()
+        .resolvePlatformSpecificImplementation<
+            AndroidFlutterLocalNotificationsPlugin>()
         ?.createNotificationChannel(channel);
   }
 
@@ -93,22 +96,27 @@ class NotificationService {
   static Future<bool> requestPermission() async {
     try {
       if (Platform.isAndroid) {
-        final androidImpl = _notifications
-            .resolvePlatformSpecificImplementation<AndroidFlutterLocalNotificationsPlugin>();
+        final androidImpl =
+            _notifications.resolvePlatformSpecificImplementation<
+                AndroidFlutterLocalNotificationsPlugin>();
 
         if (androidImpl != null) {
           // Request basic notification permission (Android 13+)
-          final notificationGranted = await androidImpl.requestNotificationsPermission() ?? false;
+          final notificationGranted =
+              await androidImpl.requestNotificationsPermission() ?? false;
 
           if (kDebugMode) {
-            print('📱 Notification permission: ${notificationGranted ? "✅ Granted" : "❌ Denied"}');
+            print(
+                '📱 Notification permission: ${notificationGranted ? "✅ Granted" : "❌ Denied"}');
           }
 
           // Request exact alarm permission (Android 12+ / API 31+)
-          final exactAlarmGranted = await androidImpl.requestExactAlarmsPermission() ?? false;
+          final exactAlarmGranted =
+              await androidImpl.requestExactAlarmsPermission() ?? false;
 
           if (kDebugMode) {
-            print('⏰ Exact alarm permission: ${exactAlarmGranted ? "✅ Granted" : "❌ Denied"}');
+            print(
+                '⏰ Exact alarm permission: ${exactAlarmGranted ? "✅ Granted" : "❌ Denied"}');
           }
 
           // Return true if notification permission is granted
@@ -117,10 +125,9 @@ class NotificationService {
         }
 
         return false;
-
       } else if (Platform.isIOS) {
-        final iosImpl = _notifications
-            .resolvePlatformSpecificImplementation<IOSFlutterLocalNotificationsPlugin>();
+        final iosImpl = _notifications.resolvePlatformSpecificImplementation<
+            IOSFlutterLocalNotificationsPlugin>();
 
         if (iosImpl != null) {
           final granted = await iosImpl.requestPermissions(
@@ -130,7 +137,8 @@ class NotificationService {
           );
 
           if (kDebugMode) {
-            print('📱 iOS notification permission: ${granted == true ? "✅ Granted" : "❌ Denied"}');
+            print(
+                '📱 iOS notification permission: ${granted == true ? "✅ Granted" : "❌ Denied"}');
           }
 
           return granted ?? false;
@@ -164,25 +172,26 @@ class NotificationService {
   static Future<bool> areNotificationsEnabled() async {
     try {
       if (Platform.isAndroid) {
-        final androidImpl = _notifications
-            .resolvePlatformSpecificImplementation<AndroidFlutterLocalNotificationsPlugin>();
+        final androidImpl =
+            _notifications.resolvePlatformSpecificImplementation<
+                AndroidFlutterLocalNotificationsPlugin>();
 
         if (androidImpl == null) return false;
 
         // Check basic notification permission
-        final notificationsEnabled = await androidImpl.areNotificationsEnabled() ?? false;
+        final notificationsEnabled =
+            await androidImpl.areNotificationsEnabled() ?? false;
 
         if (kDebugMode) {
           print('📱 Notifications enabled: $notificationsEnabled');
         }
 
         return notificationsEnabled;
-
       } else if (Platform.isIOS) {
         // For iOS, we assume notifications are enabled after initialization
         // The actual permission check happens during requestPermission
-        final iosImpl = _notifications
-            .resolvePlatformSpecificImplementation<IOSFlutterLocalNotificationsPlugin>();
+        final iosImpl = _notifications.resolvePlatformSpecificImplementation<
+            IOSFlutterLocalNotificationsPlugin>();
 
         return iosImpl != null;
       }
@@ -200,8 +209,9 @@ class NotificationService {
   static Future<void> openNotificationSettings() async {
     try {
       if (Platform.isAndroid) {
-        final androidImpl = _notifications
-            .resolvePlatformSpecificImplementation<AndroidFlutterLocalNotificationsPlugin>();
+        final androidImpl =
+            _notifications.resolvePlatformSpecificImplementation<
+                AndroidFlutterLocalNotificationsPlugin>();
 
         if (androidImpl != null) {
           // This will trigger the permission dialog or open settings
@@ -211,7 +221,8 @@ class NotificationService {
         // For iOS, there's no direct way to open settings
         // The user needs to go to Settings > App manually
         if (kDebugMode) {
-          print('⚠️ Please go to Settings > Notifications to enable notifications for this app');
+          print(
+              '⚠️ Please go to Settings > Notifications to enable notifications for this app');
         }
       }
     } catch (e) {
@@ -267,11 +278,13 @@ class NotificationService {
 
       if (kDebugMode) {
         print('   Scheduled time: $scheduledDate');
-        print('   Time until notification: ${scheduledDate.difference(now).inMinutes} minutes');
+        print(
+            '   Time until notification: ${scheduledDate.difference(now).inMinutes} minutes');
       }
 
       // Android notification details
-      const AndroidNotificationDetails androidDetails = AndroidNotificationDetails(
+      const AndroidNotificationDetails androidDetails =
+          AndroidNotificationDetails(
         _channelId,
         _channelName,
         channelDescription: _channelDescription,
@@ -306,14 +319,18 @@ class NotificationService {
         tz.TZDateTime.from(scheduledDate, tz.local),
         notificationDetails,
         payload: payload,
-        uiLocalNotificationDateInterpretation: UILocalNotificationDateInterpretation.absoluteTime,
+        uiLocalNotificationDateInterpretation:
+            UILocalNotificationDateInterpretation.absoluteTime,
         matchDateTimeComponents: DateTimeComponents.time, // Repeat daily
-        androidScheduleMode: AndroidScheduleMode.exactAllowWhileIdle, // Use exact scheduling
+        androidScheduleMode:
+            AndroidScheduleMode.exactAllowWhileIdle, // Use exact scheduling
       );
 
       if (kDebugMode) {
-        print('✅ Water reminder scheduled successfully for $scheduledDate: $title');
-        print('🔄 Daily repetition: ENABLED (will repeat every day at $hour:$minute)');
+        print(
+            '✅ Water reminder scheduled successfully for $scheduledDate: $title');
+        print(
+            '🔄 Daily repetition: ENABLED (will repeat every day at $hour:$minute)');
       }
     } catch (e, stackTrace) {
       if (kDebugMode) {
@@ -371,7 +388,8 @@ class NotificationService {
   }
 
   /// Get pending notifications
-  static Future<List<PendingNotificationRequest>> getPendingNotifications() async {
+  static Future<List<PendingNotificationRequest>>
+      getPendingNotifications() async {
     try {
       return await _notifications.pendingNotificationRequests();
     } catch (e) {
@@ -427,7 +445,8 @@ class NotificationService {
   /// Show an immediate test notification (for testing purposes)
   static Future<void> showTestNotification() async {
     try {
-      const AndroidNotificationDetails androidDetails = AndroidNotificationDetails(
+      const AndroidNotificationDetails androidDetails =
+          AndroidNotificationDetails(
         _channelId,
         _channelName,
         channelDescription: _channelDescription,

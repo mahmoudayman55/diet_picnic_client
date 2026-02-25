@@ -1,3 +1,4 @@
+import 'package:diet_picnic_client/core/custom_colors.dart';
 import 'package:diet_picnic_client/core/theme.dart';
 import 'package:diet_picnic_client/view/add_progrss_view.dart';
 import 'package:flutter/material.dart';
@@ -42,8 +43,7 @@ class WeeklyFollowUpCard extends StatelessWidget {
         width: double.infinity,
         padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 14),
         decoration: BoxDecoration(
-          color: _bgColor,
-          borderRadius: BorderRadius.circular(12),
+          color: CustomColors.mainColor.withOpacity(0.1),          borderRadius: BorderRadius.circular(12),
         ),
         child: Row(
           children: [

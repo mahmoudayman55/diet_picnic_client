@@ -44,7 +44,7 @@ class NavigatorController extends GetxController {
         case 1:
           {
             if (!userController.isLoggedIn) {
-              customSnackBar(
+              showCustomSnackbar(
                 title: "تنبيه",
                 message: "من فضلك سجل الدخول أولاً",
                 successful: false,
@@ -53,7 +53,7 @@ class NavigatorController extends GetxController {
             }
 
             // if (userController.isSubscribed&&userController.currentUser.value!.isExpired) {
-            //   customSnackBar(
+            //   showCustomSnackbar(
             //     title: "تنبيه",
             //     message: "يرجى تجديد الإشتراك",
             //     successful: false,
@@ -62,7 +62,7 @@ class NavigatorController extends GetxController {
             // }
 
             if (!userController.isSubscriptionActive) {
-              customSnackBar(
+              showCustomSnackbar(
                 title: "تنبيه",
                 message: "اشتراكك منتهي، جدد الاشتراك للاستمرار",
                 successful: false,
@@ -70,7 +70,7 @@ class NavigatorController extends GetxController {
               return;
             }
             // if(!UserController.to.currentUser.value!.hasActiveDiet()){
-            //   customSnackBar(
+            //   showCustomSnackbar(
             //     title: "تنبيه",
             //     message: "لم يتم تعيين نظام غذائى.",
             //     successful: false,
@@ -87,7 +87,7 @@ class NavigatorController extends GetxController {
         case 2:
           {
             if (!userController.isLoggedIn) {
-              customSnackBar(
+              showCustomSnackbar(
                 title: "تنبيه",
                 message: "من فضلك سجل الدخول أولاً",
                 successful: false,
@@ -96,7 +96,7 @@ class NavigatorController extends GetxController {
             }
 
             // if (!userController.isSubscribed) {
-            //   customSnackBar(
+            //   showCustomSnackbar(
             //     title: "تنبيه",
             //     message: "انت غير مشترك في أي باقة",
             //     successful: false,
@@ -105,7 +105,7 @@ class NavigatorController extends GetxController {
             // }
 
             if (!userController.isSubscriptionActive) {
-              customSnackBar(
+              showCustomSnackbar(
                 title: "تنبيه",
                 message: "اشتراكك منتهي، جدد الاشتراك للاستمرار",
                 successful: false,
@@ -114,7 +114,7 @@ class NavigatorController extends GetxController {
             }
             // if(!UserController.to.currentUser.value!.hasActiveExercise()){
             //  // log(UserController.to.currentUser.value!.assignedExerciseSystems.join("-"));
-            //   customSnackBar(
+            //   showCustomSnackbar(
             //     title: "تنبيه",
             //     message: "لم يتم تعيين نظام رياضى حتى الأن.",
             //     successful: false,
@@ -131,7 +131,7 @@ class NavigatorController extends GetxController {
         case 3:
           {
             if (!userController.isLoggedIn) {
-              customSnackBar(
+              showCustomSnackbar(
                 title: "تنبيه",
                 message: "من فضلك سجل الدخول أولاً",
                 successful: false,
@@ -140,7 +140,7 @@ class NavigatorController extends GetxController {
             }
 
             if (!userController.isSubscribed) {
-              customSnackBar(
+              showCustomSnackbar(
                 title: "تنبيه",
                 message: "انت غير مشترك في أي باقة",
                 successful: false,
@@ -149,7 +149,7 @@ class NavigatorController extends GetxController {
             }
 
             // if (!userController.isSubscriptionActive) {
-            //   customSnackBar(
+            //   showCustomSnackbar(
             //     title: "تنبيه",
             //     message: "اشتراكك منتهي، جدد الاشتراك للاستمرار",
             //     successful: false,

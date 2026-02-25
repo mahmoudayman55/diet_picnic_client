@@ -8,7 +8,6 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:iconsax/iconsax.dart';
 
-
 class NavigatorView extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
@@ -16,7 +15,7 @@ class NavigatorView extends StatelessWidget {
         init: NavigatorController(),
         builder: (controller) {
           return Scaffold(
-          appBar: CustomAppBar(title: controller.selectedScreenTitle),
+            appBar: CustomAppBar(title: controller.selectedScreenTitle),
             extendBodyBehindAppBar: false,
             resizeToAvoidBottomInset: false,
             body: controller.currentScreen,
@@ -58,19 +57,19 @@ class NavigatorView extends StatelessWidget {
                 ),
                 BottomNavigationBarItem(
                   icon: const Icon(Icons.fastfood_outlined),
-               //   activeIcon: const Icon(Icons.book_online),
+                  //   activeIcon: const Icon(Icons.book_online),
                   label: "النظام الغذائى".tr,
-                ),   BottomNavigationBarItem(
+                ),
+                BottomNavigationBarItem(
                   icon: const Icon(Icons.sports_outlined),
-               //   activeIcon: const Icon(Icons.book_online),
+                  //   activeIcon: const Icon(Icons.book_online),
                   label: "النظام الرياضى".tr,
                 ),
                 BottomNavigationBarItem(
                   icon: const Icon(Icons.trending_up),
-               //   activeIcon: const Icon(Icons.book_online),
+                  //   activeIcon: const Icon(Icons.book_online),
                   label: "التقدم".tr,
                 ),
-
               ],
             ),
           );

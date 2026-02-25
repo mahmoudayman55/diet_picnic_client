@@ -26,7 +26,7 @@ class ChangePasswordController extends GetxController {
     final confirmPassword = confirmPasswordController.text.trim();
 
     if (oldPassword.isEmpty || newPassword.isEmpty || confirmPassword.isEmpty) {
-      customSnackBar(
+      showCustomSnackbar(
         title: "تنبيه",
         message: "من فضلك املأ جميع الحقول",
         successful: false,
@@ -35,7 +35,7 @@ class ChangePasswordController extends GetxController {
     }
 
     if (newPassword != confirmPassword) {
-      customSnackBar(
+      showCustomSnackbar(
         title: "خطأ",
         message: "كلمة المرور الجديدة وتأكيدها غير متطابقين",
         successful: false,
@@ -45,7 +45,7 @@ class ChangePasswordController extends GetxController {
 
     final user = UserController.to.currentUser.value;
     if (user == null) {
-      customSnackBar(
+      showCustomSnackbar(
         title: "خطأ",
         message: "لم يتم العثور على بيانات المستخدم",
         successful: false,
@@ -61,7 +61,7 @@ class ChangePasswordController extends GetxController {
       final snapshot = await docRef.get();
 
       if (!snapshot.exists) {
-        customSnackBar(
+        showCustomSnackbar(
           title: "خطأ",
           message: "المستخدم غير موجود",
           successful: false,
@@ -74,7 +74,7 @@ class ChangePasswordController extends GetxController {
 
       // Verify old password
       if (storedHashedPassword != _hashPassword(oldPassword)) {
-        customSnackBar(
+        showCustomSnackbar(
           title: "خطأ",
           message: "كلمة المرور القديمة غير صحيحة",
           successful: false,
@@ -87,7 +87,7 @@ class ChangePasswordController extends GetxController {
         "password": _hashPassword(newPassword),
       });
 
-      customSnackBar(
+      showCustomSnackbar(
         title: "نجاح",
         message: "تم تغيير كلمة المرور بنجاح 🎉",
         successful: true,
@@ -99,7 +99,7 @@ class ChangePasswordController extends GetxController {
       confirmPasswordController.clear();
 
     } catch (e) {
-      customSnackBar(
+      showCustomSnackbar(
         title: "خطأ",
         message: "فشل تغيير كلمة المرور: $e",
         successful: false,

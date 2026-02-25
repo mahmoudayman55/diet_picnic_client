@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import '../../components/custom_snack_bar.dart';
 
 class OfferDetailsController extends GetxController {
   late List<String> images;
@@ -20,13 +21,13 @@ class OfferDetailsController extends GetxController {
   }
 
   void onSubscribe() {
-
-    Get.snackbar("اشترك", "تم الضغط على زر الاشتراك");
+    showCustomSnackbar(
+        title: "اشترك", message: "تم الضغط على زر الاشتراك", successful: true);
   }
 
   @override
   void onClose() {
-   // pageController.dispose();
+    // pageController.dispose();
     super.onClose();
   }
 }

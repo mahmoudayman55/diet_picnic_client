@@ -37,7 +37,7 @@ class RegisterController extends GetxController {
     final confirmPassword = confirmPasswordController.text;
 
     if (name.isEmpty || phone.isEmpty || password.isEmpty || confirmPassword.isEmpty) {
-      customSnackBar(
+      showCustomSnackbar(
         title: "تنبيه",
         message: "من فضلك املأ جميع الحقول",
         successful: false,
@@ -46,7 +46,7 @@ class RegisterController extends GetxController {
     }
 
     if (password != confirmPassword) {
-      customSnackBar(
+      showCustomSnackbar(
         title: "خطأ",
         message: "كلمة المرور غير متطابقة",
         successful: false,
@@ -64,7 +64,7 @@ class RegisterController extends GetxController {
           .get();
 
       if (existing.docs.isNotEmpty) {
-        customSnackBar(
+        showCustomSnackbar(
           title: "خطأ",
           message: "رقم الهاتف مستخدم بالفعل",
           successful: false,
@@ -87,7 +87,7 @@ class RegisterController extends GetxController {
       // 🟢 Save to Firestore
       await firestore.collection("clients").doc(client.id).set(client.toJson());
       Get.offAllNamed(AppConstants.loginPage);
-      customSnackBar(
+      showCustomSnackbar(
         title: "نجاح",
         message: "تم إنشاء الحساب بنجاح 🎉",
         successful: true,
@@ -97,7 +97,7 @@ class RegisterController extends GetxController {
 
 
     } catch (e) {
-      customSnackBar(
+      showCustomSnackbar(
         title: "خطأ",
         message: "فشل التسجيل: $e",
         successful: false,

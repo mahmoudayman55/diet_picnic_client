@@ -262,7 +262,7 @@ class NewCustomerQuizController extends GetxController {
     final user = userController.currentUser.value;
 
     if (user == null) {
-      customSnackBar(
+      showCustomSnackbar(
         title: "خطأ",
         message: "لم يتم العثور على المستخدم الحالي ❌",
         successful: false,
@@ -311,13 +311,13 @@ class NewCustomerQuizController extends GetxController {
 
       Get.back();
 
-      customSnackBar(
+      showCustomSnackbar(
         title: "تم الحفظ",
         message: "تم تسجيل إجابات الاستبيان بنجاح ✅",
         successful: true,
       );
     } catch (e) {
-      customSnackBar(
+      showCustomSnackbar(
         title: "خطأ",
         message: "حدث خطأ أثناء حفظ البيانات: $e",
         successful: false,

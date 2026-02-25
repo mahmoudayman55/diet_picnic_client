@@ -15,7 +15,6 @@ import 'package_model.dart';
 
 final _uuid = Uuid();
 
-
 class AssignedDietSystem {
   final String id;
   final DateTime assignedAt;
@@ -42,12 +41,12 @@ class AssignedDietSystem {
   }
 
   Map<String, dynamic> toJson() => {
-    'id': id,
-    'url': url,
-    'category': category,
-    'is_active': isActive,
-    'assigned_at': assignedAt.toIso8601String(),
-  };
+        'id': id,
+        'url': url,
+        'category': category,
+        'is_active': isActive,
+        'assigned_at': assignedAt.toIso8601String(),
+      };
 
   /// CopyWith method
   AssignedDietSystem copyWith({
@@ -68,13 +67,14 @@ class AssignedDietSystem {
 
   /// 🟢 Fake data generator
   static AssignedDietSystem fake() => AssignedDietSystem(
-    id: _uuid.v4(),
-    assignedAt: DateTime.now(),
-    url: "https://example.com/diet.pdf",
-    category: "Weight Loss",
-    isActive: false,
-  );
+        id: _uuid.v4(),
+        assignedAt: DateTime.now(),
+        url: "https://example.com/diet.pdf",
+        category: "Weight Loss",
+        isActive: false,
+      );
 }
+
 class AssignedExerciseSystem {
   final String id;
   final DateTime assignedAt;
@@ -95,10 +95,10 @@ class AssignedExerciseSystem {
   }
 
   Map<String, dynamic> toJson() => {
-    'id': id,
-    'is_active': isActive,
-    'assigned_at': assignedAt.toIso8601String(),
-  };
+        'id': id,
+        'is_active': isActive,
+        'assigned_at': assignedAt.toIso8601String(),
+      };
 
   /// 🔁 copyWith function
   AssignedExerciseSystem copyWith({
@@ -115,10 +115,10 @@ class AssignedExerciseSystem {
 
   /// 🟢 Fake data generator
   static AssignedExerciseSystem fake() => AssignedExerciseSystem(
-    id: _uuid.v4(),
-    assignedAt: DateTime.now().subtract(const Duration(days: 3)),
-    isActive: false,
-  );
+        id: _uuid.v4(),
+        assignedAt: DateTime.now().subtract(const Duration(days: 3)),
+        isActive: false,
+      );
 }
 
 class ClientProfileModel {
@@ -164,7 +164,7 @@ class ClientProfileModel {
     required this.name,
     required this.phone,
     required this.password,
-     this.createdAt,
+    this.createdAt,
     this.image,
     this.exerciseSystemModel,
     this.dietSystemModel,
@@ -201,7 +201,6 @@ class ClientProfileModel {
     required String phone,
     required String password,
     required DateTime createdAt,
-
   }) {
     return ClientProfileModel(
       id: id,
@@ -212,25 +211,30 @@ class ClientProfileModel {
     );
   }
 
-  WeekProgressModel getLastFollowing(){
-    List<WeekProgressModel>filtered=weekProgressList.where((p){return p.excuse.isEmpty;}).toList();
+  WeekProgressModel getLastFollowing() {
+    List<WeekProgressModel> filtered = weekProgressList.where((p) {
+      return p.excuse.isEmpty;
+    }).toList();
     filtered.sort((a, b) => a.date.compareTo(b.date));
-     return filtered.last;
-
+    return filtered.last;
   }
-  WeekProgressModel getFirstFollowing(){
-    List<WeekProgressModel>filtered=weekProgressList.where((p){return p.excuse.isEmpty;}).toList();
-  filtered.sort((a, b) => a.date.compareTo(b.date));
-     return filtered.first;
 
+  WeekProgressModel getFirstFollowing() {
+    List<WeekProgressModel> filtered = weekProgressList.where((p) {
+      return p.excuse.isEmpty;
+    }).toList();
+    filtered.sort((a, b) => a.date.compareTo(b.date));
+    return filtered.first;
   }
+
   bool hasActiveDiet() {
-    return assignedDietSystems.any((e) => e.isActive );
+    return assignedDietSystems.any((e) => e.isActive);
   }
 
   bool hasActiveExercise() {
-    return assignedExerciseSystems.any((e) => e.isActive );
+    return assignedExerciseSystems.any((e) => e.isActive);
   }
+
   /// From JSON
   factory ClientProfileModel.fromJson(Map<String, dynamic> json, String id) {
     return ClientProfileModel(
@@ -244,9 +248,11 @@ class ClientProfileModel {
       renewalDate: json['renewal_date'] != null
           ? DateTime.tryParse(json['renewal_date'])
           : null,
-      createdAt:json['created_at']==null?null: DateTime.tryParse(json['created_at']),
+      createdAt: json['created_at'] == null
+          ? null
+          : DateTime.tryParse(json['created_at']),
 
-    // renewalDate: DateTime(2025,12,5),
+      // renewalDate: DateTime(2025,12,5),
       level: json['level'],
       package:
           json['package'] == null ? null : Package.fromJson(json['package']),
@@ -302,7 +308,7 @@ class ClientProfileModel {
         'image': image,
         'qualification': qualification,
         'renewal_date': renewalDate?.toIso8601String(),
-    'created_at': createdAt?.toIso8601String(),
+        'created_at': createdAt?.toIso8601String(),
         'level': level,
         if (package != null) 'package': package!.toJson(),
         if (package != null) 'package_id': package!.id,
@@ -431,7 +437,6 @@ class ClientProfileModel {
     });
   }
 
-
   /// CopyWith
   ClientProfileModel copyWith({
     String? id,
@@ -466,7 +471,6 @@ class ClientProfileModel {
     PackageGroup? packageGroup,
     String? image,
     DateTime? createdAt,
-
   }) {
     return ClientProfileModel(
       id: id ?? this.id,
@@ -482,7 +486,7 @@ class ClientProfileModel {
       renewalDate: renewalDate ?? this.renewalDate,
       level: level ?? this.level,
       image: image ?? this.image,
-      package: package??this.package,
+      package: package ?? this.package,
       exerciseSystemModel: exerciseSystemModel,
       dietSystemModel: dietSystemModel,
       category: category ?? this.category,
@@ -502,7 +506,6 @@ class ClientProfileModel {
       startDate: startDate ?? this.startDate,
       packageGroup: packageGroup ?? this.packageGroup,
       createdAt: createdAt ?? this.createdAt,
-
     );
   }
 }

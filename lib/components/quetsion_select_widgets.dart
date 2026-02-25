@@ -176,3 +176,146 @@ class QuestionSingleSelectWidget<T> extends StatelessWidget {
     );
   }
 }
+
+class ExamQuestionWidget extends StatelessWidget {
+  final String question;
+  final List<String> options;
+  final int? selectedOption;
+  final Function(int) onSelect;
+
+  const ExamQuestionWidget({
+    super.key,
+    required this.question,
+    required this.options,
+    required this.selectedOption,
+    required this.onSelect,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    final isAppDark = ThemeController.to.isDarkMode;
+    final primaryColor = CustomColors.selectedNavBarColor;
+    final lightPrimary = primaryColor.withOpacity(0.1);
+
+    return SingleChildScrollView(
+      padding: const EdgeInsets.symmetric(horizontal: 20),
+      child: Column(
+        children: [
+          const SizedBox(height: 20),
+          // Question Box
+          Container(
+            width: double.infinity,
+            padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 32),
+            decoration: BoxDecoration(
+              color: isAppDark ? Colors.white.withOpacity(0.05) : lightPrimary,
+              borderRadius: BorderRadius.circular(20),
+              border: Border.all(
+                color: isAppDark
+                    ? Colors.grey.shade800
+                    : primaryColor.withOpacity(0.3),
+                width: 1,
+              ),
+            ),
+            child: Text(
+              question,
+              textAlign: TextAlign.center,
+              style: Theme.of(context).textTheme.displayLarge?.copyWith(
+                    color: isAppDark ? Colors.white : Colors.black87,
+                  ),
+            ),
+          ),
+          const SizedBox(height: 30),
+          // Options List
+          ...List.generate(options.length, (index) {
+            final isSelected = selectedOption == index;
+            final letter = String.fromCharCode(65 + index); // A, B, C, D...
+
+            return GestureDetector(
+              onTap: () => onSelect(index),
+              child: AnimatedContainer(
+                duration: const Duration(milliseconds: 200),
+                margin: const EdgeInsets.only(bottom: 16),
+                padding: const EdgeInsets.all(16),
+                decoration: BoxDecoration(
+                  color: isSelected
+                      ? (isAppDark
+                          ? primaryColor.withOpacity(0.2)
+                          : lightPrimary)
+                      : (isAppDark ? Colors.black26 : Colors.white),
+                  borderRadius: BorderRadius.circular(16),
+                  border: Border.all(
+                    color: isSelected
+                        ? primaryColor
+                        : (isAppDark
+                            ? Colors.grey.shade800
+                            : Colors.grey.shade200),
+                    width: isSelected ? 2 : 1,
+                  ),
+                  boxShadow: [
+                    if (!isSelected && !isAppDark)
+                      BoxShadow(
+                        color: Colors.black.withOpacity(0.03),
+                        blurRadius: 10,
+                        offset: const Offset(0, 4),
+                      ),
+                  ],
+                ),
+                child: Row(
+                  children: [
+                    Expanded(
+                      child: Text(
+                        options[index],
+                        textAlign: TextAlign.right,
+                        style: Theme.of(context)
+                            .textTheme
+                            .displayMedium
+                            ?.copyWith(
+                              color: isSelected
+                                  ? (isAppDark ? Colors.white : primaryColor)
+                                  : (isAppDark
+                                      ? Colors.white70
+                                      : Colors.black87),
+                              fontWeight: isSelected
+                                  ? FontWeight.bold
+                                  : FontWeight.normal,
+                            ),
+                      ),
+                    ),
+                    const SizedBox(width: 16),
+                    // Letter Bubble
+                    Container(
+                      width: 32,
+                      height: 32,
+                      decoration: BoxDecoration(
+                        color: isSelected
+                            ? primaryColor
+                            : (isAppDark
+                                ? Colors.white10
+                                : Colors.grey.shade100),
+                        shape: BoxShape.circle,
+                      ),
+                      alignment: Alignment.center,
+                      child: Text(
+                        letter,
+                        style:
+                            Theme.of(context).textTheme.displaySmall?.copyWith(
+                                  fontSize: 14,
+                                  fontWeight: FontWeight.bold,
+                                  color: isSelected
+                                      ? Colors.white
+                                      : (isAppDark
+                                          ? Colors.white54
+                                          : Colors.grey.shade500),
+                                ),
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+            );
+          }),
+        ],
+      ),
+    );
+  }
+}

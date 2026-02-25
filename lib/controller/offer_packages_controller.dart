@@ -66,7 +66,7 @@ class OfferPackagesController extends GetxController {
       offerPackages.sort((a, b) => a.order.compareTo(b.order));
       log(offerPackages.length.toString(), name: "OFFERSCHECK");
     } catch (e) {
-      customSnackBar(
+      showCustomSnackbar(
         title: "خطأ",
         message: "فشل تحميل الباقات: $e",
         successful: false,
