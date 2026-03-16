@@ -10,6 +10,7 @@ class ExamsController extends GetxController {
   ExamsController(this._repository);
 
   final RxList<ExamEntity> allAccessibleExams = <ExamEntity>[].obs;
+  final RxList<ExamEntity> allExams = <ExamEntity>[].obs;
   final RxList<ExamSubmissionEntity> userSubmissions =
       <ExamSubmissionEntity>[].obs;
   final RxBool isLoading = false.obs;
@@ -23,8 +24,8 @@ class ExamsController extends GetxController {
   Future<void> fetchExams() async {
     try {
       isLoading.value = true;
-      final allExams = await _repository.getExams();
-
+      final fetchedExams = await _repository.getExams();
+      allExams.assignAll(fetchedExams);
       final user = UserController.to.currentUser.value;
       if (user == null) {
         allAccessibleExams.value = [];
@@ -32,7 +33,7 @@ class ExamsController extends GetxController {
       }
       final isSubscribed = user.package != null;
 
-      allAccessibleExams.value = allExams.where((exam) {
+      allAccessibleExams.value = fetchedExams.where((exam) {
         if (exam.availability == ExamAvailability.all) return true;
         if (isSubscribed) {
           return exam.availability == ExamAvailability.subscribers;
@@ -67,6 +68,28 @@ class ExamsController extends GetxController {
   Future<void> refreshAll() async {
     await fetchUserSubmissions();
     await fetchExams();
+    await _fetchMissingSubmissionExams();
+  }
+
+  /// Fetches exams referenced by submissions but not in [allExams]
+  /// (e.g. exams that were hidden/deleted after the user submitted).
+  Future<void> _fetchMissingSubmissionExams() async {
+    final loadedIds = allExams.map((e) => e.id).toSet();
+    final missingIds = userSubmissions
+        .map((s) => s.examId)
+        .where((id) => !loadedIds.contains(id))
+        .toSet();
+
+    for (final id in missingIds) {
+      try {
+        final exam = await _repository.getExamById(id);
+        if (exam != null) {
+          allExams.add(exam);
+        }
+      } catch (_) {
+        // Silently ignore — exam may have been hard-deleted from Firestore.
+      }
+    }
   }
 
   List<ExamEntity> get availableExams {

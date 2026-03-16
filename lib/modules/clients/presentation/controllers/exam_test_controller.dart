@@ -75,7 +75,7 @@ class ExamTestController extends GetxController {
       // Calculate score
       int correctCount = 0;
       for (int i = 0; i < exam.questions.length; i++) {
-        if (answers[i] == exam.questions[i].correctIndex) {
+        if (answers[i] == exam.questions[i].correctAnswerIndex) {
           correctCount++;
         }
       }
@@ -151,6 +151,7 @@ class ExamTestController extends GetxController {
         'totalQuestions': totalQuestions,
         'prize': wonPrize,
         'exam': exam,
+        'date': submission.submittedAt,
       });
     } catch (e) {
       showCustomSnackbar(

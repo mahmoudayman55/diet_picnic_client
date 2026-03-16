@@ -1,24 +1,82 @@
+import 'package:diet_picnic_client/components/custom_snack_bar.dart';
 import 'package:diet_picnic_client/components/custom_url_luncher.dart';
 import 'package:diet_picnic_client/controller/meetings_controller.dart';
 import 'package:diet_picnic_client/core/app_constants.dart';
 import 'package:diet_picnic_client/core/custom_colors.dart';
 import 'package:diet_picnic_client/core/theme.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:get/get.dart';
 import 'package:iconsax/iconsax.dart';
 
 class MeetingBannerWidget extends StatelessWidget {
-  const MeetingBannerWidget({super.key});
+  final bool? debugIsLoading;
+  final bool? debugHasStarted;
+  final bool? debugHasExpired;
+  final String? debugJoinUrl;
+  final String? debugTitle;
+  final String? debugDate;
+  final String? debugTime;
+
+  const MeetingBannerWidget({
+    super.key,
+    this.debugIsLoading,
+    this.debugHasStarted,
+    this.debugHasExpired,
+    this.debugJoinUrl,
+    this.debugTitle,
+    this.debugDate,
+    this.debugTime,
+  });
 
   @override
   Widget build(BuildContext context) {
-    final controller = Get.find<MeetingsController>();
-
     return Obx(() {
-      if (controller.isLoading.value) return const SizedBox.shrink();
+      MeetingsController? controller;
+      if (Get.isRegistered<MeetingsController>()) {
+        controller = Get.find<MeetingsController>();
+      }
 
-      final meeting = controller.nextMeeting;
-      if (meeting == null) return const SizedBox.shrink();
+      // Track Rx properties properly when available
+      final isControllerLoading = controller?.isLoading.value ?? false;
+      final actualMeeting =
+          controller?.nextMeeting; // evaluates getters to track Rx changes
+
+      final isLoading = debugIsLoading ?? isControllerLoading;
+      if (isLoading) return const SizedBox.shrink();
+
+      final isDebug = debugTitle != null ||
+          debugHasStarted != null ||
+          debugHasExpired != null ||
+          debugJoinUrl != null;
+
+      if (actualMeeting == null && !isDebug) {
+        return const SizedBox.shrink();
+      }
+
+      final title = debugTitle ?? actualMeeting?.title ?? 'اجتماع تجريبي';
+      final date = debugDate ?? actualMeeting?.date ?? '2024-01-01';
+      final time = debugTime ?? actualMeeting?.time ?? '10:00 AM';
+      final joinUrl =
+          debugJoinUrl ?? actualMeeting?.joinUrl ?? 'https://debug.com';
+      final hasStarted = debugHasStarted ?? actualMeeting?.hasStarted ?? false;
+      final hasExpired = debugHasExpired ?? actualMeeting?.hasExpired ?? false;
+
+      final statusColor = hasExpired
+          ? Colors.red
+          : hasStarted
+              ? Colors.green.shade600
+              : CustomColors.mainColor;
+
+      final statusBgColor = hasExpired
+          ? Colors.red.withOpacity(0.1)
+          : hasStarted
+              ? Colors.green.withOpacity(0.1)
+              : CustomColors.mainColor.withOpacity(0.1);
+
+      // To avoid Obx throwing an error if no Rx variables were accessed because debug flags overrode everything
+      // without Get.isRegistered checking out, we ensure at least one reactive lookup happens or we use Obx correctly.
+      // But we already checked `controller?.isLoading.value` and `controller?.nextMeeting`.
 
       return InkWell(
         borderRadius: BorderRadius.circular(12),
@@ -27,16 +85,16 @@ class MeetingBannerWidget extends StatelessWidget {
           width: double.infinity,
           padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 14),
           decoration: BoxDecoration(
-            color: CustomColors.mainColor.withOpacity(0.1),
+            color: statusBgColor,border: Border.all(color: statusColor),
             borderRadius: BorderRadius.circular(12),
           ),
           child: Row(
             children: [
-              // Icon container — brand orange
+              // Icon container
               Container(
                 padding: const EdgeInsets.all(10),
                 decoration: BoxDecoration(
-                  color: CustomColors.mainColor,
+                  color: statusColor,
                   borderRadius: BorderRadius.circular(8),
                 ),
                 child: const Icon(
@@ -53,37 +111,35 @@ class MeetingBannerWidget extends StatelessWidget {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Text(
-                      'الاجتماع القادم : ${meeting.title}',
+                      'الاجتماع القادم : $title',
                       style: Themes.lightTheme.textTheme.displayLarge?.copyWith(
                         fontWeight: FontWeight.bold,
-                        color: CustomColors.mainColor,
+                        color: statusColor,
                       ),
-                      maxLines: 1,
+                      maxLines: 2,
                       overflow: TextOverflow.ellipsis,
                     ),
                     const SizedBox(height: 2),
                     Row(
                       children: [
-                        const Icon(Iconsax.calendar,
-                            size: 12, color: CustomColors.mainColor),
+                        Icon(Iconsax.calendar, size: 12, color: statusColor),
                         const SizedBox(width: 4),
                         Text(
-                          meeting.date,
+                          date,
                           style: Themes.lightTheme.textTheme.displaySmall
                               ?.copyWith(
-                            color: CustomColors.mainColor,
+                            color: statusColor,
                             fontWeight: FontWeight.w600,
                           ),
                         ),
                         const SizedBox(width: 10),
-                        const Icon(Iconsax.clock,
-                            size: 12, color: CustomColors.mainColor),
+                        Icon(Iconsax.clock, size: 12, color: statusColor),
                         const SizedBox(width: 4),
                         Text(
-                          meeting.time,
+                          time,
                           style: Themes.lightTheme.textTheme.displaySmall
                               ?.copyWith(
-                            color: CustomColors.mainColor,
+                            color: statusColor,
                             fontWeight: FontWeight.w600,
                           ),
                         ),
@@ -93,36 +149,52 @@ class MeetingBannerWidget extends StatelessWidget {
                 ),
               ),
 
-              // Join icon button — 3 states: expired / active / not yet
-              if (meeting.joinUrl.isNotEmpty)
+              // Copy URL Icon Button -- show only if running
+              if (joinUrl.isNotEmpty && hasStarted && !hasExpired)
                 IconButton(
-                  onPressed: (meeting.hasStarted && !meeting.hasExpired)
-                      ? () => CustomUrlLauncher.launchWebUrl(meeting.joinUrl)
+                  onPressed: () {
+                    Clipboard.setData(ClipboardData(text: joinUrl));
+                    showCustomSnackbar(
+                      title: "تم النسخ",
+                      message: "تم نسخ رابط الاجتماع بنجاح",
+                      successful: true,
+                    );
+                  },
+                  icon: Icon(
+                    Iconsax.copy,
+                    color: statusColor,
+                    size: 20,
+                  ),
+                ),
+
+              // Join icon button — 3 states: expired / active / not yet
+              if (joinUrl.isNotEmpty)
+                IconButton(
+                  onPressed: (hasStarted && !hasExpired)
+                      ? () => CustomUrlLauncher.launchWebUrl(joinUrl)
                       : null,
                   style: IconButton.styleFrom(
-                    backgroundColor: meeting.hasExpired
-                        ? Colors.red.shade100
-                        : meeting.hasStarted
-                            ? CustomColors.mainColor
+                    backgroundColor: hasExpired
+                        ? Colors.red
+                        : hasStarted
+                            ? statusColor
                             : Colors.grey.shade300,
                     foregroundColor: Colors.white,
-                    disabledBackgroundColor: meeting.hasExpired
-                        ? Colors.red.shade100
-                        : Colors.grey.shade300,
-                    disabledForegroundColor: meeting.hasExpired
-                        ? Colors.red.shade400
-                        : Colors.grey.shade500,
+                    disabledBackgroundColor:
+                        hasExpired ? Colors.red : Colors.grey.withOpacity(0.2),
+                    disabledForegroundColor:
+                        hasExpired ? Colors.white : Colors.grey.shade500,
                     padding: const EdgeInsets.all(10),
                     shape: RoundedRectangleBorder(
                       borderRadius: BorderRadius.circular(8),
                     ),
                   ),
-                  tooltip: meeting.hasExpired ? 'انتهى الاجتماع' : null,
+                  tooltip: hasExpired ? 'انتهى الاجتماع' : null,
                   icon: Icon(
-                    meeting.hasExpired
+                    hasExpired
                         ? Icons.cancel_outlined
-                        : meeting.hasStarted
-                            ? Icons.arrow_circle_right_outlined
+                        : hasStarted
+                            ? Icons.meeting_room_outlined
                             : Icons.access_time_rounded,
                     size: 20,
                   ),

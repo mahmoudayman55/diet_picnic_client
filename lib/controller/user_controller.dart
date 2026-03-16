@@ -34,148 +34,151 @@ class UserController extends GetxController {
   bool get isSubscriptionActive => !currentUser.value!.isExpired;
 
   /// Restore user if saved in storage
+  final isRestoringUser = false.obs;
+
   Future<void> restoreUser() async {
-    final userId = UserStorage.getUserId();
-    if (userId == null) return;
+    isRestoringUser.value = true;
+    try {
+      final userId = UserStorage.getUserId();
+      if (userId == null) return;
 
-    final doc = await firestore.collection("clients").doc(userId).get();
-    if (doc.exists) {
-      log(userId.toString());
-      currentUser.value = ClientProfileModel.fromJson(doc.data()!, doc.id);
+      final doc = await firestore.collection("clients").doc(userId).get();
+      if (doc.exists) {
+        log(userId.toString());
+        currentUser.value = ClientProfileModel.fromJson(doc.data()!, doc.id);
 
-      // ✅ 1. Fetch all packages
-      final packagesSnapshot = await firestore.collection('packages').get();
-      final packagesMap = <String, Package>{};
-      for (var pkg in packagesSnapshot.docs) {
-        final pkgData = pkg.data();
-        final pkgId = pkgData['id'] ?? pkg.id;
-        final pkgName = pkgData['name'] ?? '';
-        packagesMap[pkgId] = Package(id: pkgId, name: pkgName);
-      }
-
-      // ✅ 2. Resolve package
-      final packageId = doc.data()!['package_id'] ?? '';
-
-      Package? package;
-      // log(packagesMap.toString());
-      if (packagesMap.containsKey(packageId)) {
-        // log("Founded!",name: "packageCHECK");
-        package = packagesMap[packageId]!;
-      } else {
-        package = null;
-      }
-
-      // ✅ 3. Resolve group if exists
-      PackageGroup? packageGroup;
-      final groupId = doc.data()!['group_id'];
-      if (groupId != null && (groupId as String).isNotEmpty) {
-        final groupDoc =
-            await firestore.collection('groups').doc(groupId).get();
-        if (groupDoc.exists) {
-          packageGroup = PackageGroup.fromJson(groupDoc.data()!);
+        // ✅ 1. Fetch all packages
+        final packagesSnapshot = await firestore.collection('packages').get();
+        final packagesMap = <String, Package>{};
+        for (var pkg in packagesSnapshot.docs) {
+          final pkgData = pkg.data();
+          final pkgId = pkgData['id'] ?? pkg.id;
+          final pkgName = pkgData['name'] ?? '';
+          packagesMap[pkgId] = Package(id: pkgId, name: pkgName);
         }
-      }
-      // log(groupId.toString(),name: "groupID");
-      // log(packageGroup!.id.toString(),name: "group");
-      // log(packageGroup!.name.toString(),name: "group");
 
-      // ✅ 4. Fetch week progress
-      final weekProgressSnapshot = await firestore
-          .collection('clients')
-          .doc(currentUser.value!.id)
-          .collection('week_progress')
-          .get();
-      final weekProgressList = weekProgressSnapshot.docs
-          .map((wp) => WeekProgressModel.fromJson(wp.data()))
-          .toList();
-      // log(package!.name,name: "packageCHECK");
-      ClientProfileModel user =
-          ClientProfileModel.fromJson(doc.data()!, doc.id).copyWith(
-        weekProgressList: weekProgressList,
-        group: packageGroup,
-        package: package,
-      );
+        // ✅ 2. Resolve package
+        final packageId = doc.data()!['package_id'] ?? '';
+        Package? package;
+        if (packagesMap.containsKey(packageId)) {
+          package = packagesMap[packageId]!;
+        } else {
+          package = null;
+        }
 
-      Future<List<FollowUpMessageModel>> getFollowUpsForClient(
-          String clientId) async {
-        final snapshot = await firestore
+        // ✅ 3. Resolve group if exists
+        PackageGroup? packageGroup;
+        final groupId = doc.data()!['group_id'];
+        log("GROUP ID IS $groupId");
+        if (groupId != null && (groupId as String).isNotEmpty) {
+          final groupDoc =
+          await firestore.collection('groups').doc(groupId).get();
+          if (groupDoc.exists) {
+            packageGroup = PackageGroup.fromJson(groupDoc.data()!);
+            log("GROUP NAME IS ${packageGroup.name}");
+          }
+        }
+
+        // ✅ 4. Fetch week progress
+        final weekProgressSnapshot = await firestore
             .collection('clients')
-            .doc(clientId)
-            .collection('follow_ups')
+            .doc(currentUser.value!.id)
+            .collection('week_progress')
             .get();
+        final weekProgressList = weekProgressSnapshot.docs
+            .map((wp) => WeekProgressModel.fromJson(wp.data()))
+            .toList();
 
-        return snapshot.docs.map((doc) {
-          final data = doc.data();
-          data['id'] = doc.id; // Add the document ID to the JSON
-          return FollowUpMessageModel.fromJson(data);
-        }).toList();
-      }
-
-      // ✅ 5. Fetch followUps
-      final followUpList = await getFollowUpsForClient(doc.id);
-      DietSystemModel? dietSystemModel;
-      final assignedDietSystems = user.assignedDietSystems;
-
-      if (assignedDietSystems.isNotEmpty) {
-        final activeDietSystem = assignedDietSystems.firstWhereOrNull(
-          (system) => system.isActive == true,
+        ClientProfileModel user =
+        ClientProfileModel.fromJson(doc.data()!, doc.id).copyWith(
+          weekProgressList: weekProgressList,
+          group: packageGroup,
+          package: package,
         );
 
-        if (activeDietSystem != null) {
-          final doc = await firestore
-              .collection("diet_systems")
-              .doc(activeDietSystem.id)
+        Future<List<FollowUpMessageModel>> getFollowUpsForClient(
+            String clientId) async {
+          final snapshot = await firestore
+              .collection('clients')
+              .doc(clientId)
+              .collection('follow_ups')
               .get();
 
-          if (doc.exists && doc.data() != null) {
-            dietSystemModel = DietSystemModel.fromJson(
-                doc.data()!, activeDietSystem.assignedAt);
+          return snapshot.docs.map((doc) {
+            final data = doc.data();
+            data['id'] = doc.id;
+            return FollowUpMessageModel.fromJson(data);
+          }).toList();
+        }
+
+        // ✅ 5. Fetch followUps
+        final followUpList = await getFollowUpsForClient(doc.id);
+        DietSystemModel? dietSystemModel;
+        final assignedDietSystems = user.assignedDietSystems;
+
+        if (assignedDietSystems.isNotEmpty) {
+          final activeDietSystem = assignedDietSystems.firstWhereOrNull(
+                (system) => system.isActive == true,
+          );
+
+          if (activeDietSystem != null) {
+            final doc = await firestore
+                .collection("diet_systems")
+                .doc(activeDietSystem.id)
+                .get();
+
+            if (doc.exists && doc.data() != null) {
+              dietSystemModel = DietSystemModel.fromJson(
+                  doc.data()!, activeDietSystem.assignedAt);
+            }
           }
         }
-      }
 
-// Get active exercise system
-      ExerciseSystemModel? exerciseSystemModel;
-      final assignedExerciseSystems = user.assignedExerciseSystems;
+        // ✅ 6. Get active exercise system
+        ExerciseSystemModel? exerciseSystemModel;
+        final assignedExerciseSystems = user.assignedExerciseSystems;
 
-      if (assignedExerciseSystems.isNotEmpty) {
-        final activeExerciseSystem = assignedExerciseSystems.firstWhereOrNull(
-          (system) => system.isActive == true,
+        if (assignedExerciseSystems.isNotEmpty) {
+          final activeExerciseSystem = assignedExerciseSystems.firstWhereOrNull(
+                (system) => system.isActive == true,
+          );
+
+          if (activeExerciseSystem != null) {
+            final exerciseDoc = await firestore
+                .collection("exercise_systems")
+                .doc(activeExerciseSystem.id)
+                .get();
+
+            if (exerciseDoc.exists && exerciseDoc.data() != null) {
+              exerciseSystemModel = ExerciseSystemModel.fromJson(
+                exerciseDoc.data()!,
+                exerciseDoc.id,
+              );
+              log("EXISTEX");
+            }
+          }
+        }
+        log("GROUP NAME IS ${packageGroup.toString()}");
+
+        user = ClientProfileModel.fromJson(doc.data()!, doc.id).copyWith(
+          weekProgressList: weekProgressList,
+          dietSystemModel: dietSystemModel,
+          assignedDietSystems: assignedDietSystems,
+          assignedExerciseSystems: assignedExerciseSystems,
+          exerciseSystemModel: exerciseSystemModel,
+          group: packageGroup,packageGroup: packageGroup,
+          package: package,
         );
-        //    log(activeExerciseSystem!.id,name: "ACTIVEONE");
-
-        if (activeExerciseSystem != null) {
-          final exerciseDoc = await firestore
-              .collection("exercise_systems")
-              .doc(activeExerciseSystem.id)
-              .get();
-
-          if (exerciseDoc.exists && exerciseDoc.data() != null) {
-            exerciseSystemModel = ExerciseSystemModel.fromJson(
-              exerciseDoc.data()!,
-              exerciseDoc.id,
-            );
-            log("EXISTEX");
-          }
-        }
+        log("GROUP NAME IS ${user.packageGroup.toString()}");
+        currentUser.value = user;
+        update();
       }
-      user = ClientProfileModel.fromJson(doc.data()!, doc.id).copyWith(
-        weekProgressList: weekProgressList,
-        dietSystemModel: dietSystemModel,
-        assignedDietSystems: assignedDietSystems,
-        assignedExerciseSystems: assignedExerciseSystems,
-        exerciseSystemModel: exerciseSystemModel,
-        group: packageGroup,
-        package: package,
-      );
-//log(user.package!.toString());
-      currentUser.value = user;
-      // log(currentUser.value!.dietSystemModel!.name.toString(),name: "sysysysysyssss");
-      update();
+    } finally {
+      isRestoringUser.value = false;
     }
   }
-
   Future<void> refreshExerciseSystem() async {
+    log("message started");
     if (currentUser.value == null) return;
 
     final userId = currentUser.value!.id;

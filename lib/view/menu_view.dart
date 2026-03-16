@@ -360,18 +360,18 @@ class MenuView extends StatelessWidget {
                                 leadingIcon: Icons.privacy_tip_outlined,
                                 title: "البيانات وسياسة الخصوصية"),
                           ),
-
-                          InkWell(
-                            onTap: () => Get.to(AboutView()),
-                            child: MenuButtonWidget(
-                              leadingIcon: Iconsax.info_circle,
-                              title: "عن Diet Picnic",
-                              sideWidget: Text(
-                                "Version ${AppUpdateController.to.appVersion}",
-                                style: Theme.of(context).textTheme.bodyMedium,
-                              ),
-                            ),
-                          ),
+                          //
+                          // InkWell(
+                          //   onTap: () => Get.to(AboutView()),
+                          //   child: MenuButtonWidget(
+                          //     leadingIcon: Iconsax.info_circle,
+                          //     title: "عن Diet Picnic",
+                          //     sideWidget: Text(
+                          //       "Version ${AppUpdateController.to.appVersion}",
+                          //       style: Theme.of(context).textTheme.bodyMedium,
+                          //     ),
+                          //   ),
+                          // ),
                         ]),
                     SizedBox(
                       height: heigh * 0.03,

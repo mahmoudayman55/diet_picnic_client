@@ -7,29 +7,30 @@ import 'package:get/get.dart';
 class WeeklyFollowUpCard extends StatelessWidget {
   const WeeklyFollowUpCard({super.key});
 
-  Color get _bgColor {
-    final d = DateTime.now().weekday;
-    if (d == DateTime.thursday) return Colors.red.shade50;
-    if (d == DateTime.wednesday) return Colors.orange.shade50;
-    return Colors.blue.shade50;
-  }
-
+  // Color get _bgColor {
+  //   final d = DateTime
+  //       .now()
+  //       .weekday;
+  //   if (d == DateTime.thursday) return Colors.red.shade50;
+  //   if (d == DateTime.wednesday) return Colors.orange.shade50;
+  //   return Colors.blue.shade50;
+  // }
   MaterialColor get _accentColor {
     final d = DateTime.now().weekday;
-    if (d == DateTime.thursday) return Colors.red;
-    if (d == DateTime.wednesday) return Colors.orange;
+    if (d == DateTime.wednesday) return Colors.red;    // Last day of week
+    if (d == DateTime.tuesday) return Colors.orange;   // One day left
     return Colors.blue;
   }
 
   String get _message {
     final d = DateTime.now().weekday;
-    if (d == DateTime.thursday) {
-      return 'انهارده آخر فرصة — لازم تبعت المتابعة الأسبوعية اليوم';
-    }
     if (d == DateTime.wednesday) {
+      return 'انهارده آخر فرصة — لازم تبعت المتابعة الأسبوعية انهارده';
+    }
+    if (d == DateTime.tuesday) {
       return 'فاضل يومين بس — يفضل تبعت المتابعة الأسبوعية قبل نهاية الأسبوع';
     }
-    return 'تذكير: لا تنسَ إرسال المتابعة الأسبوعية قبل نهاية الأسبوع';
+    return 'تذكير: متنساش تبعت المتابعة الأسبوعية قبل نهاية الأسبوع';
   }
 
   @override
@@ -42,8 +43,9 @@ class WeeklyFollowUpCard extends StatelessWidget {
       child: Container(
         width: double.infinity,
         padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 14),
-        decoration: BoxDecoration(
-          color: CustomColors.mainColor.withOpacity(0.1),          borderRadius: BorderRadius.circular(12),
+        decoration: BoxDecoration(border: Border.all(color: _accentColor),
+          color: _accentColor.withOpacity(0.2),
+          borderRadius: BorderRadius.circular(12),
         ),
         child: Row(
           children: [

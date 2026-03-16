@@ -1,8 +1,11 @@
+import 'package:flutter/material.dart';
+
 class AppConstants {
   AppConstants._();
   static String fontFamily = "Tajawal";
   static String privacyURL =
       "https://github.com/mahmoudayman55/Privacy-Policy/blob/main/diet_picnic_privacy";
+  static GlobalKey<ScaffoldMessengerState> snackbarKey = GlobalKey<ScaffoldMessengerState>();
 
   static String phoneNumber = "+201146474817";
   static String exerciseSystemsPage = "/exercise-systems";

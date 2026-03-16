@@ -78,6 +78,7 @@ class MyApp extends StatelessWidget {
     return Sizer(
       builder: (context, orientation, deviceType) {
         return Obx(() => GetMaterialApp(
+          scaffoldMessengerKey: AppConstants.snackbarKey,
               useInheritedMediaQuery: true,
               locale: DevicePreview.locale(context),
               builder: DevicePreview.appBuilder,

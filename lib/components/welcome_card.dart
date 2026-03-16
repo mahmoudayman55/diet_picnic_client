@@ -1,13 +1,16 @@
 import 'dart:math' as math;
 import 'dart:developer';
-import 'dart:math';
 import 'dart:ui';
-import 'package:diet_picnic_client/controller/theme_controller.dart';
+import 'package:diet_picnic_client/components/loading_widget.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:iconsax/iconsax.dart';
 import 'package:intl/intl.dart';
+import 'dart:io';
+import 'package:flutter/rendering.dart';
+import 'package:path_provider/path_provider.dart';
+import 'package:share_plus/share_plus.dart';
 import 'package:diet_picnic_client/components/custom_url_luncher.dart';
 import 'package:diet_picnic_client/controller/user_controller.dart';
 import 'package:diet_picnic_client/core/app_constants.dart';
@@ -27,6 +30,32 @@ class _WelcomeCardState extends State<WelcomeCard>
   late Animation<double> _animation;
   bool _showFront = true;
   String _currentMessage = "";
+  final GlobalKey _backCardKey = GlobalKey();
+  bool _isSharing = false;
+
+  Future<void> _shareCard() async {
+    if (_isSharing) return;
+    setState(() => _isSharing = true);
+    try {
+      final boundary = _backCardKey.currentContext?.findRenderObject()
+          as RenderRepaintBoundary?;
+      if (boundary == null) return;
+      final image = await boundary.toImage(pixelRatio: 3.0);
+      final byteData = await image.toByteData(format: ImageByteFormat.png);
+      if (byteData == null) return;
+      final tempDir = await getTemporaryDirectory();
+      final file = File('${tempDir.path}/diet_picnic_quote.png');
+      await file.writeAsBytes(byteData.buffer.asUint8List());
+
+      final shareText =
+          '$_currentMessage\n\n#Diet_Picnic #دايت_بيكنك #صحة #رمضان_مع_دايت_بيكنك';
+      await Share.shareXFiles([XFile(file.path)], text: shareText);
+    } catch (e) {
+      log("Error sharing card: $e");
+    } finally {
+      if (mounted) setState(() => _isSharing = false);
+    }
+  }
 
   @override
   void initState() {
@@ -70,7 +99,12 @@ class _WelcomeCardState extends State<WelcomeCard>
       // We pass the user to _buildFront to use the data.
       final userController = Get.find<UserController>();
       final user = userController.currentUser.value;
-
+      if (userController.isRestoringUser.value) {
+        return Padding(
+          padding: const EdgeInsets.all(8.0),
+          child: LoadingWidget(),
+        );
+      }
       return AnimatedBuilder(
         animation: _animation,
         builder: (context, child) {
@@ -125,8 +159,8 @@ class _WelcomeCardState extends State<WelcomeCard>
       "Diet Picnic.. لأن جسمك يستاهل الأفضل دايمًا 💚",
 
       // نصايح سريعة
-      "اشرب مياه كتير بين الإفطار والسحور 💧",
-      "افطر على تمر ومياه.. وهدي نفسك قبل الأكل 🌴",
+      "اشرب ميه كتير بين الإفطار والسحور 💧",
+      "افطر على تمر وميه.. وهدي نفسك قبل الأكل 🌴",
       "السحور مش وجبة تتعداها! 🍳",
       "شوربة خفيفة = بداية إفطار مثالية 🥣",
       "المقليات والسكريات عدوك في رمضان 🚫",
@@ -135,134 +169,154 @@ class _WelcomeCardState extends State<WelcomeCard>
       "التمر طاقة طبيعية وسريعة لجسمك ⚡🌴",
     ];
 
-    final random = Random();
+    final random = math.Random();
     return messages[random.nextInt(messages.length)];
   }
 
   Widget _buildBack(BuildContext context) {
     return GestureDetector(
       onTap: _flip,
-      child: Card(
-        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
-        elevation: 2,
-        child: Stack(
-          children: [
-            Container(constraints: BoxConstraints(minHeight: 160),
-                width: double.infinity,
-                height: MediaQuery.of(context).size.height * 0.22,
-                // Approximate height to match front content roughly
-                decoration: BoxDecoration(
-                  gradient: LinearGradient(
-                    colors: [
-                      // ThemeController.to.isDarkMode
-                      //     ?
-                      Color(0xFF3E2723),
-                          // : Color(0xFFFFE4B9), // بني داكن
-                      Color(0xFFFF9800), // برتقالي (يطابق اللوجو)
-                    ],
-                    begin: Alignment.topLeft,
-                    end: Alignment.bottomRight,
-                  ),
-                  borderRadius: BorderRadius.circular(22),
-                ),
-                child: ClipRRect(
-                  borderRadius: BorderRadius.circular(22),
-                  child: Stack(
-                    children: [
-                      // دوائر شفافة للديكور
-                      Positioned(
-                        top: -30,
-                        left: -20,
-                        child: CircleAvatar(
-                          radius: 60,
-                          backgroundColor: Colors.white.withOpacity(0.1),
+      child: Stack(
+        children: [
+          RepaintBoundary(
+            key: _backCardKey,
+            child: Card(
+              shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(20)),
+              elevation: 2,
+              child: Stack(
+                children: [
+                  Container(
+                      constraints: BoxConstraints(minHeight: 160),
+                      width: double.infinity,
+                      height: MediaQuery.of(context).size.height * 0.22,
+                      // Approximate height to match front content roughly
+                      decoration: BoxDecoration(
+                        gradient: LinearGradient(
+                          colors: [
+                            // ThemeController.to.isDarkMode
+                            //     ?
+                            Color(0xFF3E2723),
+                            // : Color(0xFFFFE4B9), // بني داكن
+                            Color(0xFFFF9800), // برتقالي (يطابق اللوجو)
+                          ],
+                          begin: Alignment.topLeft,
+                          end: Alignment.bottomRight,
                         ),
+                        borderRadius: BorderRadius.circular(20),
                       ),
-
-                      Positioned(
-                        bottom: -20,
-                        right: -40,
-                        child: CircleAvatar(
-                          radius: 100,
-                          backgroundColor: Colors.white.withOpacity(0.1),
-                        ),
-                      ),
-                      Positioned(
-                        bottom: 20,
-                        left: 20,
-                        child: CircleAvatar(
-                          radius: 30,
-                          backgroundColor: Colors.white.withOpacity(0.1),
-                        ),
-                      ),
-                      Positioned(
-                          top: 0,
-                          left: 0,
-
-
-                          child: Center(
-                            child: SizedBox(
-                              height: MediaQuery.of(context).size.height * 0.1,
-
-                              child: Stack(
-                                children: [
-                                  // الظل
-                                  // Transform.translate(
-                                  //   offset: Offset(2, 2),
-                                  //   child: ImageFiltered(
-                                  //     imageFilter: ImageFilter.blur(
-                                  //         sigmaX: 6, sigmaY: 6),
-                                  //     child: ColorFiltered(
-                                  //       colorFilter: ColorFilter.mode(
-                                  //         Colors.amber.withOpacity(0.6),
-                                  //         BlendMode.srcATop,
-                                  //       ),
-                                  //       child: Opacity(
-                                  //           opacity: 0.3,
-                                  //           child: Image.asset(
-                                  //               "assets/images/logow.png")),
-                                  //     ),
-                                  //   ),
-                                  // ),
-                                  // الصورة الأصلية مع blur
-                                  ImageFiltered(
-                                    imageFilter:
-                                        ImageFilter.blur(sigmaX: 0.3, sigmaY: 0.3),
-                                    child: Image.asset("assets/images/logo.png"),
-                                  ),
-                                ],
+                      child: ClipRRect(
+                        borderRadius: BorderRadius.circular(20),
+                        child: Stack(
+                          children: [
+                            // دوائر شفافة للديكور
+                            Positioned(
+                              top: -30,
+                              left: -20,
+                              child: CircleAvatar(
+                                radius: 60,
+                                backgroundColor: Colors.white.withOpacity(0.1),
                               ),
                             ),
-                          )),
-                      Center(
-                        child: Padding(
-                          padding: const EdgeInsets.all(16.0),
-                          child: Text(
-                            "\n${_currentMessage}",
-                            textAlign: TextAlign.center,
-                            style: Theme.of(context)
-                                .textTheme
-                                .displayLarge
-                                ?.copyWith(
-                                  fontWeight: FontWeight.bold,
-                                  color:  Colors.white
 
+                            Positioned(
+                              bottom: -20,
+                              right: -40,
+                              child: CircleAvatar(
+                                radius: 100,
+                                backgroundColor: Colors.white.withOpacity(0.1),
+                              ),
+                            ),
+                            Positioned(
+                              bottom: 20,
+                              left: 20,
+                              child: CircleAvatar(
+                                radius: 30,
+                                backgroundColor: Colors.white.withOpacity(0.1),
+                              ),
+                            ),
+                            Positioned(
+                                top: 0,
+                                left: 0,
+                                child: Center(
+                                  child: SizedBox(
+                                    height: MediaQuery.of(context).size.height *
+                                        0.1,
+                                    child: Stack(
+                                      children: [
+                                        // الظل
+                                        // Transform.translate(
+                                        //   offset: Offset(2, 2),
+                                        //   child: ImageFiltered(
+                                        //     imageFilter: ImageFilter.blur(
+                                        //         sigmaX: 6, sigmaY: 6),
+                                        //     child: ColorFiltered(
+                                        //       colorFilter: ColorFilter.mode(
+                                        //         Colors.amber.withOpacity(0.6),
+                                        //         BlendMode.srcATop,
+                                        //       ),
+                                        //       child: Opacity(
+                                        //           opacity: 0.3,
+                                        //           child: Image.asset(
+                                        //               "assets/images/logow.png")),
+                                        //     ),
+                                        //   ),
+                                        // ),
+                                        // الصورة الأصلية مع blur
+                                        ImageFiltered(
+                                          imageFilter: ImageFilter.blur(
+                                              sigmaX: 0.3, sigmaY: 0.3),
+                                          child: Image.asset(
+                                              "assets/images/logo.png"),
+                                        ),
+                                      ],
+                                    ),
+                                  ),
+                                )),
+                            Center(
+                              child: Padding(
+                                padding: const EdgeInsets.all(16.0),
+                                child: Text(
+                                  "\n${_currentMessage}",
+                                  textAlign: TextAlign.center,
+                                  style: Theme.of(context)
+                                      .textTheme
+                                      .displayLarge
+                                      ?.copyWith(
+                                          fontWeight: FontWeight.bold,
+                                          color: Colors.white),
                                 ),
-                          ),
+                              ),
+                            ),
+                          ],
                         ),
-                      ),
-                    ],
-                  ),
-                )),
-            Positioned(
-                right: 0,
-                bottom: 0,
-                child: SizedBox(
-                  height: 80,
-                  child: Image.asset("assets/images/lighter.png"),
-                )),
-          ],
-        ),
+                      )),
+                  Positioned(
+                      right: 0,
+                      bottom: 0,
+                      child: SizedBox(
+                        height: 80,
+                        child: Image.asset("assets/images/lighter.png"),
+                      )),
+                ],
+              ),
+            ),
+          ), // close RepaintBoundary
+          Positioned(
+            top: 16,
+            right: 16,
+            child: IconButton(
+              onPressed: _shareCard,
+              icon: _isSharing
+                  ? const SizedBox(
+                      width: 24,
+                      height: 24,
+                      child: CircularProgressIndicator(
+                          color: Colors.white, strokeWidth: 2))
+                  : const Icon(Icons.share, color: Colors.white, size: 28),
+            ),
+          ),
+        ],
       ),
     );
   }
@@ -481,6 +535,7 @@ class _WelcomeCardState extends State<WelcomeCard>
             "أنت الآن مشترك في:\nباقة ${package.name} (${user.level?.isNotEmpty == true ? user.level! : user.packageGroup?.name ?? 'غير محدد'})",
             style: Theme.of(context).textTheme.displayMedium,
           ),
+
           const SizedBox(height: 8),
           Row(
             children: [

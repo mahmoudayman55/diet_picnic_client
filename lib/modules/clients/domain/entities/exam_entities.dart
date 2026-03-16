@@ -31,12 +31,12 @@ class ExamEntity {
 class QuestionEntity {
   final String title;
   final List<String> options;
-  final int correctIndex;
+  final int correctAnswerIndex;
 
   QuestionEntity({
     required this.title,
     required this.options,
-    required this.correctIndex,
+    required this.correctAnswerIndex,
   });
 }
 

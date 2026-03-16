@@ -52,14 +52,14 @@ class QuestionModel extends QuestionEntity {
   QuestionModel({
     required super.title,
     required super.options,
-    required super.correctIndex,
+    required super.correctAnswerIndex,
   });
 
   factory QuestionModel.fromJson(Map<String, dynamic> json) {
     return QuestionModel(
       title: json['title'] ?? '',
       options: List<String>.from(json['options'] ?? []),
-      correctIndex: json['correctIndex'] ?? 0,
+      correctAnswerIndex: json['correctAnswerIndex'] ?? 0,
     );
   }
 
@@ -67,7 +67,7 @@ class QuestionModel extends QuestionEntity {
     return {
       'title': title,
       'options': options,
-      'correctIndex': correctIndex,
+      'correctAnswerIndex': correctAnswerIndex,
     };
   }
 }

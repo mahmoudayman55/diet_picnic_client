@@ -414,18 +414,20 @@ class ClientProfileModel {
     final now = DateTime.now();
     final today = DateTime(now.year, now.month, now.day);
 
-    // Find the most recent Friday that has passed (not including today if today is Friday)
+    // Find the most recent Thursday that has passed
     int daysToSubtract;
 
-    if (now.weekday == DateTime.friday) {
-      daysToSubtract = 0; // Today is Friday, start of current week
+    if (now.weekday == DateTime.thursday) {
+      daysToSubtract = 0; // Today is Thursday, start of current week
+    } else if (now.weekday == DateTime.friday) {
+      daysToSubtract = 1; // Yesterday was Thursday
     } else if (now.weekday == DateTime.saturday) {
-      daysToSubtract = 1; // Yesterday was Friday
+      daysToSubtract = 2; // Thursday was 2 days ago
     } else if (now.weekday == DateTime.sunday) {
-      daysToSubtract = 2; // Friday was 2 days ago
+      daysToSubtract = 3; // Thursday was 3 days ago
     } else {
-      // Monday(1) to Thursday(4)
-      daysToSubtract = now.weekday + 2; // Mon:3, Tue:4, Wed:5, Thu:6
+      // Monday(1), Tuesday(2), Wednesday(3)
+      daysToSubtract = now.weekday + 4; // Mon:5, Tue:6, Wed:7
     }
 
     final weekStart = today.subtract(Duration(days: daysToSubtract));

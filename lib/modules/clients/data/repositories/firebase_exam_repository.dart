@@ -19,6 +19,13 @@ class FirebaseExamRepository implements ExamRepository {
   }
 
   @override
+  Future<ExamModel?> getExamById(String id) async {
+    final doc = await _firestore.collection('exams').doc(id).get();
+    if (!doc.exists || doc.data() == null) return null;
+    return ExamModel.fromJson(doc.data()!, doc.id);
+  }
+
+  @override
   Future<void> submitExam(ExamSubmissionEntity submission) async {
     if (submission is ExamSubmissionModel) {
       await _firestore.collection('exam_submissions').add(submission.toJson());

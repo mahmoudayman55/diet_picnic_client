@@ -92,7 +92,7 @@ class _ExamsSectionState extends State<ExamsSection>
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
                         Text(
-                          "اختبارات دايت بيكنك",
+                          "مسابقات دايت بيكنك",
                           style: Theme.of(context)
                               .textTheme
                               .headlineLarge!
@@ -105,7 +105,7 @@ class _ExamsSectionState extends State<ExamsSection>
                         SizedBox(
                           width: width * 0.55,
                           child: Text(
-                            "أجب عن الأسئلة واكسب جوائز قيمة وحصرية من دايت بيكنك.",
+                            "احصل على جوايز وخصومات من دايت بيكنك.🏆",
                             style: Theme.of(context)
                                 .textTheme
                                 .displayMedium!

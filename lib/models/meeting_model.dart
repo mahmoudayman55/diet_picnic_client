@@ -4,7 +4,7 @@ class MeetingModel {
   final String description;
   final String joinUrl;
   final String date; // "YYYY-MM-DD"
-  final String time; // "HH:mm"
+   String time; // "HH:mm"
 
   MeetingModel({
     required this.id,
