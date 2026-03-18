@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+
+<html dir="rtl" lang="ar"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<link href="https://fonts.googleapis.com/css2?family=Lexend:wght@300;400;500;600;700&amp;family=Noto+Sans+Arabic:wght@300;400;500;600;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    colors: {
+                        "primary": "#FFA600",
+                        "background-light": "#f5f8f8",
+                        "background-dark": "#101f22",
+                    },
+                    fontFamily: {
+                        "display": ["Lexend", "Noto Sans Arabic", "sans-serif"]
+                    },
+                    borderRadius: {
+                        "DEFAULT": "0.25rem",
+                        "lg": "0.5rem",
+                        "xl": "0.75rem",
+                        "full": "9999px"
+                    },
+                },
+            },
+        }
+    </script>
+<style>
+        body {
+            font-family: 'Noto Sans Arabic', 'Lexend', sans-serif;
+        }
+    </style>
+<style>
+    body {
+      min-height: max(884px, 100dvh);
+    }
+  </style>
+</head>
+<body class="bg-background-light dark:bg-background-dark text-slate-900 dark:text-slate-100 min-h-screen flex flex-col">
+<!-- Header / Top Bar -->
+<header class="flex items-center justify-between p-4 bg-background-light dark:bg-background-dark">
+<button class="flex items-center justify-center size-10 rounded-full hover:bg-slate-200 dark:hover:bg-slate-800 transition-colors">
+<span class="material-symbols-outlined text-slate-900 dark:text-slate-100">arrow_forward</span>
+</button>
+<div class="h-10 w-10"></div> <!-- Spacer for symmetry -->
+</header>
+<!-- Progress Section -->
+<div class="px-6 py-2">
+<div class="flex justify-between items-center mb-2">
+<span class="text-sm font-medium text-slate-600 dark:text-slate-400">بدء التقييم</span>
+<span class="text-sm font-bold text-primary">0%</span>
+</div>
+<div class="w-full bg-slate-200 dark:bg-slate-800 h-2 rounded-full overflow-hidden">
+<div class="bg-primary h-full w-0 transition-all duration-500"></div>
+</div>
+</div>
+<!-- Main Content -->
+<main class="flex-1 flex flex-col items-center justify-center px-6 py-8 text-center">
+<div class="mb-10">
+<div class="bg-primary/10 p-4 rounded-full inline-block mb-6">
+<span class="material-symbols-outlined text-primary text-5xl">monitoring</span>
+</div>
+<h1 class="text-3xl font-bold leading-tight mb-4 text-slate-900 dark:text-slate-100">
+                كيف حال تقدمك هذا الأسبوع؟
+            </h1>
+<p class="text-slate-600 dark:text-slate-400 text-lg max-w-xs mx-auto">
+                يسعدنا متابعة رحلتك الصحية. يرجى اختيار الخيار المناسب لك اليوم.
+            </p>
+</div>
+<!-- Action Cards -->
+<div class="w-full max-w-md space-y-4">
+<!-- Submit Progress Card -->
+<button class="group w-full flex items-center p-5 bg-white dark:bg-slate-900 border-2 border-transparent hover:border-primary rounded-xl shadow-sm transition-all duration-200 text-right">
+<div class="bg-primary/20 group-hover:bg-primary text-primary group-hover:text-white p-4 rounded-lg ml-4 transition-colors">
+<span class="material-symbols-outlined text-3xl">scale</span>
+</div>
+<div class="flex-1">
+<h3 class="text-xl font-bold text-slate-900 dark:text-slate-100">إرسال التقدم الأسبوعي</h3>
+<p class="text-sm text-slate-500 dark:text-slate-400">تحديث الوزن والقياسات الحيوية</p>
+</div>
+<span class="material-symbols-outlined text-slate-300 group-hover:text-primary mr-2 transition-colors">chevron_left</span>
+</button>
+<!-- Excuse Card -->
+<button class="group w-full flex items-center p-5 bg-white dark:bg-slate-900 border-2 border-transparent hover:border-primary/50 rounded-xl shadow-sm transition-all duration-200 text-right">
+<div class="bg-slate-100 dark:bg-slate-800 group-hover:bg-slate-200 dark:group-hover:bg-slate-700 text-slate-600 dark:text-slate-400 p-4 rounded-lg ml-4 transition-colors">
+<span class="material-symbols-outlined text-3xl">event_busy</span>
+</div>
+<div class="flex-1">
+<h3 class="text-xl font-bold text-slate-900 dark:text-slate-100">لدي عذر</h3>
+<p class="text-sm text-slate-500 dark:text-slate-400">تأجيل التقرير لوقت آخر هذا الأسبوع</p>
+</div>
+<span class="material-symbols-outlined text-slate-300 group-hover:text-slate-400 mr-2 transition-colors">chevron_left</span>
+</button>
+</div>
+</main>
+<!-- Bottom Navigation -->
+<nav class="border-t border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900 px-4 pb-6 pt-3">
+<div class="flex justify-around items-center max-w-lg mx-auto">
+<a class="flex flex-col items-center gap-1 text-primary" href="#">
+<span class="material-symbols-outlined text-2xl fill-1">home</span>
+<span class="text-xs font-medium">الرئيسية</span>
+</a>
+<a class="flex flex-col items-center gap-1 text-slate-400 dark:text-slate-500" href="#">
+<span class="material-symbols-outlined text-2xl">fitness_center</span>
+<span class="text-xs font-medium">التمارين</span>
+</a>
+<a class="flex flex-col items-center gap-1 text-slate-400 dark:text-slate-500" href="#">
+<span class="material-symbols-outlined text-2xl">insights</span>
+<span class="text-xs font-medium">التقدم</span>
+</a>
+<a class="flex flex-col items-center gap-1 text-slate-400 dark:text-slate-500" href="#">
+<span class="material-symbols-outlined text-2xl">person</span>
+<span class="text-xs font-medium">الملف</span>
+</a>
+</div>
+</nav>
+<!-- Decorative element -->
+<div class="fixed top-0 left-0 w-full h-1 bg-gradient-to-l from-primary to-transparent opacity-50 pointer-events-none"></div>
+</body></html>

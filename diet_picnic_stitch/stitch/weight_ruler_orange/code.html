@@ -1,0 +1,164 @@
+<!DOCTYPE html><html dir="rtl" lang="ar"><head>
+<meta charset="utf-8">
+<meta content="width=device-width, initial-scale=1.0" name="viewport">
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Lexend:wght@300;400;500;600;700&amp;family=Noto+Sans+Arabic:wght@300;400;500;600;700&amp;display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet">
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    colors: {
+                        "primary": "#FFA600",
+                        "background-light": "#f5f8f8",
+                        "background-dark": "#101f22",
+                    },
+                    fontFamily: {
+                        "display": ["Lexend", "Noto Sans Arabic"]
+                    },
+                    borderRadius: {"DEFAULT": "0.25rem", "lg": "0.5rem", "xl": "0.75rem", "full": "9999px"},
+                },
+            },
+        }
+    </script>
+<style>
+        body {
+            font-family: 'Lexend', 'Noto Sans Arabic', sans-serif;
+        }
+        .ruler-container::-webkit-scrollbar {
+            display: none;
+        }
+        .ruler-container {
+            -ms-overflow-style: none;
+            scrollbar-width: none;
+        }
+    </style>
+<style>
+        body {
+            min-height: max(884px, 100dvh);
+        }
+    </style>
+</head>
+<body class="bg-background-light dark:bg-background-dark text-slate-900 dark:text-slate-100 min-h-screen flex flex-col">
+<header class="p-4 flex items-center justify-between">
+<button class="p-2 hover:bg-primary/10 rounded-full transition-colors" style="">
+<span class="material-symbols-outlined block rotate-180" style="">arrow_forward</span>
+</button>
+<h2 class="text-lg font-bold leading-tight flex-1 text-center mr-[-40px]" style="">الوزن</h2>
+</header>
+<div class="px-6 py-2">
+<div class="flex justify-between items-center mb-2">
+<p class="text-sm font-medium text-primary" style="">التقدم 20%</p>
+</div>
+<div class="w-full bg-primary/20 h-2 rounded-full overflow-hidden">
+<div class="bg-primary h-full w-1/5 rounded-full transition-all duration-500"></div>
+</div>
+</div>
+<main class="flex-1 flex flex-col items-center justify-center px-6">
+<h1 class="text-3xl font-bold text-center mb-12" style="">ما هو وزنك اليوم؟</h1>
+<div class="w-full relative py-12 flex flex-col items-center">
+<div class="text-center mb-8">
+<span class="text-7xl font-bold text-slate-900 dark:text-slate-100" style="">69</span>
+<span class="text-2xl font-semibold text-primary mr-2" style="">كجم</span>
+</div>
+<div class="relative w-full overflow-x-hidden">
+<div class="absolute left-1/2 -translate-x-1/2 top-0 bottom-0 w-1 bg-primary z-10 rounded-full"></div>
+<div class="flex items-end gap-4 overflow-x-auto ruler-container px-[50%] py-4">
+<div class="flex flex-col items-center shrink-0">
+<div class="w-0.5 h-6 bg-slate-300 dark:bg-slate-700"></div>
+<span class="text-slate-400 text-xs mt-2" style="">66</span>
+</div>
+<div class="flex flex-col items-center shrink-0">
+<div class="w-0.5 h-6 bg-slate-300 dark:bg-slate-700"></div>
+</div>
+<div class="flex flex-col items-center shrink-0">
+<div class="w-0.5 h-6 bg-slate-300 dark:bg-slate-700"></div>
+</div>
+<div class="flex flex-col items-center shrink-0">
+<div class="w-0.5 h-6 bg-slate-300 dark:bg-slate-700"></div>
+</div>
+<div class="flex flex-col items-center shrink-0">
+<div class="w-0.5 h-6 bg-slate-300 dark:bg-slate-700"></div>
+</div>
+<div class="flex flex-col items-center shrink-0">
+<div class="w-0.5 h-10 bg-slate-400 dark:bg-slate-600"></div>
+<span class="text-slate-400 text-xs mt-2 font-bold" style="">67</span>
+</div>
+<div class="flex flex-col items-center shrink-0">
+<div class="w-0.5 h-6 bg-slate-300 dark:bg-slate-700"></div>
+</div>
+<div class="flex flex-col items-center shrink-0">
+<div class="w-0.5 h-6 bg-slate-300 dark:bg-slate-700"></div>
+</div>
+<div class="flex flex-col items-center shrink-0">
+<div class="w-0.5 h-6 bg-slate-300 dark:bg-slate-700"></div>
+</div>
+<div class="flex flex-col items-center shrink-0">
+<div class="w-0.5 h-6 bg-slate-300 dark:bg-slate-700"></div>
+</div>
+<div class="flex flex-col items-center shrink-0">
+<div class="w-0.5 h-10 bg-slate-400 dark:bg-slate-600"></div>
+<span class="text-slate-400 text-xs mt-2 font-bold" style="">68</span>
+</div>
+<div class="flex flex-col items-center shrink-0">
+<div class="w-0.5 h-6 bg-slate-300 dark:bg-slate-700"></div>
+</div>
+<div class="flex flex-col items-center shrink-0">
+<div class="w-0.5 h-6 bg-slate-300 dark:bg-slate-700"></div>
+</div>
+<div class="flex flex-col items-center shrink-0">
+<div class="w-0.5 h-6 bg-slate-300 dark:bg-slate-700"></div>
+</div>
+<div class="flex flex-col items-center shrink-0">
+<div class="w-0.5 h-6 bg-slate-300 dark:bg-slate-700"></div>
+</div>
+<div class="flex flex-col items-center shrink-0">
+<div class="w-0.5 h-14 bg-primary"></div>
+<span class="text-primary text-sm mt-2 font-bold" style="">69</span>
+</div>
+<div class="flex flex-col items-center shrink-0">
+<div class="w-0.5 h-6 bg-slate-300 dark:bg-slate-700"></div>
+</div>
+<div class="flex flex-col items-center shrink-0">
+<div class="w-0.5 h-6 bg-slate-300 dark:bg-slate-700"></div>
+</div>
+<div class="flex flex-col items-center shrink-0">
+<div class="w-0.5 h-6 bg-slate-300 dark:bg-slate-700"></div>
+</div>
+<div class="flex flex-col items-center shrink-0">
+<div class="w-0.5 h-6 bg-slate-300 dark:bg-slate-700"></div>
+</div>
+<div class="flex flex-col items-center shrink-0">
+<div class="w-0.5 h-10 bg-slate-400 dark:bg-slate-600"></div>
+<span class="text-slate-400 text-xs mt-2 font-bold" style="">70</span>
+</div>
+<div class="flex flex-col items-center shrink-0">
+<div class="w-0.5 h-6 bg-slate-300 dark:bg-slate-700"></div>
+</div>
+<div class="flex flex-col items-center shrink-0">
+<div class="w-0.5 h-6 bg-slate-300 dark:bg-slate-700"></div>
+</div>
+<div class="flex flex-col items-center shrink-0">
+<div class="w-0.5 h-6 bg-slate-300 dark:bg-slate-700"></div>
+</div>
+<div class="flex flex-col items-center shrink-0">
+<div class="w-0.5 h-6 bg-slate-300 dark:bg-slate-700"></div>
+</div>
+<div class="flex flex-col items-center shrink-0">
+<div class="w-0.5 h-10 bg-slate-400 dark:bg-slate-600"></div>
+<span class="text-slate-400 text-xs mt-2 font-bold" style="">71</span>
+</div>
+</div>
+</div>
+</div>
+<div class="mt-8 text-center text-slate-500 max-w-xs">
+<p class="" style="">يساعد تتبع وزنك بانتظام في فهم تقدمك نحو أهدافك الصحية.</p>
+</div>
+</main>
+<footer class="p-6">
+<button class="w-full bg-primary text-slate-900 font-bold py-4 rounded-xl shadow-lg shadow-primary/30 active:scale-95 transition-all text-lg" style="">
+            التالي
+        </button>
+</footer>
+</body></html>

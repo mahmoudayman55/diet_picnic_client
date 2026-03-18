@@ -1,0 +1,166 @@
+<!DOCTYPE html>
+
+<html dir="rtl" lang="ar"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Lexend:wght@300;400;500;600;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    colors: {
+                        "primary": "#FFA600",
+                        "background-light": "#fdf8f2",
+                        "background-dark": "#1a1610",
+                    },
+                    fontFamily: {
+                        "display": ["Lexend", "sans-serif"]
+                    },
+                    borderRadius: {
+                        "DEFAULT": "0.25rem",
+                        "lg": "0.5rem",
+                        "xl": "0.75rem",
+                        "full": "9999px"
+                    },
+                },
+            },
+        }
+    </script>
+<style>
+        body {
+            font-family: 'Lexend', sans-serif;
+        }
+    </style>
+<style>
+    body {
+      min-height: max(884px, 100dvh);
+    }
+  </style>
+  </head>
+<body class="bg-background-light dark:bg-background-dark text-slate-900 dark:text-slate-100 antialiased">
+<div class="relative flex h-auto min-h-screen w-full max-w-md mx-auto flex-col bg-background-light dark:bg-background-dark overflow-x-hidden">
+<!-- Top App Bar -->
+<div class="flex items-center p-4 pb-2 justify-between">
+<div class="text-slate-900 dark:text-slate-100 flex size-12 shrink-0 items-center justify-center cursor-pointer">
+<span class="material-symbols-outlined text-2xl">arrow_forward</span>
+</div>
+<h2 class="text-slate-900 dark:text-slate-100 text-lg font-bold leading-tight tracking-tight flex-1 text-center pr-12">تأكيد البيانات</h2>
+</div>
+<!-- Progress Indicator (Step 6/6) -->
+<div class="flex w-full flex-row items-center justify-center gap-3 py-5">
+<div class="h-2 w-2 rounded-full bg-primary/20"></div>
+<div class="h-2 w-2 rounded-full bg-primary/20"></div>
+<div class="h-2 w-2 rounded-full bg-primary/20"></div>
+<div class="h-2 w-2 rounded-full bg-primary/20"></div>
+<div class="h-2 w-2 rounded-full bg-primary/20"></div>
+<div class="h-2 w-8 rounded-full bg-primary"></div>
+</div>
+<!-- Title Section -->
+<div class="px-4 pb-4 pt-2">
+<h3 class="text-slate-900 dark:text-slate-100 text-xl font-bold leading-tight">ملخص القياسات</h3>
+<p class="text-slate-500 dark:text-slate-400 text-sm mt-1">يرجى مراجعة البيانات قبل الإرسال النهائي</p>
+</div>
+<!-- Data List -->
+<div class="flex flex-col gap-1 px-4">
+<!-- Date -->
+<div class="flex items-center gap-4 bg-white dark:bg-slate-800/50 rounded-xl px-4 min-h-[72px] py-2 justify-between border border-slate-100 dark:border-slate-800 shadow-sm mb-2">
+<div class="flex items-center gap-4">
+<div class="text-primary flex items-center justify-center rounded-lg bg-primary/10 shrink-0 size-12">
+<span class="material-symbols-outlined">calendar_today</span>
+</div>
+<div class="flex flex-col justify-center">
+<p class="text-slate-900 dark:text-slate-100 text-base font-semibold leading-normal">التاريخ</p>
+<p class="text-slate-500 dark:text-slate-400 text-sm font-normal">تاريخ التسجيل</p>
+</div>
+</div>
+<div class="shrink-0">
+<p class="text-primary text-base font-bold leading-normal">24 مايو 2024</p>
+</div>
+</div>
+<!-- Weight -->
+<div class="flex items-center gap-4 bg-white dark:bg-slate-800/50 rounded-xl px-4 min-h-[72px] py-2 justify-between border border-slate-100 dark:border-slate-800 shadow-sm mb-2">
+<div class="flex items-center gap-4">
+<div class="text-primary flex items-center justify-center rounded-lg bg-primary/10 shrink-0 size-12">
+<span class="material-symbols-outlined">fitness_center</span>
+</div>
+<div class="flex flex-col justify-center">
+<p class="text-slate-900 dark:text-slate-100 text-base font-semibold leading-normal">الوزن</p>
+<p class="text-slate-500 dark:text-slate-400 text-sm font-normal">الوزن الحالي</p>
+</div>
+</div>
+<div class="shrink-0">
+<p class="text-slate-900 dark:text-slate-100 text-base font-bold leading-normal">78.5 كجم</p>
+</div>
+</div>
+<!-- Waist -->
+<div class="flex items-center gap-4 bg-white dark:bg-slate-800/50 rounded-xl px-4 min-h-[72px] py-2 justify-between border border-slate-100 dark:border-slate-800 shadow-sm mb-2">
+<div class="flex items-center gap-4">
+<div class="text-primary flex items-center justify-center rounded-lg bg-primary/10 shrink-0 size-12">
+<span class="material-symbols-outlined">straighten</span>
+</div>
+<div class="flex flex-col justify-center">
+<p class="text-slate-900 dark:text-slate-100 text-base font-semibold leading-normal">الخصر</p>
+<p class="text-slate-500 dark:text-slate-400 text-sm font-normal">محيط الخصر</p>
+</div>
+</div>
+<div class="shrink-0">
+<p class="text-slate-900 dark:text-slate-100 text-base font-bold leading-normal">88 سم</p>
+</div>
+</div>
+<!-- Hip -->
+<div class="flex items-center gap-4 bg-white dark:bg-slate-800/50 rounded-xl px-4 min-h-[72px] py-2 justify-between border border-slate-100 dark:border-slate-800 shadow-sm mb-2">
+<div class="flex items-center gap-4">
+<div class="text-primary flex items-center justify-center rounded-lg bg-primary/10 shrink-0 size-12">
+<span class="material-symbols-outlined">accessibility_new</span>
+</div>
+<div class="flex flex-col justify-center">
+<p class="text-slate-900 dark:text-slate-100 text-base font-semibold leading-normal">الأرداف</p>
+<p class="text-slate-500 dark:text-slate-400 text-sm font-normal">محيط الحوض</p>
+</div>
+</div>
+<div class="shrink-0">
+<p class="text-slate-900 dark:text-slate-100 text-base font-bold leading-normal">102 سم</p>
+</div>
+</div>
+<!-- Arm -->
+<div class="flex items-center gap-4 bg-white dark:bg-slate-800/50 rounded-xl px-4 min-h-[72px] py-2 justify-between border border-slate-100 dark:border-slate-800 shadow-sm mb-2">
+<div class="flex items-center gap-4">
+<div class="text-primary flex items-center justify-center rounded-lg bg-primary/10 shrink-0 size-12">
+<span class="material-symbols-outlined">humerus</span>
+</div>
+<div class="flex flex-col justify-center">
+<p class="text-slate-900 dark:text-slate-100 text-base font-semibold leading-normal">الذراع</p>
+<p class="text-slate-500 dark:text-slate-400 text-sm font-normal">محيط العضد</p>
+</div>
+</div>
+<div class="shrink-0">
+<p class="text-slate-900 dark:text-slate-100 text-base font-bold leading-normal">34 سم</p>
+</div>
+</div>
+<!-- Notes -->
+<div class="flex flex-col gap-2 bg-white dark:bg-slate-800/50 rounded-xl px-4 py-4 border border-slate-100 dark:border-slate-800 shadow-sm mb-4">
+<div class="flex items-center gap-4">
+<div class="text-primary flex items-center justify-center rounded-lg bg-primary/10 shrink-0 size-12">
+<span class="material-symbols-outlined">description</span>
+</div>
+<p class="text-slate-900 dark:text-slate-100 text-base font-semibold">ملاحظات إضافية</p>
+</div>
+<div class="mt-2 p-3 bg-slate-50 dark:bg-slate-900 rounded-lg text-slate-600 dark:text-slate-300 text-sm italic">
+                    "أشعر بتحسن كبير في مستوى الطاقة هذا الأسبوع، التزمت بالوجبات بنسبة 90%."
+                </div>
+</div>
+</div>
+<!-- Footer / Action Button -->
+<div class="mt-auto p-4 bg-background-light dark:bg-background-dark border-t border-slate-200 dark:border-slate-800">
+<button class="w-full bg-primary hover:bg-primary/90 text-white font-bold py-4 rounded-xl shadow-lg flex items-center justify-center gap-2 transition-colors">
+<span>إرسال البيانات</span>
+<span class="material-symbols-outlined">send</span>
+</button>
+<p class="text-center text-slate-400 dark:text-slate-500 text-xs mt-4">بمجرد الضغط على إرسال، سيتم تحديث ملفك الشخصي</p>
+</div>
+</div>
+</body></html>

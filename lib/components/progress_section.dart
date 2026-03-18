@@ -19,9 +19,10 @@ class ProgressSection extends StatelessWidget {
       margin: const EdgeInsets.only(bottom: 12),
       padding: const EdgeInsets.all(16),
       decoration: BoxDecoration(
-        color: ThemeController.to.isDarkMode?CustomColors.shadowLight:Colors.white,
+        color: ThemeController.to.isDarkMode
+            ? CustomColors.shadowLight
+            : Colors.white,
         borderRadius: BorderRadius.circular(12),
-
         border: Border.all(
           color: CustomColors.borderColor,
           width: 1,
@@ -38,65 +39,67 @@ class ProgressSection extends StatelessWidget {
                   child: Text(
                     DateTimeFormatter.dateTimeToFullDate(progress.date),
                     style: Theme.of(context).textTheme.titleMedium?.copyWith(
-                      color:ThemeController.to.isDarkMode?CustomColors.mainColor: CustomColors.selectedNavBarColor,
-                      fontWeight: FontWeight.bold,
-                    ),
+                          color: ThemeController.to.isDarkMode
+                              ? CustomColors.mainColor
+                              : CustomColors.selectedNavBarColor,
+                          fontWeight: FontWeight.bold,
+                        ),
                   ),
                 ),
                 const SizedBox(height: 14),
                 progress.excuse.isNotEmpty
                     ? Center(
-                  child: Text(
-                    "لم يتم إرسال المتابعة الإسبوعية",
-                    style: Theme.of(context)
-                        .textTheme
-                        .displayLarge!
-                        .copyWith(color: Colors.red),
-                  ),
-                )
+                        child: Text(
+                          "لم يتم إرسال المتابعة الإسبوعية",
+                          style: Theme.of(context)
+                              .textTheme
+                              .displayLarge!
+                              .copyWith(color: Colors.red),
+                        ),
+                      )
                     : Column(
-                  children: [
-                    Row(
-                      children: [
-                        Expanded(
-                          child: _buildProgressItem(
-                              context,
-                              'الوزن',
-                              '${progress.weight} كجم',
-                              "assets/images/weight.png"),
-                        ),
-                        const SizedBox(width: 12),
-                        Expanded(
-                          child: _buildProgressItem(
-                              context,
-                              'الحوض',
-                              '${progress.pelvis} سم',
-                              "assets/images/palvies.png"),
-                        ),
-                      ],
-                    ),
-                    const SizedBox(height: 10),
-                    Row(
-                      children: [
-                        Expanded(
-                          child: _buildProgressItem(
-                              context,
-                              'وسط الذراع',
-                              '${progress.rightArm} سم',
-                              "assets/images/arm.png"),
-                        ),
-                        const SizedBox(width: 12),
-                        Expanded(
-                          child: _buildProgressItem(
-                              context,
-                              'الوسط',
-                              '${progress.waist} سم',
-                              "assets/images/waist.png"),
-                        ),
-                      ],
-                    ),
-                  ],
-                ),
+                        children: [
+                          Row(
+                            children: [
+                              Expanded(
+                                child: _buildProgressItem(
+                                    context,
+                                    'الوزن',
+                                    '${progress.weight % 1 == 0 ? progress.weight.toInt() : progress.weight} كجم',
+                                    "assets/images/weight.png"),
+                              ),
+                              const SizedBox(width: 12),
+                              Expanded(
+                                child: _buildProgressItem(
+                                    context,
+                                    'الحوض',
+                                    '${progress.pelvis % 1 == 0 ? progress.pelvis.toInt() : progress.pelvis} سم',
+                                    "assets/images/palvies.png"),
+                              ),
+                            ],
+                          ),
+                          const SizedBox(height: 10),
+                          Row(
+                            children: [
+                              Expanded(
+                                child: _buildProgressItem(
+                                    context,
+                                    'وسط الذراع',
+                                    '${progress.rightArm % 1 == 0 ? progress.rightArm.toInt() : progress.rightArm} سم',
+                                    "assets/images/arm.png"),
+                              ),
+                              const SizedBox(width: 12),
+                              Expanded(
+                                child: _buildProgressItem(
+                                    context,
+                                    'الوسط',
+                                    '${progress.waist % 1 == 0 ? progress.waist.toInt() : progress.waist} سم',
+                                    "assets/images/waist.png"),
+                              ),
+                            ],
+                          ),
+                        ],
+                      ),
                 if (progress.notes != null && progress.notes!.isNotEmpty) ...[
                   const SizedBox(height: 14),
                   Container(
@@ -115,9 +118,8 @@ class ProgressSection extends StatelessWidget {
                     child: Text(
                       progress.notes!,
                       style: Theme.of(context).textTheme.displaySmall?.copyWith(
-
-                        fontStyle: FontStyle.italic,
-                      ),
+                            fontStyle: FontStyle.italic,
+                          ),
                     ),
                   ),
                 ],
@@ -139,9 +141,8 @@ class ProgressSection extends StatelessWidget {
                     child: Text(
                       progress.excuse,
                       style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-
-                        fontStyle: FontStyle.italic,
-                      ),
+                            fontStyle: FontStyle.italic,
+                          ),
                     ),
                   ),
                 ],
@@ -151,10 +152,11 @@ class ProgressSection extends StatelessWidget {
 
           // 🔧 Edit button
           Positioned(
-            top:-15,
+            top: -15,
             left: -15,
             child: IconButton(
-              icon: const Icon(Icons.edit, color: CustomColors.selectedNavBarColor),
+              icon: const Icon(Icons.edit,
+                  color: CustomColors.selectedNavBarColor),
               onPressed: () {
                 Get.to(AddWeekProgressView(), arguments: progress);
                 // OR if you don't use named routes:
@@ -168,11 +170,11 @@ class ProgressSection extends StatelessWidget {
   }
 
   Widget _buildProgressItem(
-      BuildContext context,
-      String label,
-      String value,
-      String imageAssetPath,
-      ) {
+    BuildContext context,
+    String label,
+    String value,
+    String imageAssetPath,
+  ) {
     return Container(
       padding: const EdgeInsets.symmetric(vertical: 12, horizontal: 10),
       decoration: BoxDecoration(
@@ -189,7 +191,9 @@ class ProgressSection extends StatelessWidget {
             width: 26,
             height: 26,
             fit: BoxFit.contain,
-            color:ThemeController.to.isDarkMode?CustomColors.mainColor: CustomColors.selectedNavBarColor, // Optional tint
+            color: ThemeController.to.isDarkMode
+                ? CustomColors.mainColor
+                : CustomColors.selectedNavBarColor, // Optional tint
           ),
           const SizedBox(height: 6),
           Text(
@@ -201,9 +205,11 @@ class ProgressSection extends StatelessWidget {
           Text(
             value,
             style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-              color:ThemeController.to.isDarkMode?CustomColors.mainColor: CustomColors.selectedNavBarColor,
-              fontWeight: FontWeight.bold,
-            ),
+                  color: ThemeController.to.isDarkMode
+                      ? CustomColors.mainColor
+                      : CustomColors.selectedNavBarColor,
+                  fontWeight: FontWeight.bold,
+                ),
             textAlign: TextAlign.center,
           ),
         ],
@@ -211,46 +217,45 @@ class ProgressSection extends StatelessWidget {
     );
   }
 
-
   @override
   Widget build(BuildContext context) {
     if (client.weekProgressList.isEmpty) {
       return Obx(
-            () =>
-            Column(
-
-              children: [
-                const Center(
-                  child: Padding(
-                    padding: EdgeInsets.all(16),
-                    child: Text(
-                      'لا توجد بيانات تقدم متاحة',
-                      style: TextStyle(
-                        color: Colors.grey,
-                        fontStyle: FontStyle.italic,
-                      ),
-                    ),
+        () => Column(
+          children: [
+            const Center(
+              child: Padding(
+                padding: EdgeInsets.all(16),
+                child: Text(
+                  'لا توجد بيانات تقدم متاحة',
+                  style: TextStyle(
+                    color: Colors.grey,
+                    fontStyle: FontStyle.italic,
                   ),
                 ),
-                const SizedBox(height: 12),
-                ElevatedButton.icon(
-                  onPressed: UserController.to.currentUser.value!.weeklyFollowUpSent?null:() async {
-                    Get.to(AddWeekProgressView());
-                  },
-                  icon: const Icon(Icons.add),
-                    label: const Text('إضافة تقدم أسبوعي'),
-                  style: ElevatedButton.styleFrom(
-                    backgroundColor: CustomColors.mintGold,
-                    foregroundColor: Colors.white,
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(12),
-                    ),
-                    padding: const EdgeInsets.symmetric(
-                        vertical: 14, horizontal: 18),
-                  ),
-                ),
-              ],
+              ),
             ),
+            const SizedBox(height: 12),
+            ElevatedButton.icon(
+              onPressed: UserController.to.currentUser.value!.weeklyFollowUpSent
+                  ? null
+                  : () async {
+                      Get.to(AddWeekProgressView());
+                    },
+              icon: const Icon(Icons.add),
+              label: const Text('إضافة تقدم أسبوعي'),
+              style: ElevatedButton.styleFrom(
+                backgroundColor: CustomColors.mintGold,
+                foregroundColor: Colors.white,
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(12),
+                ),
+                padding:
+                    const EdgeInsets.symmetric(vertical: 14, horizontal: 18),
+              ),
+            ),
+          ],
+        ),
       );
     }
 
@@ -258,13 +263,9 @@ class ProgressSection extends StatelessWidget {
       ..sort((a, b) => b.date.compareTo(a.date));
 
     return Column(
-
       children: [
-        ...sortedProgress.map((progress) =>
-            _buildProgressRow(context, progress)),
-
-
-
+        ...sortedProgress
+            .map((progress) => _buildProgressRow(context, progress)),
       ],
     );
   }

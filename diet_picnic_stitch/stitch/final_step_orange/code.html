@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+
+<html dir="rtl" lang="ar"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Lexend:wght@300;400;500;600;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    colors: {
+                        "primary": "#FFA600",
+                        "background-light": "#f5f8f8",
+                        "background-dark": "#101f22",
+                    },
+                    fontFamily: {
+                        "display": ["Lexend", "sans-serif"]
+                    },
+                    borderRadius: {
+                        "DEFAULT": "0.25rem",
+                        "lg": "0.5rem",
+                        "xl": "0.75rem",
+                        "full": "9999px"
+                    },
+                },
+            },
+        }
+    </script>
+<style>
+        body {
+            font-family: 'Lexend', sans-serif;
+        }
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+    </style>
+<style>
+        body {
+            min-height: max(884px, 100dvh);
+        }
+    </style>
+</head>
+<body class="bg-background-light dark:bg-background-dark text-slate-900 dark:text-slate-100 font-display">
+<div class="relative flex min-h-screen w-full flex-col max-w-md mx-auto shadow-xl bg-background-light dark:bg-background-dark overflow-x-hidden">
+<!-- Top Navigation -->
+<div class="flex items-center p-4 pb-2 justify-between">
+<div class="text-slate-900 dark:text-slate-100 flex size-12 shrink-0 items-center justify-center cursor-pointer">
+<span class="material-symbols-outlined text-2xl">arrow_forward</span>
+</div>
+<h2 class="text-slate-900 dark:text-slate-100 text-lg font-bold leading-tight tracking-[-0.015em] flex-1 text-center">ملاحظات وتاريخ</h2>
+<div class="size-12 flex items-center justify-center">
+<span class="material-symbols-outlined text-primary text-2xl">check_circle</span>
+</div>
+</div>
+<!-- Progress Section -->
+<div class="flex flex-col gap-3 p-4">
+<div class="flex gap-6 justify-between items-center">
+<p class="text-slate-700 dark:text-slate-300 text-sm font-medium leading-normal">اكتمل الإعداد</p>
+<p class="text-primary text-sm font-bold">100%</p>
+</div>
+<div class="rounded-full bg-primary/20 h-2 w-full">
+<div class="h-2 rounded-full bg-primary" style="width: 100%;"></div>
+</div>
+</div>
+<!-- Content Area -->
+<div class="flex flex-col flex-1 px-4 py-4 gap-6">
+<!-- Notes Section -->
+<div class="flex flex-col gap-2">
+<h3 class="text-slate-900 dark:text-slate-100 tracking-light text-xl font-bold leading-tight">ملاحظات</h3>
+<label class="flex flex-col w-full">
+<textarea class="form-input flex w-full min-w-0 flex-1 resize-none overflow-hidden rounded-xl text-slate-900 dark:text-slate-100 focus:outline-0 focus:ring-2 focus:ring-primary border border-primary/20 bg-white dark:bg-slate-800 min-h-40 placeholder:text-slate-400 p-4 text-base font-normal leading-normal" placeholder="أضف أي ملاحظات إضافية..."></textarea>
+</label>
+</div>
+<!-- Date Picker Card -->
+<div class="flex flex-col gap-2">
+<h3 class="text-slate-900 dark:text-slate-100 text-lg font-bold leading-tight">التاريخ</h3>
+<div class="flex items-center gap-4 p-4 bg-white dark:bg-slate-800 border border-primary/20 rounded-xl">
+<div class="flex size-12 shrink-0 items-center justify-center rounded-lg bg-primary/10 text-primary">
+<span class="material-symbols-outlined text-2xl">calendar_today</span>
+</div>
+<div class="flex flex-col flex-1">
+<p class="text-slate-500 dark:text-slate-400 text-xs font-medium uppercase tracking-wider">تاريخ المراجعة</p>
+<p class="text-slate-900 dark:text-slate-100 text-base font-bold">24 مايو، 2024</p>
+</div>
+<span class="material-symbols-outlined text-slate-400">edit_calendar</span>
+</div>
+</div>
+<!-- Review Summary -->
+<div class="p-4 bg-primary/5 rounded-xl border border-dashed border-primary/30 flex items-start gap-3">
+<span class="material-symbols-outlined text-primary mt-0.5">info</span>
+<p class="text-slate-600 dark:text-slate-400 text-sm leading-relaxed">
+                    سيتم حفظ هذه المعلومات في ملفك الشخصي الصحي. يمكنك تعديل هذه الملاحظات لاحقاً من قسم التاريخ.
+                </p>
+</div>
+</div>
+<!-- Footer / Action Button -->
+<div class="p-4 mt-auto">
+<button class="w-full bg-primary text-white font-bold py-4 rounded-xl flex items-center justify-center gap-2 hover:opacity-90 transition-opacity">
+<span>إرسال</span>
+<span class="material-symbols-outlined">send</span>
+</button>
+</div>
+<!-- Success Toast Mockup -->
+<div class="flex justify-center pb-8 pt-2">
+<div class="flex items-center gap-2 px-3 py-1.5 bg-emerald-500/10 text-emerald-600 dark:text-emerald-400 rounded-full text-xs font-medium">
+<span class="material-symbols-outlined text-base">check_circle</span>
+<span>جاهز للحفظ</span>
+</div>
+</div>
+</div>
+</body></html>
