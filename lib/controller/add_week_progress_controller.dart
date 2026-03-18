@@ -22,6 +22,11 @@ class AddWeekProgressController extends GetxController {
   var errorMessage = ''.obs;
   var successMessage = ''.obs;
 
+  // Wizard state
+  var currentStep = 0.obs;
+  var totalSteps = 6.obs; // Default assuming progress flow
+  var isExcuseFlow = false.obs;
+
   WeekProgressModel? initialModel;
 
   // Set date externally
@@ -41,21 +46,20 @@ class AddWeekProgressController extends GetxController {
   void _fillFormFromInitialModel() {
     if (initialModel == null) return;
 
-    weightController.text = initialModel!.weight != 0 ? initialModel!.weight.toString() : '';
-    pelvisController.text = initialModel!.pelvis != 0 ? initialModel!.pelvis.toString() : '';
-    rightArmController.text = initialModel!.rightArm != 0 ? initialModel!.rightArm.toString() : '';
-    waistController.text = initialModel!.waist != 0 ? initialModel!.waist.toString() : '';
+    weightController.text =
+        initialModel!.weight != 0 ? initialModel!.weight.toString() : '';
+    pelvisController.text =
+        initialModel!.pelvis != 0 ? initialModel!.pelvis.toString() : '';
+    rightArmController.text =
+        initialModel!.rightArm != 0 ? initialModel!.rightArm.toString() : '';
+    waistController.text =
+        initialModel!.waist != 0 ? initialModel!.waist.toString() : '';
     notesController.text = initialModel!.notes!;
     excuseController.text = initialModel!.excuse;
     selectedDate.value = initialModel!.date;
   }
 
   String? validateNumber(String? value, String fieldName) {
-    // ✅ Skip validation completely if excuse is provided
-    if (excuseController.text.trim().isNotEmpty) {
-      return null;
-    }
-
     if (value == null || value.trim().isEmpty) {
       return '$fieldName مطلوب';
     }
@@ -68,6 +72,83 @@ class AddWeekProgressController extends GetxController {
     return null;
   }
 
+  void selectFlow(bool excuseFlow) {
+    isExcuseFlow.value = excuseFlow;
+    if (excuseFlow) {
+      totalSteps.value =
+          2; // Entry Choice (0) -> Excuse (1) -> Summary/Save (2) can be simplified to Submit on step 1
+    } else {
+      totalSteps.value =
+          7; // Choice (0) -> Weight (1) -> Waist (2) -> Pelvis (3) -> Arm (4) -> Date/Notes (5) -> Submit (6)
+      excuseController.clear();
+    }
+    nextStep();
+  }
+
+  void nextStep() {
+    errorMessage.value = ''; // clear errors on move
+
+    // Validate current step before moving
+    if (!isExcuseFlow.value) {
+      if (currentStep.value == 1) {
+        // Weight
+        final err = validateNumber(weightController.text, 'الوزن');
+        if (err != null) {
+          errorMessage.value = err;
+          return;
+        }
+      } else if (currentStep.value == 2) {
+        // Waist
+        final err = validateNumber(waistController.text, 'مقاس الوسط');
+        if (err != null) {
+          errorMessage.value = err;
+          return;
+        }
+      } else if (currentStep.value == 3) {
+        // Pelvis
+        final err = validateNumber(pelvisController.text, 'مقاس الحوض');
+        if (err != null) {
+          errorMessage.value = err;
+          return;
+        }
+      } else if (currentStep.value == 4) {
+        // Arm
+        final err = validateNumber(rightArmController.text, 'مقاس وسط الذراع');
+        if (err != null) {
+          errorMessage.value = err;
+          return;
+        }
+      } else if (currentStep.value == 5) {
+        // Date
+        if (selectedDate.value == null) {
+          errorMessage.value = 'الرجاء اختيار التاريخ';
+          return;
+        }
+      }
+    } else {
+      if (currentStep.value == 1 && excuseController.text.trim().isEmpty) {
+        errorMessage.value = 'الرجاء كتابة العذر';
+        return;
+      }
+    }
+
+    if (currentStep.value < totalSteps.value - 1) {
+      currentStep.value++;
+    } else if (currentStep.value == totalSteps.value - 1) {
+      // Reached the end, trigger save
+      saveProgress();
+    }
+  }
+
+  void previousStep() {
+    errorMessage.value = '';
+    if (currentStep.value > 0) {
+      currentStep.value--;
+    } else {
+      // If at step 0, go back to previous screen
+      Get.back();
+    }
+  }
 
   Future<void> saveProgress() async {
     final hasExcuse = excuseController.text.trim().isNotEmpty;
@@ -102,7 +183,8 @@ class AddWeekProgressController extends GetxController {
             : double.parse(waistController.text),
         notes: notesController.text,
         excuse: excuseController.text,
-        date: selectedDate.value ?? DateTime.now(), sentAt: DateTime.now(),
+        date: selectedDate.value ?? DateTime.now(),
+        sentAt: DateTime.now(),
       );
 
       if (initialModel == null) {
@@ -114,7 +196,9 @@ class AddWeekProgressController extends GetxController {
       }
       UserController.to.update();
       UserController.to.restoreUser();
-      Get.back();
+
+      // Advance to success screen, which we can consider as totalSteps
+      currentStep.value = totalSteps.value;
     } catch (e, stack) {
       log('Error saving progress', error: e, stackTrace: stack);
       errorMessage.value = 'حدث خطأ أثناء الحفظ';

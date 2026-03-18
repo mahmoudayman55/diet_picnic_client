@@ -1,5 +1,6 @@
 import 'package:diet_picnic_client/controller/theme_controller.dart';
 import 'package:diet_picnic_client/core/custom_colors.dart';
+import 'package:diet_picnic_client/core/theme.dart';
 import 'package:flutter/material.dart';
 
 class DatePickerChip extends StatelessWidget {
@@ -37,7 +38,7 @@ class DatePickerChip extends StatelessWidget {
           lastDate: DateTime(2100),
           builder: (context, child) {
             return Theme(
-              data: isAppDark ? ThemeData.dark() : ThemeData.light(),
+              data: isAppDark ? Themes.darkTheme : Themes.lightTheme,
               child: child!,
             );
           },
@@ -53,14 +54,15 @@ class DatePickerChip extends StatelessWidget {
                 color: isAppDark ? Colors.white : CustomColors.textBlack87),
           ),
           Container(
-            padding: padding,
+            padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 14),
             margin: margin,
             decoration: BoxDecoration(
-              color:
-                  isAppDark ? Colors.white.withOpacity(0.1) : backgroundColor,
-              borderRadius: borderRadius,
-              border:
-                  isAppDark ? Border.all(color: Colors.grey.shade700) : null,
+              color: isAppDark ? Colors.white.withOpacity(0.1) : Colors.white,
+              borderRadius: BorderRadius.circular(8),
+              border: Border.all(
+                  color: isAppDark
+                      ? Colors.grey.shade700
+                      : CustomColors.borderColor),
             ),
             child: Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -69,16 +71,17 @@ class DatePickerChip extends StatelessWidget {
                   value == null
                       ? placeholder
                       : "${value!.year}/${value!.month}/${value!.day}",
-                  style: Theme.of(context)
-                      .textTheme
-                      .displayMedium!
-                      .copyWith(color: isAppDark ? Colors.white : textColor),
+                  style: Theme.of(context).textTheme.displayMedium!.copyWith(
+                      color: isAppDark
+                          ? Colors.white
+                          : (value == null ? Colors.grey[400] : textColor)),
                 ),
                 Icon(
-                  Icons.date_range,
+                  Icons.calendar_today_outlined,
+                  size: 20,
                   color: isAppDark
                       ? Colors.grey.shade400
-                      : CustomColors.selectedNavBarColor,
+                      : CustomColors.mainColor, // use mainColor for consistency
                 )
               ],
             ),
