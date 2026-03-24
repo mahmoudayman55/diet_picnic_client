@@ -159,6 +159,10 @@ class ClientProfileModel {
   final PackageGroup? packageGroup;
   final DateTime? createdAt;
 
+  // 🔥 Weight sync fields
+  final double? lastWeight;
+  final DateTime? lastWeightDate;
+
   ClientProfileModel({
     required this.id,
     required this.name,
@@ -192,6 +196,8 @@ class ClientProfileModel {
     this.subscriptionDate,
     this.startDate,
     this.packageGroup,
+    this.lastWeight,
+    this.lastWeightDate,
   });
 
   /// Minimal factory for registration
@@ -296,6 +302,12 @@ class ClientProfileModel {
       packageGroup: json['package_group'] != null
           ? PackageGroup.fromJson(json['package_group'])
           : null,
+      lastWeight: json['last_weight'] != null
+          ? (json['last_weight'] as num).toDouble()
+          : null,
+      lastWeightDate: json['last_weight_date'] != null
+          ? DateTime.tryParse(json['last_weight_date'])
+          : null,
     );
   }
 
@@ -333,6 +345,8 @@ class ClientProfileModel {
         'subscription_date': subscriptionDate?.toIso8601String(),
         'start_date': startDate?.toIso8601String(),
         'package_group': packageGroup?.toJson(),
+        'last_weight': lastWeight,
+        'last_weight_date': lastWeightDate?.toIso8601String(),
       };
 
   // /// Fake data
@@ -473,6 +487,8 @@ class ClientProfileModel {
     PackageGroup? packageGroup,
     String? image,
     DateTime? createdAt,
+    double? lastWeight,
+    DateTime? lastWeightDate,
   }) {
     return ClientProfileModel(
       id: id ?? this.id,
@@ -508,6 +524,8 @@ class ClientProfileModel {
       startDate: startDate ?? this.startDate,
       packageGroup: packageGroup ?? this.packageGroup,
       createdAt: createdAt ?? this.createdAt,
+      lastWeight: lastWeight ?? this.lastWeight,
+      lastWeightDate: lastWeightDate ?? this.lastWeightDate,
     );
   }
 }

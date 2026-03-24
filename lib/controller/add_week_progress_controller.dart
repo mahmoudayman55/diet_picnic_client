@@ -194,6 +194,28 @@ class AddWeekProgressController extends GetxController {
         await _updateWeekProgress(progress);
         successMessage.value = 'تم تحديث التقدم الأسبوعي بنجاح';
       }
+
+      // 🔥 Weight sync: update parent client document with latest weight
+      if (progress.weight > 0) {
+        try {
+          await firestore.collection('clients').doc(clientId).update({
+            'last_weight': progress.weight,
+            'last_weight_date': progress.date.toIso8601String(),
+          });
+
+          // Update in-memory user model
+          final currentUser = UserController.to.currentUser.value;
+          if (currentUser != null) {
+            UserController.to.currentUser.value = currentUser.copyWith(
+              lastWeight: progress.weight,
+              lastWeightDate: progress.date,
+            );
+          }
+        } catch (e) {
+          log('Failed to sync last weight to client document: $e');
+        }
+      }
+
       UserController.to.update();
       UserController.to.restoreUser();
 

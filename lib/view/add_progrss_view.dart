@@ -162,10 +162,10 @@ class AddWeekProgressView extends StatelessWidget {
                 .headlineSmall
                 ?.copyWith(fontWeight: FontWeight.bold)),
         const SizedBox(height: 8),
-        const Text(
+         Text(
             'يسعدنا متابعة رحلتك الصحية. يرجى اختيار الخيار المناسب لك اليوم.',
             textAlign: TextAlign.center,
-            style: TextStyle(color: Colors.grey)),
+            style: Theme.of(context).textTheme.displayMedium!.copyWith(color: Colors.grey)),
         const SizedBox(height: 48),
         InkWell(
           onTap: () => c.selectFlow(false),
@@ -228,7 +228,7 @@ class AddWeekProgressView extends StatelessWidget {
                       Text('لدي عذر',
                           style: TextStyle(
                               fontWeight: FontWeight.bold, fontSize: 16)),
-                      Text('تأجيل التقرير لوقت آخر هذا الأسبوع',
+                      Text('لا أستطيع إرسال المتابعة هذا الأسبوع',
                           style: TextStyle(color: Colors.grey, fontSize: 12)),
                     ],
                   ),
@@ -373,9 +373,13 @@ class AddWeekProgressView extends StatelessWidget {
         const Divider(),
         _buildSummaryRow(
             'مقاس وسط الذراع', '${formatValue(c.rightArmController.text)} سم'),
+
         const Divider(),
         _buildSummaryRow(
             'التاريخ', c.selectedDate.value?.toString().split(' ')[0] ?? ''),
+        const Divider(),
+  if(c.notesController.text.trim() .isNotEmpty)      _buildSummaryRow(
+            'ملاحظات', '${formatValue(c.notesController.text)}'),
         if (c.errorMessage.value.isNotEmpty) ...[
           const SizedBox(height: 16),
           Container(
@@ -456,7 +460,7 @@ class AddWeekProgressView extends StatelessWidget {
       children: [
         const SizedBox(height: 32),
         Text(title,
-            style: const TextStyle(fontSize: 28, fontWeight: FontWeight.bold)),
+            style: Theme.of(context).textTheme.headlineLarge),
         const SizedBox(height: 48),
         Row(
           mainAxisAlignment: MainAxisAlignment.center,
@@ -467,10 +471,7 @@ class AddWeekProgressView extends StatelessWidget {
               double.tryParse(textController.text)
                       ?.toStringAsFixed(decimalPlaces) ??
                   currentValue.toStringAsFixed(decimalPlaces),
-              style: const TextStyle(
-                  fontSize: 72,
-                  fontWeight: FontWeight.bold,
-                  color: Colors.black),
+              style: Theme.of(context).textTheme.headlineLarge!.copyWith(fontSize: 77),
             ),
             const SizedBox(width: 4),
             Text(
@@ -537,8 +538,8 @@ class AddWeekProgressView extends StatelessWidget {
               shape: RoundedRectangleBorder(
                   borderRadius: BorderRadius.circular(12)),
             ),
-            child: const Text('العودة',
-                style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold)),
+            child:  Text('العودة',
+                style: Theme.of(context).textTheme.displayLarge!.copyWith(color: Colors.white)),
           ),
         )
       ],
@@ -572,8 +573,7 @@ class AddWeekProgressView extends StatelessWidget {
                           color: Colors.white, strokeWidth: 2))
                   : Text(
                       isLastStep ? 'إرسال' : 'استمرار',
-                      style: const TextStyle(
-                          fontSize: 16, fontWeight: FontWeight.bold),
+                      style: Theme.of(context).textTheme.displayMedium!.copyWith(color: Colors.white) ,
                     ),
             ),
           ),
