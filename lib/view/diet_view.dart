@@ -22,18 +22,18 @@ class DietView extends GetView<DietController> {
         appBar: controller.showAppBar
             ? const CustomAppBar(title: "النظام الغذائى")
             : null,
-          body: Obx(
-            ()=> Padding(
+        body: Obx(
+          () => Padding(
             padding: const EdgeInsets.all(16),
             child: controller.loading.value
                 ? LogoLoadingWidget()
                 : !controller.hasDietSystem.value
                     ? Center(
-                      child: Text(
+                        child: Text(
                           "لم يتم تعيين نظام غذائى",
                           style: Theme.of(context).textTheme.displayMedium,
                         ),
-                    )
+                      )
                     : Column(
                         crossAxisAlignment: CrossAxisAlignment.center,
                         children: [
@@ -82,7 +82,15 @@ class DietView extends GetView<DietController> {
                                   ),
                             ),
                           ),
-                          if(controller.dietSystem.assignedAt!=null)Text("تم التحديث في ${DateTimeFormatter.dateTimeToFullDate(controller.dietSystem.assignedAt!)}"),
+                          if (controller.dietSystem.assignedAt != null)
+                            Container(
+                                decoration: BoxDecoration(
+                                    color: Colors.grey.withOpacity(0.4),
+                                    borderRadius: BorderRadius.circular(12)),
+                                padding: EdgeInsets.all(15),
+                                margin: EdgeInsets.all(15),
+                                child: Text(
+                                    "تم التحديث في ${DateTimeFormatter.dateTimeToFullDate(controller.dietSystem.assignedAt!)}",style: Theme.of(context).textTheme.displayMedium,)),
 
                           const SizedBox(height: 24),
 
@@ -90,7 +98,8 @@ class DietView extends GetView<DietController> {
                           Align(
                             alignment: Alignment.centerRight,
                             child: Text("التعليمات:",
-                                style: Theme.of(context).textTheme.displayLarge),
+                                style:
+                                    Theme.of(context).textTheme.displayLarge),
                           ),
 
                           const SizedBox(height: 12),
@@ -101,14 +110,15 @@ class DietView extends GetView<DietController> {
                                   color: CustomColors.selectedNavBarColor),
                               title: Text(
                                 instr,
-                                style: Theme.of(context).textTheme.displayMedium,
+                                style:
+                                    Theme.of(context).textTheme.displayMedium,
                               ),
                             ),
                           ),
                         ],
                       ),
-                    ),
           ),
+        ),
       );
     });
   }

@@ -73,12 +73,12 @@ class MenuView extends StatelessWidget {
                           child: Stack(
                             alignment: AlignmentGeometry.center,
                             children: [
-                              Positioned(
-                                  top: 0,
-                                  child: SizedBox(width: width,height: heigh*0.2,
-                                    child: Image.asset(
-                                        "assets/images/lighter2.png",fit: BoxFit.fill,),
-                                  )),
+                              // Positioned(
+                              //     top: 0,
+                              //     child: SizedBox(width: width,height: heigh*0.2,
+                              //       child: Image.asset(
+                              //           "assets/images/lighter2.png",fit: BoxFit.fill,),
+                              //     )),
                               Padding(
                                 padding: const EdgeInsets.all(8.0),
                                 child: Column(

@@ -27,75 +27,67 @@ class WaterReminderController extends GetxController {
   final List<WaterReminder> reminders = [
     WaterReminder(
       id: 1,
-      time: '4:00 ص',
-      message: 'اشرب ماء قبل الفجر في السحور 💧',
-      hour: 4,
+      time: '8:00 ص',
+      message: 'ابدأ يومك بنشاط واشرب كوباية مية 💧',
+      hour: 8,
       minute: 0,
-      reason: 'آخر فرصة للترطيب قبل بداية الصيام، اشرب كمية كويسة',
+      reason: 'بداية اليوم هي أحسن وقت لترطيب جسمك وتنشيط الحرق',
     ),
     WaterReminder(
       id: 2,
-      time: '5:00 ص',
-      message: 'كوب ماء أخير قبل الإمساك 🌙',
-      hour: 5,
+      time: '10:00 ص',
+      message: 'متنساش ترطب جسمك، اشرب مية دلوقتي 🧊',
+      hour: 10,
       minute: 0,
-      reason: 'آخر فرصة لشرب الماء قبل أذان الفجر والإمساك',
+      reason: 'شرب المية بانتظام بيحافظ على تركيزك ونشاطك طول اليوم',
     ),
     WaterReminder(
       id: 3,
-      time: '6:00 م',
-      message: 'حان وقت الإفطار! ابدأ بماء وتمر 🌴',
-      hour: 18,
+      time: '12:00 م',
+      message: 'وقت الغدا قرب، كوباية مية قبل الأكل بتساعد على الهضم 🍽️',
+      hour: 12,
       minute: 0,
-      reason: 'أفضل طريقة لكسر الصيام هي الماء والتمر زي السنة النبوية',
+      reason: 'شرب المية قبل الأكل بيحسسك بالشبع وبيحسن عملية الهضم',
     ),
     WaterReminder(
       id: 4,
-      time: '7:00 م',
-      message: 'اشرب كوب ماء بعد صلاة المغرب 🕌',
-      hour: 19,
+      time: '2:00 م',
+      message: 'عوض السوائل وبدد التعب بكوباية مية 💧',
+      hour: 14,
       minute: 0,
-      reason: 'بعد الصلاة، جسمك محتاج يعوض السوائل اللي فقدها',
+      reason: 'في نص اليوم جسمك بيحتاج طاقة، والمية هي أحسن وقود',
     ),
     WaterReminder(
       id: 5,
-      time: '8:00 م',
-      message: 'كوب ماء قبل التراويح 🌙',
-      hour: 20,
+      time: '4:00 م',
+      message: 'خليك مركز في شغلك واشرب مية ⚡',
+      hour: 16,
       minute: 0,
-      reason: 'عشان تكون نشيط في صلاة التراويح',
+      reason: 'نقص المية بيسبب الصداع والكسل، اشرب مية وخليك فايق',
     ),
     WaterReminder(
       id: 6,
-      time: '9:00 م',
-      message: 'اشرب ماء بعد التراويح 💧',
-      hour: 21,
+      time: '6:00 م',
+      message: 'وصلت البيت؟ اشرب كوباية مية مريحة 🏠',
+      hour: 18,
       minute: 0,
-      reason: 'عوض السوائل بعد الوقوف في الصلاة',
+      reason: 'بعد يوم طويل، كوباية مية هترجعلك حيويتك',
     ),
     WaterReminder(
       id: 7,
-      time: '10:00 م',
-      message: 'ترطيب قبل النوم 😴',
-      hour: 22,
+      time: '8:00 م',
+      message: 'كوباية مية خفيفة قبل العشا 🌙',
+      hour: 20,
       minute: 0,
-      reason: 'اشرب كمية معقولة عشان جسمك يبقى رطب أثناء النوم',
+      reason: 'حافظ على روتينك الصحي واشرب مية قبل وجبتك الأخيرة',
     ),
     WaterReminder(
       id: 8,
-      time: '11:00 م',
-      message: 'كوب ماء أخير قبل النوم 🌙',
-      hour: 23,
+      time: '10:00 م',
+      message: 'آخر كوباية مية قبل النوم عشان تصحى مرتاح 😴',
+      hour: 22,
       minute: 0,
-      reason: 'آخر ترطيب قبل النوم عشان تصحى نشيط للسحور',
-    ),
-    WaterReminder(
-      id: 9,
-      time: '12:00 ص',
-      message: 'لو صاحي، اشرب كوب ماء 💧',
-      hour: 0,
-      minute: 0,
-      reason: 'لو لسه صاحي، فرصة ترطب جسمك قبل السحور',
+      reason: 'ترطيب جسمك قبل النوم بيساعدك تصحى بنشاط ومن غير إجهاد',
     ),
   ];
   @override
@@ -130,7 +122,8 @@ class WaterReminderController extends GetxController {
 
   /// Check if notifications are enabled on the device
   Future<void> _checkNotificationStatus() async {
-    areNotificationsEnabled.value = await NotificationService.areNotificationsEnabled();
+    areNotificationsEnabled.value =
+        await NotificationService.areNotificationsEnabled();
   }
 
   /// Request notification permission from user

@@ -156,7 +156,7 @@ class ProgressSection extends StatelessWidget {
             left: -15,
             child: IconButton(
               icon: const Icon(Icons.edit,
-                  color: CustomColors.selectedNavBarColor),
+                  color: CustomColors.mainColor),
               onPressed: () {
                 Get.to(AddWeekProgressView(), arguments: progress);
                 // OR if you don't use named routes:

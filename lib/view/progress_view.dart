@@ -115,13 +115,13 @@ class ProgressView extends StatelessWidget {
                                 .textTheme
                                 .displaySmall!
                                 .copyWith(
-                                    color: CustomColors.selectedNavBarColor),
-                            foregroundColor: CustomColors.selectedNavBarColor,
+                                    color: CustomColors.mainColor),
+                            foregroundColor: CustomColors.mainColor,
                             shape: RoundedRectangleBorder(
                               borderRadius: BorderRadius.circular(12),
                             ),
                             side: BorderSide(
-                                color: CustomColors.selectedNavBarColor),
+                                color: CustomColors.mainColor),
                             padding: const EdgeInsets.symmetric(vertical: 14),
                           ),
                         ),

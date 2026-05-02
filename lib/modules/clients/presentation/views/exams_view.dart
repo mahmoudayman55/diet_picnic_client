@@ -29,8 +29,8 @@ class ExamsView extends StatelessWidget {
           child: Column(
             children: [
               TabBar(
-                indicatorColor: CustomColors.selectedNavBarColor,
-                labelColor: CustomColors.selectedNavBarColor,
+                indicatorColor: CustomColors.mainColor,
+                labelColor: CustomColors.mainColor,
                 unselectedLabelColor: Colors.grey,
                 labelStyle: Theme.of(context).textTheme.displayMedium,
                 tabs: const [
@@ -135,7 +135,7 @@ class ExamsView extends StatelessWidget {
                                 // Compact Styled Button
                                 Material(
                                   color: exam.isActive
-                                      ? CustomColors.selectedNavBarColor
+                                      ? CustomColors.mainColor
                                       : Colors.grey.shade300,
                                   borderRadius: BorderRadius.circular(10),
                                   child: InkWell(

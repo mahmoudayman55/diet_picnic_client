@@ -48,7 +48,7 @@ class _WelcomeCardState extends State<WelcomeCard>
       await file.writeAsBytes(byteData.buffer.asUint8List());
 
       final shareText =
-          '$_currentMessage\n\n#Diet_Picnic #دايت_بيكنك #صحة #رمضان_مع_دايت_بيكنك';
+          '$_currentMessage\n\n#Diet_Picnic #دايت_بيكنك #صحة #حياة_صحية #لياقة';
       await Share.shareXFiles([XFile(file.path)], text: shareText);
     } catch (e) {
       log("Error sharing card: $e");
@@ -135,38 +135,29 @@ class _WelcomeCardState extends State<WelcomeCard>
   String getRandomMessage() {
     final messages = [
       // تحفيز
-      "كل يوم بتصوم فيه خطوة أقرب لجسمك اللي عايزه 💪",
-      "رمضان أحسن وقت تبدأ فيه رحلتك الصح 🌙",
-      "الإرادة اللي بتصوم بيها.. هي نفسها اللي هتغير بيها حياتك 🔥",
-      "متستسهلش في إفطارك.. جسمك يستاهل الأحسن ✨",
-      "كل وجبة صح بتاكلها دي انجاز يستاهل فخر 🏆",
-      "الجوع في النهار مش عذر للإفراط بالليل 😉",
-      "صيامك عبادة.. وأكلك الصح مسؤولية 💚",
-      "إنت أقوى من أي وجبة غير صحية 💥",
-      "رمضان مش وقت تزيد وزنك.. ده وقت تغيّر عاداتك 🌿",
-      "كل خطوة صغيرة بتعملها دلوقتي.. هتشوف نتيجتها قريب 🎯",
+      "كل يوم وجبة صحية هي استثمار في مستقبلك 💪",
+      "الاستمرارية أهم من المثالية.. كمل ومتقفلش 🎯",
+      "جسمك بيسمع كل كلمة بتقولها.. خليك رحيم بيه 💚",
+      "التمرين مش عقاب.. ده احتفال بقدرة جسمك �",
+      "صحتك هي رأس مالك الحقيقي.. حافظ عليها ✨",
+      "الرياضة بتغير مزاجك قبل ما تغير جسمك 😊",
 
       // ترويج Diet Picnic
-      "Diet Picnic بيساعدك تاكل صح حتى في رمضان 🥗🌙",
-      "مش لازم تحرم نفسك.. Diet Picnic عنده الحل 😍",
-      "وجبات Diet Picnic متوازنة.. وهتخليك شبعان طول اليوم 💪",
-      "إفطار صح مع Diet Picnic = رمضان أخف وأحلى ✨",
-      "Diet Picnic مش بس أكل.. ده أسلوب حياة 🌟",
-      "خلي Diet Picnic يكون رفيقك في رمضان 🌙❤️",
-      "سحورك مع Diet Picnic هيديك طاقة طول اليوم ⚡",
-      "Diet Picnic فاكرك حتى في رمضان 🥰",
-      "ابدأ رمضان صح.. ابدأ مع Diet Picnic 🚀",
-      "Diet Picnic.. لأن جسمك يستاهل الأفضل دايمًا 💚",
+      "Diet Picnic بيسهل عليك حياتك وبيريحك من حيرة كل يوم �",
+      "وجباتنا محسوبة السعرات وعالية القيمة الغذائية 😍",
+      "مع Diet Picnic، الأكل الصحي بقى أسهل وأطعم 🥗",
+      "إحنا هنا عشان نساعدك توصل لهدفك بأفضل طريقة 🚀",
+      "Diet Picnic مش بس دايت.. ده أسلوب حياة صحي 🌟",
+      "جرب Diet Picnic النهاردة وخد خطوة جديدة لصحتك 💚",
 
       // نصايح سريعة
-      "اشرب ميه كتير بين الإفطار والسحور 💧",
-      "افطر على تمر وميه.. وهدي نفسك قبل الأكل 🌴",
-      "السحور مش وجبة تتعداها! 🍳",
-      "شوربة خفيفة = بداية إفطار مثالية 🥣",
-      "المقليات والسكريات عدوك في رمضان 🚫",
-      "نومك الكافي بيساعدك تتحكم في أكلك 😴",
-      "إفطارك ميكونش وليمة.. خلي الأكل معقول 🍽️",
-      "التمر طاقة طبيعية وسريعة لجسمك ⚡🌴",
+      "اشرب ميه كفاية طول اليوم.. جسمك هيشكرك 💧",
+      "النوم الكافي جزء لا يتجزأ من رحلتك لخسارة الوزن 😴",
+      "الخضروات مش بس ألياف.. دي فيتامينات ومعادن �",
+      "متخليش أكلة واحدة تبوظ يومك.. ارجع لدايتك فوراً 🍽️",
+      "البروتين هو حجر الأساس لبناء عضلاتك وزيادة حرقك 🥩",
+      "امشي كل يوم ٣٠ دقيقة وشوف الفرق في طاقتك �‍♂️",
+      "قلل السكر تدريجياً وهتحس بفرق كبير في نشاطك ⚡",
     ];
 
     final random = math.Random();
@@ -196,9 +187,11 @@ class _WelcomeCardState extends State<WelcomeCard>
                           colors: [
                             // ThemeController.to.isDarkMode
                             //     ?
-                            Color(0xFF3E2723),
+                            CustomColors.purble,
+                            CustomColors.mainColor,
+
                             // : Color(0xFFFFE4B9), // بني داكن
-                            Color(0xFFFF9800), // برتقالي (يطابق اللوجو)
+                            // برتقالي (يطابق اللوجو)
                           ],
                           begin: Alignment.topLeft,
                           end: Alignment.bottomRight,
@@ -239,37 +232,41 @@ class _WelcomeCardState extends State<WelcomeCard>
                                 top: 0,
                                 left: 0,
                                 child: Center(
-                                  child: SizedBox(
-                                    height: MediaQuery.of(context).size.height *
-                                        0.1,
-                                    child: Stack(
-                                      children: [
-                                        // الظل
-                                        // Transform.translate(
-                                        //   offset: Offset(2, 2),
-                                        //   child: ImageFiltered(
-                                        //     imageFilter: ImageFilter.blur(
-                                        //         sigmaX: 6, sigmaY: 6),
-                                        //     child: ColorFiltered(
-                                        //       colorFilter: ColorFilter.mode(
-                                        //         Colors.amber.withOpacity(0.6),
-                                        //         BlendMode.srcATop,
-                                        //       ),
-                                        //       child: Opacity(
-                                        //           opacity: 0.3,
-                                        //           child: Image.asset(
-                                        //               "assets/images/logow.png")),
-                                        //     ),
-                                        //   ),
-                                        // ),
-                                        // الصورة الأصلية مع blur
-                                        ImageFiltered(
-                                          imageFilter: ImageFilter.blur(
-                                              sigmaX: 0.3, sigmaY: 0.3),
-                                          child: Image.asset(
-                                              "assets/images/logo.png"),
-                                        ),
-                                      ],
+                                  child: Padding(
+                                    padding: const EdgeInsets.all(8.0),
+                                    child: SizedBox(
+                                      height:
+                                          MediaQuery.of(context).size.height *
+                                              0.06,
+                                      child: Stack(
+                                        children: [
+                                          // الظل
+                                          // Transform.translate(
+                                          //   offset: Offset(2, 2),
+                                          //   child: ImageFiltered(
+                                          //     imageFilter: ImageFilter.blur(
+                                          //         sigmaX: 6, sigmaY: 6),
+                                          //     child: ColorFiltered(
+                                          //       colorFilter: ColorFilter.mode(
+                                          //         Colors.amber.withOpacity(0.6),
+                                          //         BlendMode.srcATop,
+                                          //       ),
+                                          //       child: Opacity(
+                                          //           opacity: 0.3,
+                                          //           child: Image.asset(
+                                          //               "assets/images/logow.png")),
+                                          //     ),
+                                          //   ),
+                                          // ),
+                                          // الصورة الأصلية مع blur
+                                          ImageFiltered(
+                                            imageFilter: ImageFilter.blur(
+                                                sigmaX: 0.3, sigmaY: 0.3),
+                                            child: Image.asset(
+                                                "assets/images/logo.png"),
+                                          ),
+                                        ],
+                                      ),
                                     ),
                                   ),
                                 )),
@@ -290,13 +287,6 @@ class _WelcomeCardState extends State<WelcomeCard>
                             ),
                           ],
                         ),
-                      )),
-                  Positioned(
-                      right: 0,
-                      bottom: 0,
-                      child: SizedBox(
-                        height: 80,
-                        child: Image.asset("assets/images/lighter.png"),
                       )),
                 ],
               ),
@@ -334,7 +324,7 @@ class _WelcomeCardState extends State<WelcomeCard>
           borderRadius: BorderRadius.circular(12),
           child: Image.asset(
             AppConstants.appLogo,
-            fit: BoxFit.cover,
+            fit: BoxFit.contain,
           ),
         ),
       ),
@@ -358,7 +348,7 @@ class _WelcomeCardState extends State<WelcomeCard>
                       "أهلا بيك في Diet Picnic 👋",
                       style: Theme.of(context).textTheme.displayLarge?.copyWith(
                             fontWeight: FontWeight.bold,
-                            color: CustomColors.selectedNavBarColor,
+                            color: CustomColors.mainColor,
                           ),
                     ),
                     const SizedBox(height: 8),
@@ -430,7 +420,7 @@ class _WelcomeCardState extends State<WelcomeCard>
             "مرحبًا يا $userName 👋",
             style: Theme.of(context).textTheme.displayLarge?.copyWith(
                   fontWeight: FontWeight.bold,
-                  color: CustomColors.selectedNavBarColor,
+                  color: CustomColors.mainColor,
                 ),
           ),
           const SizedBox(height: 8),
@@ -472,7 +462,7 @@ class _WelcomeCardState extends State<WelcomeCard>
             "أهلاً بيك يا $userName 👋",
             style: Theme.of(context).textTheme.displayLarge?.copyWith(
                   fontWeight: FontWeight.bold,
-                  color: CustomColors.selectedNavBarColor,
+                  color: CustomColors.mainColor,
                 ),
           ),
           const SizedBox(height: 8),
@@ -527,7 +517,7 @@ class _WelcomeCardState extends State<WelcomeCard>
             "أهلاً بيك يا $userName 👋",
             style: Theme.of(context).textTheme.displayLarge?.copyWith(
                   fontWeight: FontWeight.bold,
-                  color: CustomColors.selectedNavBarColor,
+                  color: CustomColors.mainColor,
                 ),
           ),
           const SizedBox(height: 8),
@@ -535,12 +525,11 @@ class _WelcomeCardState extends State<WelcomeCard>
             "أنت الآن مشترك في:\nباقة ${package.name} (${user.level?.isNotEmpty == true ? user.level! : user.packageGroup?.name ?? 'غير محدد'})",
             style: Theme.of(context).textTheme.displayMedium,
           ),
-
           const SizedBox(height: 8),
           Row(
             children: [
               const Icon(Icons.calendar_today,
-                  size: 18, color: CustomColors.selectedNavBarColor),
+                  size: 18, color: CustomColors.mainColor),
               const SizedBox(width: 6),
               Text(
                 "تاريخ انتهاء: ${DateFormat('dd/MM/yyyy').format(renewalDate)}",
@@ -552,7 +541,7 @@ class _WelcomeCardState extends State<WelcomeCard>
           Row(
             children: [
               const Icon(Icons.hourglass_bottom,
-                  size: 18, color: CustomColors.selectedNavBarColor),
+                  size: 18, color: CustomColors.mainColor),
               const SizedBox(width: 6),
               Text(
                 "متبقي: ${UserController.to.currentUser.value!.timeLeft}",

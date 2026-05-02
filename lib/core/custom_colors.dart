@@ -4,10 +4,11 @@ class CustomColors {
   // Main brand color
   // static const Color mainColor = Color(0xFFE68200);
   //static const Color mainColor = Color(0xFF3A8726);
-  //static const Color mainColor = Color(0xFFFF9576);
-  static const Color mainColor = Color(0xFFFFA600);
+  static const Color mainColor = Color(0xFFFF9576);
+  // static const Color mainColor = Color(0xFFFFA600);
   static const Color purble = Color(0xFF974B6A);
-  static const Color selectedNavBarColor = Color(0xFFFFA600);
+  // static const Color selectedNavBarColor = Color(0xFFFFA600);
+  static const Color selectedNavBarColor = Color(0xFF974B6A);
   static const Color mintGold = Color(0xFFFFD500);
   //static const Color mintGreen = Color(0xFF52D0B3);
   static const Color mintBlue = Color(0xFF2CBEBB);

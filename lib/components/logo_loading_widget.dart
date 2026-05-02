@@ -9,7 +9,7 @@ class LogoLoadingWidget extends StatefulWidget {
   const LogoLoadingWidget({
     Key? key,
     this.showIndicator = true, // 👈 Default true
-    this.size = 60, // 👈 Default true
+    this.size = 30, // 👈 Default true
   }) : super(key: key);
 
   @override
@@ -51,18 +51,18 @@ class _LogoLoadingWidgetState extends State<LogoLoadingWidget>
           // ✅ Circular Gradient Loading Indicator (optional)
           if (widget.showIndicator)
             SizedBox(
-              width: widget.size + 30,
-              height:widget. size + 30,
+              width: widget.size + 40,
+              height:widget. size + 40,
               child: ShaderMask(
                 shaderCallback: (bounds) => SweepGradient(
                   startAngle: 0.0,
                   endAngle: math.pi * 2,
                   colors: [
-                    CustomColors.borderColor,
+                   Colors.white,
                     CustomColors.mainColor,
-                    CustomColors.borderColor,
-                    CustomColors.mintGold,
-                    CustomColors.borderColor,
+                    Colors.white,
+                    CustomColors.mainColor,
+                    Colors.white,
 
                   ],
                   stops: const [0.1, 0.3, 0.5, 0.8, 1.0],
@@ -82,7 +82,7 @@ class _LogoLoadingWidgetState extends State<LogoLoadingWidget>
           ScaleTransition(
             scale: _scaleAnimation,
             child: Image.asset(
-              "assets/images/logo.png",
+              "assets/images/logob.png",
               width:widget.size ,
               height: widget.size,
             ),
