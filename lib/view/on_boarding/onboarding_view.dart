@@ -1,5 +1,3 @@
-
-import 'package:diet_picnic_client/core/custom_colors.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
@@ -8,8 +6,8 @@ import 'package:get/get.dart';
 import 'package:sizer/sizer.dart';
 import 'package:smooth_page_indicator/smooth_page_indicator.dart';
 
-
 import '../../controller/on_boarding_controller.dart';
+import '../../core/custom_colors.dart';
 import 'intro_screen1.dart';
 
 class OnBoardingView extends StatelessWidget {
@@ -25,184 +23,104 @@ class OnBoardingView extends StatelessWidget {
             DeviceType deviceType) {
           double height = 100.h;
           double width = 100.w;
-          return  Scaffold(backgroundColor: CustomColors.selectedNavBarColor,
-                  resizeToAvoidBottomInset: false,
-                  body: SafeArea(
-                    child: Column(
-                      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                      children: [
-                        if (controller.currentPage !=
-                            controller.onBoards.length - 1)
-                          Padding(
-                            padding: const EdgeInsets.all(8.0),
-                            child: Align(
-                                alignment: Alignment.centerRight,
-                                child: InkWell(
-                                    onTap: () => controller.updateCurrentPage(
-                                        controller.onBoards.length - 1),
-                                    child: Text(
-                                      "skip",
-                                      style: Theme.of(context)
-                                          .textTheme
-                                          .displayMedium!.copyWith(color: Colors.white),
-                                    ))),
-                          ),
-                        SizedBox(
-                          height: height * 0.7,
-                          child: PageView(
-                            onPageChanged: (value) =>
-                                controller.updateCurrentPage(value),
-                            controller: controller.pageController,
-                            children: [
-                              for (int i = 0;
-                                  i < controller.onBoards.length;
-                                  i++)
-                                IntroScreen(
-                                  label: controller.onBoards[i].title,
-                                  details: controller.onBoards[i].content,
-                                  height: height,
-                                  width: width,
-                                  img: controller.onBoards[i].img,
-                                ),
-                            ],
-                          ),
-                        ),
-                        Padding(
-                          padding: const EdgeInsets.all(8),
-                          child: AnimatedSmoothIndicator(duration: Duration(milliseconds: 700),
-                            count: controller.onBoards.length,
-                            effect: SwapEffect(
-                              dotColor: Colors.white.withOpacity(0.5),
-                              activeDotColor: Colors.white,
-                            ),
-                            activeIndex: controller.currentPage,
-                          ),
-                        ),
-                        ElevatedButton(
-
-                            onPressed: () {
-                              controller.currentPage ==
-                                      (controller.onBoards.length - 1)
-                                  ? controller.submit(context)
-                                  : controller.nextPage();
+          return Scaffold(
+            resizeToAvoidBottomInset: false,
+            body: SafeArea(
+              child: Padding(
+                padding: EdgeInsets.symmetric(vertical: 2.h, horizontal: 4.w),
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                  children: [
+                    if (controller.currentPage !=
+                        controller.onBoards.length - 1)
+                      Align(
+                          alignment: Alignment.centerLeft,
+                          child: InkWell(
+                              onTap: () => controller.updateCurrentPage(
+                                  controller.onBoards.length - 1),
+                              child: Text(
+                                "تخطي",
+                                style: Theme.of(context)
+                                    .textTheme
+                                    .displayMedium!
+                                    .copyWith(color: CustomColors.textBlack54),
+                              ))),
+                    SizedBox(
+                      height: height * 0.70,
+                      child: PageView.builder(
+                        itemCount: controller.onBoards.length,
+                        onPageChanged: (value) =>
+                            controller.updateCurrentPage(value),
+                        controller: controller.pageController,
+                        physics: const BouncingScrollPhysics(),
+                        itemBuilder: (context, index) {
+                          return AnimatedBuilder(
+                            animation: controller.pageController,
+                            builder: (context, child) {
+                              double offset = 0.0;
+                              if (controller
+                                  .pageController.position.haveDimensions) {
+                                offset =
+                                    controller.pageController.page! - index;
+                              } else {
+                                offset =
+                                    (controller.currentPage - index).toDouble();
+                              }
+                              return IntroScreen(
+                                label: controller.onBoards[index].title,
+                                details: controller.onBoards[index].content,
+                                height: height,
+                                width: width,
+                                img: controller.onBoards[index].img,
+                                animationValue: offset,
+                              );
                             },
-                            child: Text(controller.currentPage ==
-                                (controller.onBoards.length - 1)
-                                ? "Let's go"
-                                : "Next"))
-                      ],
+                          );
+                        },
+                      ),
                     ),
-                  ),
-                );
-
+                    Padding(
+                      padding: const EdgeInsets.symmetric(vertical: 16),
+                      child: AnimatedSmoothIndicator(
+                        duration: const Duration(milliseconds: 700),
+                        count: controller.onBoards.length,
+                        effect: ExpandingDotsEffect(
+                          dotColor: Colors.grey.withOpacity(0.5),
+                          activeDotColor: CustomColors.mainColor,
+                          dotHeight: 8,
+                          dotWidth: 8,
+                        ),
+                        activeIndex: controller.currentPage,
+                      ),
+                    ),
+                    SizedBox(
+                      width: double.infinity,
+                      height: 6.h,
+                      child: ElevatedButton(
+                          onPressed: () {
+                            controller.currentPage ==
+                                    (controller.onBoards.length - 1)
+                                ? controller.submit(context)
+                                : controller.nextPage();
+                          },
+                          child: Text(
+                            controller.currentPage ==
+                                    (controller.onBoards.length - 1)
+                                ? "ابدأ الآن"
+                                : "التالي",
+                            style: Theme.of(context)
+                                .textTheme
+                                .displayLarge!
+                                .copyWith(color: Colors.white),
+                          )),
+                    )
+                  ],
+                ),
+              ),
+            ),
+          );
         },
       );
     });
   }
 }
-
-/// todo: tablet:
-//  Scaffold(
-//                     body: Stack(
-//                     fit: StackFit.expand,
-//                     children: [
-//                       Image.asset(
-//                         'assets/images/bg.jpg',
-//                         fit: BoxFit.cover,
-//                       ),
-//                       Container(
-//                         decoration: BoxDecoration(
-//                             gradient: LinearGradient(
-//                                 colors: [Colors.black, Colors.transparent],
-//                                 begin: Alignment.bottomCenter,
-//                                 end: Alignment.topCenter)),
-//                         child: Stack(children: [
-//                           Container(
-//                             padding: EdgeInsets.all(1.w),
-//                             alignment: Alignment.bottomCenter,
-//                             height: 100.h,
-//                             child: Column(
-//                               children: [
-//                                 Expanded(flex: 20,
-//                                   child: PageView(
-//                                     onPageChanged: (value) => setState(() {
-//                                       currentPage = value;
-//                                     }),
-//                                     controller: _controller,
-//                                     children: [
-//                                       IntroScreen(
-//                                         label: 'Join Your Community!',
-//                                         details:
-//                                         'imperial will help you to meet members of your community in the UK and attend various events with them',
-//                                       ),
-//                                       IntroScreen(
-//                                         label: 'Join Your Community!',
-//                                         details:
-//                                         'imperial will help you to meet members of your community in the UK and attend various events with them',
-//                                       ),
-//
-//                                       onBoardingRegions(),
-//                                     ],
-//                                   ),
-//                                 ),Expanded(flex: 1,
-//                                   child: Row(
-//                                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
-//                                     children: [
-//                                       TextButton(
-//                                           onPressed: () {
-//                                             _controller.jumpToPage(controller.onBoards.length+1);
-//                                           },
-//                                           child: Text(
-//                                             currentPage != 2 ? 'Skip' : '',
-//                                             style: Theme.of(context)
-//                                                 .textTheme
-//                                                 .displayLarge!
-//                                                 .copyWith(color: Colors.white),
-//                                           )),
-//                                       SmoothPageIndicator(
-//                                         controller: _controller,
-//                                         count: controller.onBoards.length+1,
-//                                         effect: ExpandingDotsEffect(
-//                                           dotColor: Colors.white,
-//                                           activeDotColor: CustomColors.red,
-//                                         ),
-//                                       ),
-//                                       TextButton(
-//                                           onPressed: currentPage == controller.onBoards.length+1
-//                                               ? () {
-//                                             // Boxes.onBoardingBox().put(1, true);
-//                                             // Get.offAll(HomeView());
-//                                           }
-//                                               : () {
-//                                             _controller.nextPage(
-//                                                 duration:
-//                                                 Duration(milliseconds: 200),
-//                                                 curve: Curves.easeInOut);
-//                                           },
-//                                           child: currentPage == controller.onBoards.length+1
-//                                               ? NextButton(iconSize: 3,
-//                                             onPressed: () {
-//                                               Get.to(HomeView());
-//                                             },
-//                                             icon: Icons.done,
-//                                             color: CustomColors.green,
-//                                           )
-//                                               : NextButton(iconSize: 3,onPressed: () {
-//                                             setState(() {
-//                                               _controller.nextPage(
-//                                                   duration:
-//                                                   Duration(milliseconds: 200),
-//                                                   curve: Curves.easeInOut);
-//                                             });
-//                                           })),
-//                                     ],
-//                                   ),
-//                                 ),
-//                               ],
-//                             ),
-//                           ),
-//
-//                         ]),
-//                       ),
-//                     ],
-//                   ));

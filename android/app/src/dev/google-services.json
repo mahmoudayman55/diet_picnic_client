@@ -1,0 +1,48 @@
+{
+  "project_info": {
+    "project_number": "961946217712",
+    "project_id": "diet-picnic-dev",
+    "storage_bucket": "diet-picnic-dev.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:961946217712:android:1bcb6f7111bcec20716635",
+        "android_client_info": {
+          "package_name": "com.MahmoudAyman.dietpicnic.dev"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyB7htmsIObZz8r5nIZ4PlL81FNaMBOOzXo"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:961946217712:android:da035bd9658e0fc6716635",
+        "android_client_info": {
+          "package_name": "com.dietPicnic.diet_picnic.dev"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyB7htmsIObZz8r5nIZ4PlL81FNaMBOOzXo"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

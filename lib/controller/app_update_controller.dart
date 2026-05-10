@@ -6,6 +6,7 @@ import 'package:package_info_plus/package_info_plus.dart';
 import 'package:intl/intl.dart';
 import 'package:url_launcher/url_launcher.dart';
 import 'package:diet_picnic_client/core/app_constants.dart';
+import 'package:get_storage/get_storage.dart';
 
 class AppUpdateController extends GetxService {
   static AppUpdateController get to => Get.find();
@@ -15,6 +16,7 @@ class AppUpdateController extends GetxService {
     checkAppVersion();
     super.onInit();
   }
+
   final _firestore = FirebaseFirestore.instance;
   final isLoading = false.obs;
   final appVersion = ''.obs;
@@ -35,7 +37,8 @@ class AppUpdateController extends GetxService {
       appVersion.value = info.version;
 
       // Get remote data
-      final doc = await _firestore.collection("app").doc("e4bqcpJ89mMFZ8xx5Zhp").get();
+      final doc =
+          await _firestore.collection("app").doc("e4bqcpJ89mMFZ8xx5Zhp").get();
       if (!doc.exists) {
         showCustomSnackbar(
           title: "خطأ",
@@ -48,13 +51,12 @@ class AppUpdateController extends GetxService {
       final data = doc.data()!;
       remoteVersion.value = data["version"] ?? "";
       playStoreUrl.value = data["playstore_url"] ?? "";
-      if(remoteVersion.value=="0.0.0"){
-        inMaintenance.value=true;
+      if (remoteVersion.value == "0.0.0") {
+        inMaintenance.value = true;
         return;
       }
       if (data["deadline"] != null) {
         deadline.value = DateTime.tryParse(data["deadline"]);
-
       }
 
       // Compare versions
@@ -68,12 +70,19 @@ class AppUpdateController extends GetxService {
         isLoading.value = false;
 
         // Navigate to update view
-     //   Get.offAllNamed(AppConstants.updatePage);
+        //   Get.offAllNamed(AppConstants.updatePage);
       } else {
         // Continue normally
-        Get.offAllNamed(AppConstants.navigatorPage);
-      }
+        final getStorage = GetStorage();
+       // final hasSeenOnboarding = getStorage.read('hasSeenOnboarding') ?? false;
+        final hasSeenOnboarding = false;
 
+        if (hasSeenOnboarding) {
+          Get.offAllNamed(AppConstants.navigatorPage);
+        } else {
+          Get.offAllNamed(AppConstants.onBoarding);
+        }
+      }
     } catch (e) {
       showCustomSnackbar(
         title: "خطأ",

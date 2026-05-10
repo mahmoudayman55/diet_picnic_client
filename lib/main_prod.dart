@@ -9,7 +9,6 @@ import 'package:diet_picnic_client/core/is_valid_phone.dart';
 import 'package:diet_picnic_client/core/notification_service.dart';
 import 'package:diet_picnic_client/core/notification_test_helper.dart';
 import 'package:diet_picnic_client/core/user_storage.dart';
-import 'package:diet_picnic_client/firebase_options.dart';
 import 'package:diet_picnic_client/view/login_view.dart';
 import 'package:diet_picnic_client/view/navigator_view.dart';
 import 'package:firebase_core/firebase_core.dart';
@@ -30,6 +29,8 @@ import 'dart:convert';
 
 import 'package:device_preview/device_preview.dart';
 import 'package:flutter/foundation.dart';
+
+import 'firebase_options_prod.dart';
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -79,19 +80,19 @@ class MyApp extends StatelessWidget {
       builder: (context, orientation, deviceType) {
         return Obx(() => GetMaterialApp(
           scaffoldMessengerKey: AppConstants.snackbarKey,
-              useInheritedMediaQuery: true,
-              locale: DevicePreview.locale(context),
-              builder: DevicePreview.appBuilder,
-              scrollBehavior: MyCustomScrollBehavior(),
-              debugShowCheckedModeBanner: false,
-              textDirection: TextDirection.rtl,
-              // locale: const Locale('ar', 'AE'),
-              theme: Themes.lightTheme,
-              darkTheme: Themes.darkTheme,
-              themeMode: ThemeController.to.themeMode,
-              initialRoute: AppConstants.updatePage,
-              getPages: GetRoutes.pages,
-            ));
+          useInheritedMediaQuery: true,
+          locale: DevicePreview.locale(context),
+          builder: DevicePreview.appBuilder,
+          scrollBehavior: MyCustomScrollBehavior(),
+          debugShowCheckedModeBanner: false,
+          textDirection: TextDirection.rtl,
+          // locale: const Locale('ar', 'AE'),
+          theme: Themes.lightTheme,
+          darkTheme: Themes.darkTheme,
+          themeMode: ThemeController.to.themeMode,
+          initialRoute: AppConstants.updatePage,
+          getPages: GetRoutes.pages,
+        ));
       },
     );
   }
@@ -101,8 +102,8 @@ class MyCustomScrollBehavior extends MaterialScrollBehavior {
   // Override behavior methods like buildOverscrollIndicator and buildScrollbar
   @override
   Set<PointerDeviceKind> get dragDevices => {
-        PointerDeviceKind.touch,
-        PointerDeviceKind.mouse,
-        // etc.
-      };
+    PointerDeviceKind.touch,
+    PointerDeviceKind.mouse,
+    // etc.
+  };
 }

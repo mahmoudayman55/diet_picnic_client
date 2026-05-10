@@ -228,7 +228,42 @@ class AddWeekProgressController extends GetxController {
       isLoading.value = false;
     }
   }
+  Future<void> _updateClientProfile(
+       WeekProgressModel progress) async {
+    try {
 
+    final client = UserController.to.currentUser.value;
+      if (client != null) {
+        String? newTrend = client.weightTrend;
+        double newWeight = progress.weight;
+
+        if (newWeight > 0 && progress.excuse.isEmpty) {
+          double? oldWeight = client.lastWeight;
+          if (oldWeight != null && oldWeight > 0) {
+            if (newWeight > oldWeight) {
+              newTrend = "increased";
+            } else if (newWeight < oldWeight) {
+              newTrend = "decreased";
+            } else {
+              newTrend = "same";
+            }
+          }
+        }
+
+        final updatedClient = client.copyWith(
+          lastWeight: newWeight > 0 ? newWeight : client.lastWeight,
+          lastWeightDate: newWeight > 0 ? progress.date : client.lastWeightDate,
+          weightTrend: newTrend,
+          lastFollowupDate: progress.date,
+        );
+        await firestore.collection('clients').doc(client.id).update(updatedClient.toJson());
+        await UserController.to.setUser(updatedClient);
+
+      }
+    } catch (e) {
+      log('Failed to update client profile: $e');
+    }
+  }
   Future<void> _addWeekProgress(WeekProgressModel weekProgress) async {
     final docRef = firestore
         .collection('clients')
@@ -242,6 +277,8 @@ class AddWeekProgressController extends GetxController {
 
     // Add to user's local list
     UserController.to.currentUser.value!.weekProgressList.add(newProgress);
+    await _updateClientProfile(newProgress);
+
   }
 
   Future<void> _updateWeekProgress(WeekProgressModel weekProgress) async {

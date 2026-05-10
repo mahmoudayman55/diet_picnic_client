@@ -32,7 +32,7 @@ if (keystorePropertiesFile.exists()) {
 }
 android {
     namespace = "com.mahmoudayman.diet_picnic_client"
-    compileSdkVersion 35
+    compileSdkVersion 36
     ndkVersion = flutter.ndkVersion
 
     compileOptions {
@@ -47,6 +47,7 @@ android {
             storePassword keystoreProperties['storePassword']
         }
     }
+
     buildTypes {
         release {
             // TODO: Add your own signing config for the release build.
@@ -60,6 +61,20 @@ android {
         }
         debug {
             minifyEnabled false
+        }
+    }
+    flavorDimensions += "env"
+
+    productFlavors {
+        create("dev") {
+            dimension = "env"
+            applicationId = "com.MahmoudAyman.dietpicnic.dev"
+            resValue("string", "app_name", "Diet Picnic Client (Dev)")
+        }
+        create("prod") {
+            dimension = "env"
+            applicationId = "com.MahmoudAyman.dietpicnic"
+            resValue("string", "app_name", "Diet Picnic Client")
         }
     }
     defaultConfig {

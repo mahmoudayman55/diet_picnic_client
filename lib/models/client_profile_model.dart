@@ -163,7 +163,15 @@ class ClientProfileModel {
   final double? lastWeight;
   final DateTime? lastWeightDate;
 
-  ClientProfileModel({
+  // ─── Phase 1 Backend Filtering Fields ──────────────────────────────────────
+  final String? weightTrend; // "increased", "decreased", "same"
+  final String? subscriptionStatus; // "active", "expired"
+  final bool hasActiveDietPlan;
+  final bool hasActiveWorkoutPlan;
+  final DateTime? lastFollowupDate;
+
+  ClientProfileModel(
+ {
     required this.id,
     required this.name,
     required this.phone,
@@ -181,6 +189,11 @@ class ClientProfileModel {
     this.renewalDate,
     this.birthDate,
     this.level,
+   this.weightTrend,
+   this.subscriptionStatus,
+   this.hasActiveDietPlan=false,
+   this.hasActiveWorkoutPlan=false,
+   this.lastFollowupDate,
     this.category,
     this.gender,
     this.socialStatus,
@@ -349,45 +362,7 @@ class ClientProfileModel {
         'last_weight_date': lastWeightDate?.toIso8601String(),
       };
 
-  // /// Fake data
-  // factory ClientProfileModel.fake() {
-  //   final package = Package.fake();
-  //   return ClientProfileModel(
-  //     id: _uuid.v4(),
-  //     name: "John Doe",
-  //     phone: "0123456789",
-  //     password: "hashedPassword123",
-  //     order: "001",
-  //     qualification: "Bachelor",
-  //     renewalDate: DateTime.now().add(const Duration(days: 30)),
-  //     level: "VIP",
-  //     package: package,
-  //     group: PackageGroup.dummyList("pkg1")[0],
-  //     category: "Diet",
-  //     address: "123 Cairo St.",
-  //     job: "Engineer",
-  //     email: "john.doe@example.com",
-  //     height: "175",
-  //     birthDate: DateTime(1995, 5, 20),
-  //     gender: "Male",
-  //     socialStatus: "Single",
-  //     isLactating: false,
-  //     isPregnant: false,
-  //     questionnaireAnswers: QuestionnaireAnswers.fake(),
-  //     weekProgressList: [WeekProgressModel.fake()],
-  //     assignedDietSystems: [AssignedDietSystem.fake()],
-  //     assignedExerciseSystems: [AssignedExerciseSystem.fake()],
-  //     followUps: [],
-  //     subscriptionDate: DateTime.now().subtract(const Duration(days: 10)),
-  //     startDate: DateTime.now().subtract(const Duration(days: 5)),
-  //     packageGroup: PackageGroup.dummyList("pkg1").first,
-  //   );
-  // }
 
-  // /// Fake list
-  // static List<ClientProfileModel> fakeList() {
-  //   return List.generate(5, (i) => ClientProfileModel.fake().copyWith(id: "c$i"));
-  // }
 
   /// Helpers
   String get timeLeft {
@@ -453,7 +428,6 @@ class ClientProfileModel {
     });
   }
 
-  /// CopyWith
   ClientProfileModel copyWith({
     String? id,
     String? name,
@@ -489,6 +463,12 @@ class ClientProfileModel {
     DateTime? createdAt,
     double? lastWeight,
     DateTime? lastWeightDate,
+    // ─── Missing filtering fields ───────────────────────────────────────────
+    String? weightTrend,
+    String? subscriptionStatus,
+    bool? hasActiveDietPlan,
+    bool? hasActiveWorkoutPlan,
+    DateTime? lastFollowupDate,
   }) {
     return ClientProfileModel(
       id: id ?? this.id,
@@ -519,13 +499,19 @@ class ClientProfileModel {
       assignedDietSystems: assignedDietSystems ?? this.assignedDietSystems,
       followUps: followUps ?? this.followUps,
       assignedExerciseSystems:
-          assignedExerciseSystems ?? this.assignedExerciseSystems,
+      assignedExerciseSystems ?? this.assignedExerciseSystems,
       subscriptionDate: subscriptionDate ?? this.subscriptionDate,
       startDate: startDate ?? this.startDate,
       packageGroup: packageGroup ?? this.packageGroup,
       createdAt: createdAt ?? this.createdAt,
       lastWeight: lastWeight ?? this.lastWeight,
       lastWeightDate: lastWeightDate ?? this.lastWeightDate,
+      // ─── Missing filtering fields ─────────────────────────────────────────
+      weightTrend: weightTrend ?? this.weightTrend,
+      subscriptionStatus: subscriptionStatus ?? this.subscriptionStatus,
+      hasActiveDietPlan: hasActiveDietPlan ?? this.hasActiveDietPlan,
+      hasActiveWorkoutPlan: hasActiveWorkoutPlan ?? this.hasActiveWorkoutPlan,
+      lastFollowupDate: lastFollowupDate ?? this.lastFollowupDate,
     );
   }
 }

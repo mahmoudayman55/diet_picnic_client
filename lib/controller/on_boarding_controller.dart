@@ -1,13 +1,10 @@
 import 'dart:developer';
 
-import 'package:diet_picnic_client/components/custom_url_luncher.dart';
 import 'package:diet_picnic_client/core/app_constants.dart';
-import 'package:diet_picnic_client/core/custom_colors.dart';
 import 'package:diet_picnic_client/models/OnBoarding.dart';
-import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-
+import 'package:get_storage/get_storage.dart';
 
 /// Controller for managing onBoarding screens.
 class OnBoardingController extends GetxController {
@@ -31,23 +28,36 @@ class OnBoardingController extends GetxController {
   List<OnBoarding> onBoards = [
     OnBoarding(
       id: 0,
-      title: "Welcome to ClickBooking",
-      content: "Exceptional service at unbeatable prices!",
-      img: 'assets/img/Clicbookingsquarelogo.png',
+      title: "مرحباً بك في دايت بيكنيك",
+      content: "نقدم لك أفضل الأنظمة الغذائية والرياضية المصممة خصيصاً لك.",
+      img: 'assets/images/diet.png',
     ),
     OnBoarding(
-      id: 0,
-      title: "Find and Book",
-      content:
-          "Explore a variety of nearby hotels. Sign in or create an account to access a diverse selection tailored to your preferences. Easily find and book the perfect stay for your travels with clickBooking.",
-      img: 'assets/animations/book.json',
+      id: 1,
+      title: "أنظمة رياضية مخصصة",
+      content: "مجموعة متنوعة من التمارين الرياضية لمساعدتك على تحقيق أهدافك.",
+      img: 'assets/images/workout.png',
     ),
     OnBoarding(
-      id: 0,
-      title: "Find Your Dream Home",
+      id: 2,
+      title: "متابعة مستمرة وتقييم",
       content:
-          "Explore diverse homes on clickBooking, from cozy apartments to charming villas. Find your dream living space effortlessly with us.",
-      img: 'assets/animations/home.json',
+          "سجل وزنك وقياساتك بانتظام وتواصل مع أطبائنا للحصول على استشارات مستمرة.",
+      img: 'assets/images/tracking.png',
+    ),
+    OnBoarding(
+      id: 3,
+      title: "مسابقات وجوائز",
+      content:
+          "مسابقات دايت بيكنيك لا تنتهي, شارك وأربح اقوى العروض والخصومات!",
+      img: 'assets/animation/tr.png',
+    ),
+    OnBoarding(
+      id: 4,
+      title: "دايت بيكنيك",
+      content:
+          "دايت بيكنيك هو خيارك الأمثل لحياة صحية ومتوازنة، مع نخبة من أفضل الأطباء والمتخصصين في التغذية.",
+      img: 'assets/images/logob.png',
     ),
   ];
 
@@ -92,138 +102,15 @@ class OnBoardingController extends GetxController {
   }
 
   saveOnBoardingStatus() async {
-
+    final getStorage = GetStorage();
+    await getStorage.write('hasSeenOnboarding', true);
   }
 
   /// Navigate to the login screen.
   void submit(BuildContext context) async {
-    // final permissionGranted = await requestLocationPermission();
-    //
-    // if (!permissionGranted) {
-    //   LocationPermission permission = await Geolocator.checkPermission();
-    //   if (permission == LocationPermission.deniedForever) {
-    //     await showDialog(
-    //       context: context,
-    //       builder: (c) {
-    //         return IntrinsicHeight(
-    //           child: AlertDialog(
-    //             title: Text(
-    //               "Permission Required",
-    //               style: Theme.of(context).textTheme.displayMedium!.copyWith(color: Colors.black),
-    //             ),scrollable: true,
-    //             content: Center(
-    //               child: Column(
-    //                 mainAxisAlignment: MainAxisAlignment.center,
-    //                 children: [
-    //                   Padding(
-    //                     padding: const EdgeInsets.all(20),
-    //                     child: Text(
-    //                       "Location permission denied, please open app settings and allow location permission.",
-    //                       style: Theme.of(context).textTheme.bodyMedium,
-    //                       textAlign: TextAlign.center,
-    //                     ),
-    //                   ),
-    //                   IconButton(
-    //                     onPressed: () async {
-    //                       await openAppSettings();
-    //                     },
-    //                     icon: Icon(
-    //                       Icons.settings,
-    //                       color: CustomColors.darkGreen,
-    //                     ),
-    //                   ),
-    //                 ],
-    //               ),
-    //             ),
-    //             actions: [
-    //               TextButton(
-    //                 onPressed: () {
-    //                   Get.back();
-    //                 },
-    //                 child: Text("Cancel",style: Theme.of(context).textTheme.displaySmall!.copyWith(color: Colors.red),),
-    //               ),
-    //             ],
-    //           ),
-    //         );
-    //       },
-    //     );
-    //   } else {
-    //     Get.snackbar(
-    //       "Permission Required",
-    //       "Location permission is required to proceed.",
-    //       snackPosition: SnackPosition.BOTTOM,
-    //     );
-    //   }
-    //   return;
-    // }
-
-    await showDialog(
-      context: context,
-      builder: (c) {
-        return AlertDialog(
-          title: Text(
-            "Privacy Policies",
-            style: Theme.of(context)
-                .textTheme
-                .displayMedium!
-                .copyWith(color: Colors.black),
-          ),
-          scrollable: true,
-          content: Container(
-            child: SelectableText.rich(
-              TextSpan(
-                style: Theme.of(context)
-                    .textTheme
-                    .bodyMedium!
-                    .copyWith(color: Colors.black),
-                children: [
-                  TextSpan(text: 'By clicking continue, you agree to our '),
-                  TextSpan(
-                    recognizer: TapGestureRecognizer()
-                      ..onTap = () {
-                        CustomUrlLauncher.launchWebUrl(AppConstants.privacyURL);
-                      },
-                    style: Theme.of(context).textTheme.bodyMedium!.copyWith(
-                        color: Colors.blueAccent,
-                        decoration: TextDecoration.underline),
-                    text: 'Privacy Policy & Terms And Conditions',
-                  ),
-                ],
-              ),
-            ),
-          ),
-          actions: [
-            GetBuilder<OnBoardingController>(builder: (c) {
-              return TextButton(
-                onPressed: loading
-                    ? null
-                    : () async {
-                        loading = true;
-                        c.update();
-                        saveOnBoardingStatus();
-                        Get.offAllNamed(AppConstants.navigatorPage);
-                        loading = false;
-                        c.update();
-                      },
-                child: Text(
-                  loading ? "Loading..." : "Continue",
-                  style: Theme.of(context)
-                      .textTheme
-                      .displayMedium!
-                      .copyWith(color: CustomColors.selectedNavBarColor),
-                ),
-              );
-            })
-          ],
-        );
-      },
-    );
-
-    loading = false;
-    update();
+    saveOnBoardingStatus();
+    Get.offAllNamed(AppConstants.navigatorPage);
   }
-
-
 
   @override
   void onInit() {

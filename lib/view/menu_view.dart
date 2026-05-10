@@ -36,6 +36,7 @@ class MenuView extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Sizer(builder: (context, orientation, deviceType) {
+     // log(UserController.to.currentUser.value!.id);
       final width = 100.w;
       final heigh = 100.h;
       bool isMobile = deviceType == DeviceType.mobile;
@@ -132,6 +133,7 @@ class MenuView extends StatelessWidget {
                       height: heigh * 0.03,
                     ),
                     if (UserController.to.isLoggedIn)
+
                       SectionWidget(
                           title: "حسابى",
                           // color: Color(0xFFFAFAFB),

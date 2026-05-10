@@ -25,13 +25,14 @@ class UpdatePersonalInfoController extends GetxController {
       selectedGender.value = value;
     }
   }
-final formKey = GlobalKey<FormState>();
-  var socialStatuses = <String>["اعزب", "متزوج", "أرمل","منفصل"].obs;
+
+  final formKey = GlobalKey<FormState>();
+  var socialStatuses = <String>["اعزب", "متزوج", "أرمل", "منفصل"].obs;
   var selectedSocialStatus = RxnString();
+
   void setSocialStatus(String? value) => selectedSocialStatus.value = value;
 
   Future<void> pickBirthday(BuildContext context) async {
-
     final now = DateTime.now();
     final initialDate = selectedBirthday.value ?? DateTime(now.year - 18);
     final firstDate = DateTime(1950);
@@ -60,16 +61,18 @@ final formKey = GlobalKey<FormState>();
     selectedSocialStatus.value = user.socialStatus ?? '';
     heightController.text = user.height ?? '';
     selectedGender.value = user.gender ?? '';
-    selectedBirthday.value = user.birthDate; // ✅ assuming you have birthDate in model
+    selectedBirthday.value =
+        user.birthDate; // ✅ assuming you have birthDate in model
     super.onInit();
   }
 
   Future<void> updatePersonalInfo() async {
-    if(!formKey.currentState!.validate()){
+    if (!formKey.currentState!.validate()) {
       return;
     }
     final user = UserController.to.currentUser.value!;
-    log(user.package==null?"package is null":user.package!.name,name: "package checking");
+    log(user.package == null ? "package is null" : user.package!.name,
+        name: "package checking");
 
     isLoading.value = true;
 
@@ -93,12 +96,16 @@ final formKey = GlobalKey<FormState>();
         name: nameController.text.trim(),
         email: emailController.text.trim(),
         qualification: qualificationController.text.trim(),
-        socialStatus:selectedSocialStatus.value==null?null: selectedSocialStatus.value!.trim(),
+        socialStatus: selectedSocialStatus.value == null
+            ? null
+            : selectedSocialStatus.value!.trim(),
         height: heightController.text.trim(),
         gender: selectedGender.value.trim(),
-        birthDate: selectedBirthday.value,phone: phoneController.text.trim(),
+        birthDate: selectedBirthday.value,
+        phone: phoneController.text.trim(),
       );
-log(user.package==null?"package is null":user.package!.name,name: "package checking");
+      log(user.package == null ? "package is null" : user.package!.name,
+          name: "package checking");
       await UserController.to.setUser(updatedUser);
       Get.back();
       showCustomSnackbar(
