@@ -33,6 +33,7 @@ import 'package:diet_picnic_client/view/register_view.dart';
 import 'package:diet_picnic_client/view/videos_view.dart';
 import 'package:diet_picnic_client/view/water_reminder_view.dart';
 import 'package:diet_picnic_client/view/body_composition_view.dart';
+import 'package:diet_picnic_client/view/package_type_view.dart';
 import 'package:diet_picnic_client/modules/clients/data/repositories/firebase_exam_repository.dart';
 import 'package:diet_picnic_client/modules/clients/presentation/controllers/exam_test_controller.dart';
 import 'package:diet_picnic_client/modules/clients/presentation/controllers/exams_controller.dart';
@@ -205,7 +206,11 @@ class GetRoutes {
     ),
     GetPage(
       name: AppConstants.examResultsPage,
-      page: () => const ExamResultsView(),
+      page: () =>  ExamResultsView(),
+    ),
+    GetPage(
+      name: AppConstants.packageTypePage,
+      page: () => const PackageTypeView(),
     ),
   ];
 }

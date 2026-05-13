@@ -13,6 +13,7 @@ import 'package:diet_picnic_client/components/reading_section.dart';
 import 'package:diet_picnic_client/components/review_slider.dart';
 import 'package:diet_picnic_client/components/review_widget.dart';
 import 'package:diet_picnic_client/components/section_widget.dart';
+import 'package:diet_picnic_client/components/package_type_list_section.dart';
 import 'package:diet_picnic_client/components/package_widget.dart';
 import 'package:diet_picnic_client/components/visual_section.dart';
 import 'package:diet_picnic_client/components/weekly_follow_up_card.dart';
@@ -75,27 +76,8 @@ class HomeView extends GetView<HomeController> {
                         SizedBox(
                           height: heigh * 0.03,
                         ),
-
-                        Obx(
-                          () => controller.offers.isNotEmpty
-                              ? Text(
-                                  "العروض",
-                                  style: Theme.of(context).textTheme.headlineSmall,
-                                )
-                              : SizedBox.shrink(),
-                        ),
-                        // SingleChildScrollView(scrollDirection: Axis.horizontal,
-                        //   child: Row(
-                        //     children: [
-                        //       SizedBox(width: width*0.7,height: heigh*0.6,child: ServiceWidget()),
-                        //       SizedBox(width: width*0.7,height: heigh*0.6,child: ServiceWidget()),
-                        //       SizedBox(width: width*0.7,height: heigh*0.6,child: ServiceWidget()),
-                        //       SizedBox(width: width*0.7,height: heigh*0.6,child: ServiceWidget()),
-                        //     ],
-                        //   ),
-                        // )
                         Obx(() => controller.isLoadingOffers.value
-                            ? LogoLoadingWidget()
+                            ? const LogoLoadingWidget()
                             : OffersSlider(
                                 width: width,
                                 height: heigh,
@@ -103,30 +85,9 @@ class HomeView extends GetView<HomeController> {
                         SizedBox(
                           height: heigh * 0.03,
                         ),
-                        Text(
-                          "الباقات",
-                          style: Theme.of(context).textTheme.headlineSmall,
-                        ),
-                        Obx(
-                          () => controller.isLoadingPackages.value
-                              ? LogoLoadingWidget()
-                              : SingleChildScrollView(
-                                  scrollDirection: Axis.horizontal,
-                                  padding: EdgeInsets.zero,
-                                  child: Padding(
-                                    padding:
-                                        const EdgeInsets.symmetric(vertical: 8.0),
-                                    child: Row(
-                                      children: controller.packages.value
-                                          .map(
-                                            (e) => SizedBox(
-                                                width: width * 0.4,
-                                                child: PackageWidget(e)),
-                                          )
-                                          .toList(),
-                                    ),
-                                  ),
-                                ),
+                         PackageTypeListSection(heigh,width),
+                        SizedBox(
+                          height: heigh * 0.03,
                         ),
                         SizedBox(
                           height: heigh * 0.025,

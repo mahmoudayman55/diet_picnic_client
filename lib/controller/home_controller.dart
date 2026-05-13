@@ -16,6 +16,7 @@ class HomeController extends GetxController {
   final FirebaseFirestore firestore = FirebaseFirestore.instance;
 
   var offers = <OfferModel>[].obs;
+  var allSubOffers = <SubOffer>[].obs;
   var isLoadingOffers = false.obs;
   var isLoadingPackages = false.obs;
   OfferModel? offer;
@@ -66,50 +67,56 @@ class HomeController extends GetxController {
   }
 
   Future<void> fetchOffers() async {
-    if (offers.isNotEmpty) {
-      offers.clear();
-    }
+    if (offers.isNotEmpty) offers.clear();
+    if (allSubOffers.isNotEmpty) allSubOffers.clear();
     isLoadingOffers.value = true;
     try {
-      // جلب العروض
-      final offersSnapshot = await firestore
-          .collection('offers')
-          .where('isAvailable', isEqualTo: true)
-          .get();
+      // جلب كل العروض (بدون فلتر isAvailable) لضمان جلب subOffers الخاصة بالعروض غير المتاحة
+      final offersSnapshot = await firestore.collection('offers').get();
 
       // جلب كل الـ sub_offers مرة واحدة
       final subSnapshot = await firestore.collection('sub_offers').get();
 
       List<OfferModel> loadedOffers = [];
+      List<SubOffer> loadedAllSubOffers = [];
 
       for (var doc in offersSnapshot.docs) {
         final data = doc.data();
         final offerId = doc.id;
-        final offerName = doc["name"];
+        final offerName = data['name'] ?? '';
+        final isAvailable = data['isAvailable'] == true;
 
-        // فلترة الـ subOffers الخاصة بالـ offer
+        // جلب الـ subOffers الخاصة بهذا العرض
         final subOffers = subSnapshot.docs
             .where((subDoc) => subDoc.data()['offer_id'] == offerId)
-            .map((subDoc) {
-          final subData = subDoc.data();
-          return SubOffer.fromJson(subData, offerName);
-        }).toList();
+            .map((subDoc) => SubOffer.fromJson(subDoc.data(), offerName))
+            .toList();
 
-        loadedOffers.add(
-          OfferModel(
-            id: offerId,
-            name: data['name'] ?? '',
-            coverImage: data['cover_image'] ?? '',
-            subOffers: subOffers,
-            isAvailable: data['isAvailable'], order: data['order'],
-          ),
-        );
+        // أضف كل الـ subOffers لـ allSubOffers بغض النظر عن isAvailable
+        loadedAllSubOffers.addAll(subOffers);
+
+        // أضف فقط العروض المتاحة لقائمة العروض المعروضة في الهوم
+        if (isAvailable) {
+          loadedOffers.add(
+            OfferModel(
+              id: offerId,
+              name: offerName,
+              coverImage: data['cover_image'] ?? '',
+              subOffers: subOffers,
+              isAvailable: true,
+              order: data['order'] ?? 0,
+            ),
+          );
+        }
       }
 
+      allSubOffers.value = loadedAllSubOffers;
       offers.value = loadedOffers;
       offers.value.sort((a, b) => a.order.compareTo(b.order));
-      log(offers.value[0].order.toString(),name: "offerTest");
-      log(offers.value[0].name.toString(),name: "offerTest");
+      if (offers.isNotEmpty) {
+        log(offers.value[0].order.toString(), name: "offerTest");
+        log(offers.value[0].name.toString(), name: "offerTest");
+      }
     } catch (e) {
       showCustomSnackbar(
         title: "خطأ",

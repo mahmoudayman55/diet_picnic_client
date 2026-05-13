@@ -67,6 +67,7 @@ class PackageModel {
   final String name;
   final String description;
   final String about;
+  final String target;
   bool isAvailable;
 
   /// Base image (always required)
@@ -86,6 +87,7 @@ class PackageModel {
     required this.order,
     required this.name,
     required this.about,
+    required this.target,
     required this.isAvailable,
     required this.description,
     required this.baseImage,
@@ -106,6 +108,7 @@ class PackageModel {
         name: json['name'] ?? '',
         order: json['order'] ?? 0,
         about: json['about'] ?? '',
+        target: json['target'] ?? '',
         isAvailable: json['isAvailable'] ?? true,
 
         baseImage: json['baseImage'] ?? '',
@@ -130,6 +133,7 @@ class PackageModel {
     'coverImage': coverImage,
     'superEliteImage': superEliteImage,
     'about': about,
+    'target': target,
     'type': type,
     'description': description,
     'groups': groups.map((e) => e.toJson()).toList(),

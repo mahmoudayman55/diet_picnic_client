@@ -49,28 +49,23 @@ class PackageDetailsController extends GetxController {
 
           String offerName = "غير معروف";
 
-          // ✅ Get related offer document
+          // ✅ Get related offer document name (no availability filter)
           if (offerId != null) {
             final offerDoc = await firestore.collection('offers').doc(offerId).get();
             final offerData = offerDoc.data();
-
-            // ✅ Check if offer is available
-            if (offerData == null || offerData['isAvailable'] != true) {
-              // ❌ Skip sub-offer if the related offer is not available
-              return null;
-            }
-
-            offerName = offerData["name"] ?? "غير معروف";
+            offerName = offerData?["name"] ?? "غير معروف";
           }
 
-          // ✅ Return SubOffer only if valid
+          // ✅ Return SubOffer (all sub-offers, regardless of parent offer availability)
           return SubOffer.fromJson(data, offerName);
         }),
       );
 
-// ✅ Remove null results (unavailable offers)
-      final validSubOffers = fetchedSubOffers.whereType<SubOffer>().toList();
-
+      // ✅ Keep only visible sub-offers (isVisible == true)
+      final validSubOffers = fetchedSubOffers
+          .whereType<SubOffer>()
+          .where((sub) => sub.isVisible)
+          .toList();
 
       subOffers.assignAll(validSubOffers);
       subOffers.sort((a, b) => (a.order ?? 0).compareTo(b.order ?? 0));

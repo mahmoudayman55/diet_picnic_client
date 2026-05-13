@@ -46,4 +46,5 @@ class AppConstants {
   static String examsPage = "/exams";
   static String examTestPage = "/exam-test";
   static String examResultsPage = "/exam-results";
+  static String packageTypePage = "/package-type";
 }

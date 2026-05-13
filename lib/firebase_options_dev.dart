@@ -8,7 +8,7 @@ import 'package:flutter/foundation.dart'
 ///
 /// Example:
 /// ```dart
-/// import 'firebase_options.dart';
+/// import 'firebase_options_dev.dart';
 /// // ...
 /// await Firebase.initializeApp(
 ///   options: DefaultFirebaseOptions.currentPlatform,
@@ -23,11 +23,20 @@ class DefaultFirebaseOptions {
       case TargetPlatform.android:
         return android;
       case TargetPlatform.iOS:
-        return ios;
+        throw UnsupportedError(
+          'DefaultFirebaseOptions have not been configured for ios - '
+          'you can reconfigure this by running the FlutterFire CLI again.',
+        );
       case TargetPlatform.macOS:
-        return macos;
+        throw UnsupportedError(
+          'DefaultFirebaseOptions have not been configured for macos - '
+          'you can reconfigure this by running the FlutterFire CLI again.',
+        );
       case TargetPlatform.windows:
-        return windows;
+        throw UnsupportedError(
+          'DefaultFirebaseOptions have not been configured for windows - '
+          'you can reconfigure this by running the FlutterFire CLI again.',
+        );
       case TargetPlatform.linux:
         throw UnsupportedError(
           'DefaultFirebaseOptions have not been configured for linux - '
@@ -52,38 +61,9 @@ class DefaultFirebaseOptions {
 
   static const FirebaseOptions android = FirebaseOptions(
     apiKey: 'AIzaSyB7htmsIObZz8r5nIZ4PlL81FNaMBOOzXo',
-    appId: '1:961946217712:android:8508ccd93b84b8e9716635',
+    appId: '1:961946217712:android:1bcb6f7111bcec20716635',
     messagingSenderId: '961946217712',
     projectId: 'diet-picnic-dev',
     storageBucket: 'diet-picnic-dev.firebasestorage.app',
   );
-
-  static const FirebaseOptions ios = FirebaseOptions(
-    apiKey: 'AIzaSyDlFSIu5umS99pMNwN3DFYxle9LGacQN4E',
-    appId: '1:329336245312:ios:d0048dd1f6a44f311123a5',
-    messagingSenderId: '329336245312',
-    projectId: 'diet-picnic',
-    storageBucket: 'diet-picnic.firebasestorage.app',
-    iosBundleId: 'com.mahmoudayman.dietPicnicClient',
-  );
-
-  static const FirebaseOptions macos = FirebaseOptions(
-    apiKey: 'AIzaSyDlFSIu5umS99pMNwN3DFYxle9LGacQN4E',
-    appId: '1:329336245312:ios:d0048dd1f6a44f311123a5',
-    messagingSenderId: '329336245312',
-    projectId: 'diet-picnic',
-    storageBucket: 'diet-picnic.firebasestorage.app',
-    iosBundleId: 'com.mahmoudayman.dietPicnicClient',
-  );
-
-  static const FirebaseOptions windows = FirebaseOptions(
-    apiKey: 'AIzaSyAKPBIuwHy1nc1FGBhcnqdkiy0uTNbA1is',
-    appId: '1:329336245312:web:449aa78cde6652731123a5',
-    messagingSenderId: '329336245312',
-    projectId: 'diet-picnic',
-    authDomain: 'diet-picnic.firebaseapp.com',
-    storageBucket: 'diet-picnic.firebasestorage.app',
-    measurementId: 'G-HKB21FTMD9',
-  );
-
 }

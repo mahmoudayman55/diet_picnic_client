@@ -8,6 +8,7 @@ class SubOffer {
   final String level;
   final int order;
   final double oldPrice, newPrice;
+  final bool isVisible;
 
   SubOffer({
     required this.id,
@@ -19,6 +20,7 @@ class SubOffer {
     required this.level,
     required this.newPrice,
     required this.oldPrice,
+    this.isVisible = true,
   });
 
   factory SubOffer.fromJson(Map<String, dynamic> json,String offerName) => SubOffer(
@@ -26,10 +28,11 @@ class SubOffer {
     packageId: json['package_id'] ?? '',
     level: json['level'],
     id: json['id'],
-    name: offerName,
+    name: json['name']??offerName,
     mainOfferId: json['offer_id'],
     newPrice: double.parse(json['new_price'].toString()),
     oldPrice: double.parse(json['old_price'].toString()), order: json['order'],
+    isVisible: json['isVisible'] ?? true,
   );
 
   Map<String, dynamic> toJson() => {

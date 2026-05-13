@@ -81,6 +81,7 @@ class PrizeModel extends PrizeEntity {
     required super.maxScore,
     required super.availability,
     required super.packageIds,
+    super.packageNames = const [],
   });
 
   factory PrizeModel.fromJson(Map<String, dynamic> json) {
@@ -95,6 +96,7 @@ class PrizeModel extends PrizeEntity {
         orElse: () => ExamAvailability.all,
       ),
       packageIds: List<String>.from(json['packageIds'] ?? []),
+      packageNames: List<String>.from(json['packageNames'] ?? []),
     );
   }
 
@@ -107,6 +109,7 @@ class PrizeModel extends PrizeEntity {
       'maxScore': maxScore,
       'availability': availability.name,
       'packageIds': packageIds,
+      'packageNames': packageNames,
     };
   }
 }

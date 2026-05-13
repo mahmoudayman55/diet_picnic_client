@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:cloud_firestore/cloud_firestore.dart';
 import '../../domain/entities/exam_entities.dart';
 import '../../domain/repositories/exam_repository.dart';
@@ -12,7 +14,7 @@ class FirebaseExamRepository implements ExamRepository {
         .collection('exams')
         .where('isVisible', isEqualTo: true)
         .get();
-
+log(snapshot.toString(),name: "EXASMSDATA");
     return snapshot.docs
         .map((doc) => ExamModel.fromJson(doc.data(), doc.id))
         .toList();

@@ -32,7 +32,7 @@ if (keystorePropertiesFile.exists()) {
 }
 android {
     namespace = "com.mahmoudayman.diet_picnic_client"
-    compileSdkVersion 35
+    compileSdkVersion 36
     ndkVersion = flutter.ndkVersion
 
     compileOptions {
@@ -71,6 +71,20 @@ android {
         targetSdk = 35
         versionCode = flutterVersionCode.toInteger()
         versionName = flutterVersionName
+    }
+
+    flavorDimensions "default"
+
+    productFlavors {
+        dev {
+            dimension "default"
+            applicationIdSuffix ".dev"
+            resValue "string", "app_name", "Diet Picnic Dev"
+        }
+        prod {
+            dimension "default"
+            resValue "string", "app_name", "Diet Picnic"
+        }
     }
 
 

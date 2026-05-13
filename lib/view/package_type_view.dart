@@ -1,21 +1,23 @@
-import 'package:diet_picnic_client/components/custom_app_bar.dart';
+import 'dart:ui';
 import 'package:diet_picnic_client/components/package_flip_card.dart';
-import 'package:diet_picnic_client/components/subscription_dialog.dart';
-import 'package:diet_picnic_client/controller/home_controller.dart';
-import 'package:diet_picnic_client/controller/offer_packages_controller.dart';
 import 'package:diet_picnic_client/core/app_constants.dart';
-import 'package:diet_picnic_client/core/custom_colors.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
-class OfferPackagesView extends StatefulWidget {
-  const OfferPackagesView({super.key});
+import '../components/custom_app_bar.dart';
+import '../components/package_horizontal_card.dart';
+import '../components/subscription_dialog.dart';
+import '../controller/home_controller.dart';
+import '../core/custom_colors.dart';
+
+class PackageTypeView extends StatefulWidget {
+  const PackageTypeView({super.key});
 
   @override
-  State<OfferPackagesView> createState() => _OfferPackagesViewState();
+  State<PackageTypeView> createState() => _PackageTypeViewState();
 }
 
-class _OfferPackagesViewState extends State<OfferPackagesView> {
+class _PackageTypeViewState extends State<PackageTypeView> {
   final PageController _pageController = PageController(viewportFraction: 0.85);
   int _currentIndex = 0;
 
@@ -27,23 +29,32 @@ class _OfferPackagesViewState extends State<OfferPackagesView> {
 
   @override
   Widget build(BuildContext context) {
-    final controller = Get.find<OfferPackagesController>();
+    final String type = Get.arguments as String;
+    final String title = type == 'group'
+        ? 'التحديات الجماعية'
+        : type == 'individual'
+            ? 'المتابعات الفردية'
+            : 'استشارة هاتفية';
+
     final homeController = Get.find<HomeController>();
 
     return Scaffold(
-      appBar: CustomAppBar(title: controller.offer.name),
+      appBar: CustomAppBar(title: title),
       body: Obx(() {
-        // Full-screen loading while packages are being fetched
-        if (controller.isLoading.value && controller.offerPackages.isEmpty) {
-          return const Center(child: CircularProgressIndicator());
+        // Show full screen loading only if we don't have packages yet
+        if (homeController.isLoadingPackages.value &&
+            homeController.packages.isEmpty) {
+          return const Center(
+            child: CircularProgressIndicator(),
+          );
         }
 
-        final packages = controller.offerPackages;
+        final filteredPackages =
+            homeController.packages.where((p) => p.type == type).toList();
 
-        // Empty state
-        if (packages.isEmpty) {
+        if (filteredPackages.isEmpty) {
           return RefreshIndicator(
-            onRefresh: () async => controller.getPackagesByIds(),
+            onRefresh: () => homeController.fetchPackages(),
             child: ListView(
               physics: const AlwaysScrollableScrollPhysics(),
               children: [
@@ -57,7 +68,7 @@ class _OfferPackagesViewState extends State<OfferPackagesView> {
                             size: 60, color: Colors.grey.shade400),
                         const SizedBox(height: 16),
                         Text(
-                          "لا توجد باقات متاحة في هذا العرض حالياً",
+                          "لا توجد باقات متوفرة لهذا النوع حالياً",
                           style: Theme.of(context)
                               .textTheme
                               .displayMedium
@@ -72,18 +83,16 @@ class _OfferPackagesViewState extends State<OfferPackagesView> {
           );
         }
 
-        // Current package based on page index
-        final currentPackage =
-            packages[_currentIndex.clamp(0, packages.length - 1)];
-
-        // Sub-offers for the current package (visible only, any parent offer)
+        // Get sub-offers for the current package from allSubOffers
+        // (includes suboffers from unavailable offers too)
+        final currentPackage = filteredPackages[
+            _currentIndex.clamp(0, filteredPackages.length - 1)];
         final relatedSubOffers = homeController.allSubOffers
-            .where((sub) =>
-                sub.packageId == currentPackage.id && sub.isVisible)
+            .where((sub) => sub.packageId == currentPackage.id && sub.isVisible)
             .toList();
 
         return RefreshIndicator(
-          onRefresh: () async => controller.getPackagesByIds(),
+          onRefresh: () => homeController.fetchPackages(),
           child: CustomScrollView(
             physics: const AlwaysScrollableScrollPhysics(),
             slivers: [
@@ -91,18 +100,20 @@ class _OfferPackagesViewState extends State<OfferPackagesView> {
                 hasScrollBody: true,
                 child: Column(
                   children: [
-                    // ── Package flip cards ──────────────────────────────
+                    // const SizedBox(height: 20),
                     Expanded(
                       flex: 3,
                       child: PageView.builder(
                         controller: _pageController,
                         physics: const BouncingScrollPhysics(),
                         onPageChanged: (index) {
-                          setState(() => _currentIndex = index);
+                          setState(() {
+                            _currentIndex = index;
+                          });
                         },
-                        itemCount: packages.length,
+                        itemCount: filteredPackages.length,
                         itemBuilder: (context, index) {
-                          final pkg = packages[index];
+                          final pkg = filteredPackages[index];
                           final List<Color> gradient =
                               CustomColors.packageGradients[
                                   index % CustomColors.packageGradients.length];
@@ -131,10 +142,7 @@ class _OfferPackagesViewState extends State<OfferPackagesView> {
                                     gradient: gradient,
                                     onAction: () => Get.toNamed(
                                       AppConstants.packageDetailsPage,
-                                      arguments: {
-                                        "package_id": pkg.id,
-                                        "offer_id": controller.offer.id,
-                                      },
+                                      arguments: {"package_id": pkg.id},
                                     ),
                                   ),
                                 ),
@@ -144,13 +152,10 @@ class _OfferPackagesViewState extends State<OfferPackagesView> {
                         },
                       ),
                     ),
-
-                    // ── Sub-offer cards section ─────────────────────────
                     if (relatedSubOffers.isNotEmpty) ...[
                       const SizedBox(height: 20),
                       Padding(
-                        padding:
-                            const EdgeInsets.symmetric(horizontal: 24),
+                        padding: const EdgeInsets.symmetric(horizontal: 24),
                         child: Row(
                           children: [
                             Text(
@@ -165,8 +170,7 @@ class _OfferPackagesViewState extends State<OfferPackagesView> {
                               padding: const EdgeInsets.symmetric(
                                   horizontal: 12, vertical: 4),
                               decoration: BoxDecoration(
-                                color: CustomColors.mainColor
-                                    .withOpacity(0.1),
+                                color: CustomColors.mainColor.withOpacity(0.1),
                                 borderRadius: BorderRadius.circular(20),
                               ),
                               child: Text(
@@ -183,16 +187,16 @@ class _OfferPackagesViewState extends State<OfferPackagesView> {
                           ],
                         ),
                       ),
-                      const SizedBox(height: 12),
+                      const SizedBox(height: 20),
                       SizedBox(
                         height: 120,
                         child: ListView.builder(
                           scrollDirection: Axis.horizontal,
-                          padding:
-                              const EdgeInsets.symmetric(horizontal: 16),
+                          padding: const EdgeInsets.symmetric(horizontal: 16),
                           itemCount: relatedSubOffers.length,
                           itemBuilder: (context, index) {
                             final sub = relatedSubOffers[index];
+                            // Use current package gradient for the sub-offers
                             final List<Color> packageGradient =
                                 CustomColors.packageGradients[_currentIndex %
                                     CustomColors.packageGradients.length];
@@ -202,7 +206,6 @@ class _OfferPackagesViewState extends State<OfferPackagesView> {
                         ),
                       ),
                     ],
-
                     const SizedBox(height: 30),
                   ],
                 ),
@@ -218,8 +221,7 @@ class _OfferPackagesViewState extends State<OfferPackagesView> {
       BuildContext context, dynamic sub, List<Color> gradient) {
     final Color backgroundColor = gradient.first;
     return GestureDetector(
-      onTap: () =>
-          SubscriptionDialog.show(context, sub.name, backgroundColor),
+      onTap: () => SubscriptionDialog.show(context, sub.level, backgroundColor),
       child: Container(
         width: 220,
         margin: const EdgeInsets.only(right: 12, bottom: 4, top: 4),
@@ -242,18 +244,15 @@ class _OfferPackagesViewState extends State<OfferPackagesView> {
               Row(
                 children: [
                   Container(
-                    padding: const EdgeInsets.symmetric(
-                        horizontal: 8, vertical: 2),
+                    padding:
+                        const EdgeInsets.symmetric(horizontal: 8, vertical: 2),
                     decoration: BoxDecoration(
                       color: Colors.white,
                       borderRadius: BorderRadius.circular(8),
                     ),
                     child: Text(
                       "وفر ${(100 - (sub.newPrice / sub.oldPrice * 100)).toInt()}%",
-                      style: Theme.of(context)
-                          .textTheme
-                          .labelSmall!
-                          .copyWith(
+                      style: Theme.of(context).textTheme.labelSmall!.copyWith(
                             color: backgroundColor,
                             fontWeight: FontWeight.bold,
                           ),
@@ -264,10 +263,7 @@ class _OfferPackagesViewState extends State<OfferPackagesView> {
               const Spacer(),
               Text(
                 sub.name,
-                style: Theme.of(context)
-                    .textTheme
-                    .displayMedium!
-                    .copyWith(
+                style: Theme.of(context).textTheme.displayMedium!.copyWith(
                       color: Colors.white,
                       fontWeight: FontWeight.w500,
                     ),
@@ -277,10 +273,7 @@ class _OfferPackagesViewState extends State<OfferPackagesView> {
                 children: [
                   Text(
                     "${sub.newPrice} EGP",
-                    style: Theme.of(context)
-                        .textTheme
-                        .headlineSmall!
-                        .copyWith(
+                    style: Theme.of(context).textTheme.headlineSmall!.copyWith(
                           color: Colors.white,
                           fontWeight: FontWeight.bold,
                         ),
@@ -288,10 +281,7 @@ class _OfferPackagesViewState extends State<OfferPackagesView> {
                   const SizedBox(width: 8),
                   Text(
                     "${sub.oldPrice}",
-                    style: Theme.of(context)
-                        .textTheme
-                        .displaySmall!
-                        .copyWith(
+                    style: Theme.of(context).textTheme.displaySmall!.copyWith(
                           color: Colors.white.withOpacity(0.5),
                           decoration: TextDecoration.lineThrough,
                         ),
