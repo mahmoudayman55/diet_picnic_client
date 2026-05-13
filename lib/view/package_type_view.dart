@@ -19,7 +19,7 @@ class PackageTypeView extends StatefulWidget {
 
 class _PackageTypeViewState extends State<PackageTypeView> {
   final PageController _pageController = PageController(viewportFraction: 0.85);
-  int _currentIndex = 0;
+  final RxInt _currentIndex = 0.obs;
 
   @override
   void dispose() {
@@ -37,6 +37,9 @@ class _PackageTypeViewState extends State<PackageTypeView> {
             : 'استشارة هاتفية';
 
     final homeController = Get.find<HomeController>();
+    final size = MediaQuery.of(context).size;
+    final screenW = size.width;
+    final screenH = size.height;
 
     return Scaffold(
       appBar: CustomAppBar(title: title),
@@ -59,14 +62,14 @@ class _PackageTypeViewState extends State<PackageTypeView> {
               physics: const AlwaysScrollableScrollPhysics(),
               children: [
                 SizedBox(
-                  height: MediaQuery.of(context).size.height * 0.7,
+                  height: screenH * 0.7,
                   child: Center(
                     child: Column(
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
                         Icon(Icons.inventory_2_outlined,
-                            size: 60, color: Colors.grey.shade400),
-                        const SizedBox(height: 16),
+                            size: screenW * 0.14, color: Colors.grey.shade400),
+                        SizedBox(height: screenH * 0.02),
                         Text(
                           "لا توجد باقات متوفرة لهذا النوع حالياً",
                           style: Theme.of(context)
@@ -86,7 +89,7 @@ class _PackageTypeViewState extends State<PackageTypeView> {
         // Get sub-offers for the current package from allSubOffers
         // (includes suboffers from unavailable offers too)
         final currentPackage = filteredPackages[
-            _currentIndex.clamp(0, filteredPackages.length - 1)];
+            _currentIndex.value.clamp(0, filteredPackages.length - 1)];
         final relatedSubOffers = homeController.allSubOffers
             .where((sub) => sub.packageId == currentPackage.id && sub.isVisible)
             .toList();
@@ -100,16 +103,14 @@ class _PackageTypeViewState extends State<PackageTypeView> {
                 hasScrollBody: true,
                 child: Column(
                   children: [
-                    // const SizedBox(height: 20),
-                    Expanded(
-                      flex: 3,
+                    // ── Package flip cards (6% of screen height) ──────────
+                    SizedBox(
+                      height: screenH * 0.6,
                       child: PageView.builder(
                         controller: _pageController,
                         physics: const BouncingScrollPhysics(),
                         onPageChanged: (index) {
-                          setState(() {
-                            _currentIndex = index;
-                          });
+                          _currentIndex.value = index;
                         },
                         itemCount: filteredPackages.length,
                         itemBuilder: (context, index) {
@@ -132,8 +133,9 @@ class _PackageTypeViewState extends State<PackageTypeView> {
                               return Transform.scale(
                                 scale: value,
                                 child: Padding(
-                                  padding: const EdgeInsets.symmetric(
-                                      horizontal: 10, vertical: 10),
+                                  padding: EdgeInsets.symmetric(
+                                      horizontal: screenW * 0.01,
+                                      vertical: screenH * 0.012),
                                   child: PackageFlipCard(
                                     title: pkg.name,
                                     target: pkg.target,
@@ -153,22 +155,24 @@ class _PackageTypeViewState extends State<PackageTypeView> {
                       ),
                     ),
                     if (relatedSubOffers.isNotEmpty) ...[
-                      const SizedBox(height: 20),
+                      SizedBox(height: screenH * 0.018),
                       Padding(
-                        padding: const EdgeInsets.symmetric(horizontal: 24),
+                        padding:
+                            EdgeInsets.symmetric(horizontal: screenW * 0.05),
                         child: Row(
                           children: [
                             Text(
                               "العروض المتاحة",
                               style: Theme.of(context)
                                   .textTheme
-                                  .headlineSmall
+                                  .titleSmall
                                   ?.copyWith(fontWeight: FontWeight.bold),
                             ),
                             const Spacer(),
                             Container(
-                              padding: const EdgeInsets.symmetric(
-                                  horizontal: 12, vertical: 4),
+                              padding: EdgeInsets.symmetric(
+                                  horizontal: screenW * 0.025,
+                                  vertical: screenH * 0.004),
                               decoration: BoxDecoration(
                                 color: CustomColors.mainColor.withOpacity(0.1),
                                 borderRadius: BorderRadius.circular(20),
@@ -177,7 +181,7 @@ class _PackageTypeViewState extends State<PackageTypeView> {
                                 "${relatedSubOffers.length} عرض",
                                 style: Theme.of(context)
                                     .textTheme
-                                    .labelLarge!
+                                    .labelSmall!
                                     .copyWith(
                                       color: CustomColors.mainColor,
                                       fontWeight: FontWeight.bold,
@@ -187,26 +191,27 @@ class _PackageTypeViewState extends State<PackageTypeView> {
                           ],
                         ),
                       ),
-                      const SizedBox(height: 20),
+                      SizedBox(height: screenH * 0.012),
                       SizedBox(
-                        height: 120,
+                        height: screenH * 0.135,
                         child: ListView.builder(
                           scrollDirection: Axis.horizontal,
-                          padding: const EdgeInsets.symmetric(horizontal: 16),
+                          padding:
+                              EdgeInsets.symmetric(horizontal: screenW * 0.04),
                           itemCount: relatedSubOffers.length,
                           itemBuilder: (context, index) {
                             final sub = relatedSubOffers[index];
-                            // Use current package gradient for the sub-offers
                             final List<Color> packageGradient =
-                                CustomColors.packageGradients[_currentIndex %
-                                    CustomColors.packageGradients.length];
-                            return _buildSubOfferCard(
-                                context, sub, packageGradient);
+                                CustomColors.packageGradients[
+                                    _currentIndex.value %
+                                        CustomColors.packageGradients.length];
+                            return buildSubOfferCard(context, sub,
+                                packageGradient, screenW, screenH);
                           },
                         ),
                       ),
                     ],
-                    const SizedBox(height: 30),
+                    SizedBox(height: screenH * 0.02),
                   ],
                 ),
               ),
@@ -216,82 +221,95 @@ class _PackageTypeViewState extends State<PackageTypeView> {
       }),
     );
   }
+}
 
-  Widget _buildSubOfferCard(
-      BuildContext context, dynamic sub, List<Color> gradient) {
-    final Color backgroundColor = gradient.first;
-    return GestureDetector(
-      onTap: () => SubscriptionDialog.show(context, sub.level, backgroundColor),
-      child: Container(
-        width: 220,
-        margin: const EdgeInsets.only(right: 12, bottom: 4, top: 4),
-        decoration: BoxDecoration(
-          color: backgroundColor,
-          borderRadius: BorderRadius.circular(20),
-          boxShadow: [
-            BoxShadow(
-              color: backgroundColor.withOpacity(0.2),
-              blurRadius: 6,
-              offset: const Offset(0, 3),
+Widget buildSubOfferCard(
+  BuildContext context,
+  dynamic sub,
+  List<Color> gradient,
+  double screenW,
+  double screenH,
+) {
+  final Color bg = gradient[1];
+  final textTheme = Theme.of(context).textTheme;
+  return GestureDetector(
+    onTap: () => SubscriptionDialog.show(context, sub.name, bg),
+    child: Container(
+      width: screenW * 0.42,
+      margin: EdgeInsets.only(
+          right: screenW * 0.03, bottom: screenH * 0.004, top: screenH * 0.004),
+      decoration: BoxDecoration(
+        color: bg,
+        borderRadius: BorderRadius.circular(16),
+        boxShadow: [
+          BoxShadow(
+            color: bg.withOpacity(0.25),
+            blurRadius: 6,
+            offset: const Offset(0, 3),
+          ),
+        ],
+      ),
+      child: Padding(
+        padding: EdgeInsets.symmetric(
+            horizontal: screenW * 0.03, vertical: screenH * 0.01),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: [
+            // Discount badge
+            Container(
+              padding:
+                  EdgeInsets.symmetric(horizontal: screenW * 0.02, vertical: 2),
+              decoration: BoxDecoration(
+                color: Colors.white,
+                borderRadius: BorderRadius.circular(6),
+              ),
+              child: Text(
+                "وفر ${(100 - (sub.newPrice / sub.oldPrice * 100)).toInt()}%",
+                style: textTheme.labelSmall!.copyWith(
+                  color: bg,
+                  fontWeight: FontWeight.bold,
+                ),
+              ),
+            ),
+            // Name
+            Text(
+              sub.name,
+              maxLines: 2,
+              overflow: TextOverflow.ellipsis,
+              style: textTheme.displayMedium!.copyWith(
+                color: Colors.white,
+                fontWeight: FontWeight.w600,
+                height: 1.3,
+              ),
+            ),
+            // Price row
+            Row(
+              crossAxisAlignment: CrossAxisAlignment.baseline,
+              textBaseline: TextBaseline.alphabetic,
+              children: [
+                Text(
+                  "${sub.newPrice} EGP",
+                  style: textTheme.displayLarge!.copyWith(
+                    color: Colors.white,
+                    fontWeight: FontWeight.bold,
+                  ),
+                ),
+                SizedBox(width: screenW * 0.015),
+                Text(
+                  "${sub.oldPrice}",
+                  style: const TextStyle(
+                      color: Colors.white,
+                      fontSize: 15,
+                      decoration: TextDecoration.lineThrough,
+                      decorationColor: Colors.white,
+                      decorationThickness: 1),
+                ),
+              ],
             ),
           ],
         ),
-        child: Padding(
-          padding: const EdgeInsets.all(12),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Row(
-                children: [
-                  Container(
-                    padding:
-                        const EdgeInsets.symmetric(horizontal: 8, vertical: 2),
-                    decoration: BoxDecoration(
-                      color: Colors.white,
-                      borderRadius: BorderRadius.circular(8),
-                    ),
-                    child: Text(
-                      "وفر ${(100 - (sub.newPrice / sub.oldPrice * 100)).toInt()}%",
-                      style: Theme.of(context).textTheme.labelSmall!.copyWith(
-                            color: backgroundColor,
-                            fontWeight: FontWeight.bold,
-                          ),
-                    ),
-                  ),
-                ],
-              ),
-              const Spacer(),
-              Text(
-                sub.name,
-                style: Theme.of(context).textTheme.displayMedium!.copyWith(
-                      color: Colors.white,
-                      fontWeight: FontWeight.w500,
-                    ),
-              ),
-              const SizedBox(height: 6),
-              Row(
-                children: [
-                  Text(
-                    "${sub.newPrice} EGP",
-                    style: Theme.of(context).textTheme.headlineSmall!.copyWith(
-                          color: Colors.white,
-                          fontWeight: FontWeight.bold,
-                        ),
-                  ),
-                  const SizedBox(width: 8),
-                  Text(
-                    "${sub.oldPrice}",
-                    style: Theme.of(context).textTheme.displaySmall!.copyWith(
-                          color: Colors.white.withOpacity(0.5),
-                          decoration: TextDecoration.lineThrough,
-                        ),
-                  ),
-                ],
-              ),
-            ],
-          ),
-        ),
       ),
-    );
-  }
+    ),
+  );
 }

@@ -5,6 +5,7 @@ import 'package:diet_picnic_client/controller/home_controller.dart';
 import 'package:diet_picnic_client/controller/offer_packages_controller.dart';
 import 'package:diet_picnic_client/core/app_constants.dart';
 import 'package:diet_picnic_client/core/custom_colors.dart';
+import 'package:diet_picnic_client/view/package_type_view.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
@@ -17,7 +18,7 @@ class OfferPackagesView extends StatefulWidget {
 
 class _OfferPackagesViewState extends State<OfferPackagesView> {
   final PageController _pageController = PageController(viewportFraction: 0.85);
-  int _currentIndex = 0;
+  final RxInt _currentIndex = 0.obs;
 
   @override
   void dispose() {
@@ -29,6 +30,9 @@ class _OfferPackagesViewState extends State<OfferPackagesView> {
   Widget build(BuildContext context) {
     final controller = Get.find<OfferPackagesController>();
     final homeController = Get.find<HomeController>();
+    final size = MediaQuery.of(context).size;
+    final double screenW = size.width;
+    final double screenH = size.height;
 
     return Scaffold(
       appBar: CustomAppBar(title: controller.offer.name),
@@ -48,14 +52,14 @@ class _OfferPackagesViewState extends State<OfferPackagesView> {
               physics: const AlwaysScrollableScrollPhysics(),
               children: [
                 SizedBox(
-                  height: MediaQuery.of(context).size.height * 0.7,
+                  height: screenH * 0.7,
                   child: Center(
                     child: Column(
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
                         Icon(Icons.inventory_2_outlined,
-                            size: 60, color: Colors.grey.shade400),
-                        const SizedBox(height: 16),
+                            size: screenW * 0.14, color: Colors.grey.shade400),
+                        SizedBox(height: screenH * 0.02),
                         Text(
                           "لا توجد باقات متاحة في هذا العرض حالياً",
                           style: Theme.of(context)
@@ -74,7 +78,7 @@ class _OfferPackagesViewState extends State<OfferPackagesView> {
 
         // Current package based on page index
         final currentPackage =
-            packages[_currentIndex.clamp(0, packages.length - 1)];
+            packages[_currentIndex.value.clamp(0, packages.length - 1)];
 
         // Sub-offers for the current package (visible only, any parent offer)
         final relatedSubOffers = homeController.allSubOffers
@@ -91,14 +95,14 @@ class _OfferPackagesViewState extends State<OfferPackagesView> {
                 hasScrollBody: true,
                 child: Column(
                   children: [
-                    // ── Package flip cards ──────────────────────────────
-                    Expanded(
-                      flex: 3,
+                    // ── Package flip cards (60% of screen height) ──────────
+                    SizedBox(
+                      height: screenH * 0.6,
                       child: PageView.builder(
                         controller: _pageController,
                         physics: const BouncingScrollPhysics(),
                         onPageChanged: (index) {
-                          setState(() => _currentIndex = index);
+                          _currentIndex.value = index;
                         },
                         itemCount: packages.length,
                         itemBuilder: (context, index) {
@@ -121,8 +125,9 @@ class _OfferPackagesViewState extends State<OfferPackagesView> {
                               return Transform.scale(
                                 scale: value,
                                 child: Padding(
-                                  padding: const EdgeInsets.symmetric(
-                                      horizontal: 10, vertical: 10),
+                                  padding: EdgeInsets.symmetric(
+                                      horizontal: screenW * 0.025,
+                                      vertical: screenH * 0.012),
                                   child: PackageFlipCard(
                                     title: pkg.name,
                                     target: pkg.target,
@@ -147,23 +152,23 @@ class _OfferPackagesViewState extends State<OfferPackagesView> {
 
                     // ── Sub-offer cards section ─────────────────────────
                     if (relatedSubOffers.isNotEmpty) ...[
-                      const SizedBox(height: 20),
+                      SizedBox(height: screenH * 0.018),
                       Padding(
-                        padding:
-                            const EdgeInsets.symmetric(horizontal: 24),
+                        padding: EdgeInsets.symmetric(horizontal: screenW * 0.05),
                         child: Row(
                           children: [
                             Text(
                               "العروض المتاحة",
                               style: Theme.of(context)
                                   .textTheme
-                                  .headlineSmall
+                                  .titleSmall
                                   ?.copyWith(fontWeight: FontWeight.bold),
                             ),
                             const Spacer(),
                             Container(
-                              padding: const EdgeInsets.symmetric(
-                                  horizontal: 12, vertical: 4),
+                              padding: EdgeInsets.symmetric(
+                                  horizontal: screenW * 0.025,
+                                  vertical: screenH * 0.004),
                               decoration: BoxDecoration(
                                 color: CustomColors.mainColor
                                     .withOpacity(0.1),
@@ -173,7 +178,7 @@ class _OfferPackagesViewState extends State<OfferPackagesView> {
                                 "${relatedSubOffers.length} عرض",
                                 style: Theme.of(context)
                                     .textTheme
-                                    .labelLarge!
+                                    .labelSmall!
                                     .copyWith(
                                       color: CustomColors.mainColor,
                                       fontWeight: FontWeight.bold,
@@ -183,27 +188,25 @@ class _OfferPackagesViewState extends State<OfferPackagesView> {
                           ],
                         ),
                       ),
-                      const SizedBox(height: 12),
+                      SizedBox(height: screenH * 0.012),
                       SizedBox(
-                        height: 120,
+                        height: screenH * 0.12,
                         child: ListView.builder(
                           scrollDirection: Axis.horizontal,
-                          padding:
-                              const EdgeInsets.symmetric(horizontal: 16),
+                          padding: EdgeInsets.symmetric(horizontal: screenW * 0.04),
                           itemCount: relatedSubOffers.length,
                           itemBuilder: (context, index) {
                             final sub = relatedSubOffers[index];
                             final List<Color> packageGradient =
-                                CustomColors.packageGradients[_currentIndex %
-                                    CustomColors.packageGradients.length];
-                            return _buildSubOfferCard(
-                                context, sub, packageGradient);
+                                CustomColors.packageGradients[_currentIndex.value % CustomColors.packageGradients.length];
+                            return buildSubOfferCard(
+                                context, sub, packageGradient, screenW, screenH);
                           },
                         ),
                       ),
                     ],
 
-                    const SizedBox(height: 30),
+                    SizedBox(height: screenH * 0.02),
                   ],
                 ),
               ),
@@ -214,94 +217,5 @@ class _OfferPackagesViewState extends State<OfferPackagesView> {
     );
   }
 
-  Widget _buildSubOfferCard(
-      BuildContext context, dynamic sub, List<Color> gradient) {
-    final Color backgroundColor = gradient.first;
-    return GestureDetector(
-      onTap: () =>
-          SubscriptionDialog.show(context, sub.name, backgroundColor),
-      child: Container(
-        width: 220,
-        margin: const EdgeInsets.only(right: 12, bottom: 4, top: 4),
-        decoration: BoxDecoration(
-          color: backgroundColor,
-          borderRadius: BorderRadius.circular(20),
-          boxShadow: [
-            BoxShadow(
-              color: backgroundColor.withOpacity(0.2),
-              blurRadius: 6,
-              offset: const Offset(0, 3),
-            ),
-          ],
-        ),
-        child: Padding(
-          padding: const EdgeInsets.all(12),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Row(
-                children: [
-                  Container(
-                    padding: const EdgeInsets.symmetric(
-                        horizontal: 8, vertical: 2),
-                    decoration: BoxDecoration(
-                      color: Colors.white,
-                      borderRadius: BorderRadius.circular(8),
-                    ),
-                    child: Text(
-                      "وفر ${(100 - (sub.newPrice / sub.oldPrice * 100)).toInt()}%",
-                      style: Theme.of(context)
-                          .textTheme
-                          .labelSmall!
-                          .copyWith(
-                            color: backgroundColor,
-                            fontWeight: FontWeight.bold,
-                          ),
-                    ),
-                  ),
-                ],
-              ),
-              const Spacer(),
-              Text(
-                sub.name,
-                style: Theme.of(context)
-                    .textTheme
-                    .displayMedium!
-                    .copyWith(
-                      color: Colors.white,
-                      fontWeight: FontWeight.w500,
-                    ),
-              ),
-              const SizedBox(height: 6),
-              Row(
-                children: [
-                  Text(
-                    "${sub.newPrice} EGP",
-                    style: Theme.of(context)
-                        .textTheme
-                        .headlineSmall!
-                        .copyWith(
-                          color: Colors.white,
-                          fontWeight: FontWeight.bold,
-                        ),
-                  ),
-                  const SizedBox(width: 8),
-                  Text(
-                    "${sub.oldPrice}",
-                    style: Theme.of(context)
-                        .textTheme
-                        .displaySmall!
-                        .copyWith(
-                          color: Colors.white.withOpacity(0.5),
-                          decoration: TextDecoration.lineThrough,
-                        ),
-                  ),
-                ],
-              ),
-            ],
-          ),
-        ),
-      ),
-    );
-  }
+
 }

@@ -34,7 +34,7 @@ class PackageTypeListSection extends StatelessWidget {
         'description':
             'تواصل مباشر وسريع للرد على كافة استفساراتك الغذائية وحل مشكلات ثبات الوزن.',
         'gradient': [const Color(0xFF11998e), const Color(0xFF38ef7d)],
-        'image': 'assets/images/call2.png',
+        'image': 'assets/images/call.png',
         'type': 'consultation',
       },
     ];

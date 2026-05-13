@@ -64,9 +64,9 @@ class PackageTypeCard extends StatelessWidget {
                       ClipRRect(
                         borderRadius: BorderRadius.circular(15),
                         child: BackdropFilter(
-                          filter: ImageFilter.blur(sigmaX: 5, sigmaY: 5),
+                          filter: ImageFilter.blur(sigmaX: 10, sigmaY: 10),
                           child: Container(
-                            padding: const EdgeInsets.all(8),
+                            padding: const EdgeInsets.all(3),
                             decoration: BoxDecoration(
                               color: Colors.white.withOpacity(0.15),
                               borderRadius: BorderRadius.circular(15),
@@ -77,8 +77,8 @@ class PackageTypeCard extends StatelessWidget {
                             ),
                             child: Image.asset(
                               image,
-                              width: 35,
-                              height: 35,
+                              width: 50,
+                              height: 50,
                               fit: BoxFit.contain,
                             ),
                           ),
@@ -91,7 +91,7 @@ class PackageTypeCard extends StatelessWidget {
                     description,
                     style: Theme.of(context)
                         .textTheme
-                        .displayLarge!
+                        .displayMedium!
                         .copyWith(color: Colors.white),
                     maxLines: 5,
                     overflow: TextOverflow.ellipsis,
