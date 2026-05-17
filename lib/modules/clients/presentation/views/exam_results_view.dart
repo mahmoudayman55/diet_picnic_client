@@ -97,8 +97,19 @@ class _ExamResultsViewState extends State<ExamResultsView> {
   Widget build(BuildContext context) {
     final Map<String, dynamic> args = Get.arguments ?? {};
     final int score = args['score'] ?? 0;
+    //final int score =10;
     final int totalQuestions = args['totalQuestions'] ?? 0;
     final PrizeEntity? prize = args['prize'];
+    // final PrizeEntity? prize = args['prize'] ??
+    //     PrizeEntity(
+    //       id: 'test_prize',
+    //       title: 'خصم خاص من دايت بيكنك',
+    //       image: '',
+    //       minScore: 0,
+    //       maxScore: 100,
+    //       availability: ExamAvailability.all,
+    //       packageIds: [],
+    //     );
     final ExamEntity? exam = args['exam'];
 
     final bool hasWon = prize != null;
@@ -160,9 +171,9 @@ class _ExamResultsViewState extends State<ExamResultsView> {
               if (hasWon && exam != null) ...[
                 RepaintBoundary(
                   key: _boundaryKey,
-                  child: _RamadanCouponCard(
+                  child: _ModernCouponCard(
                     clientName: clientName,
-                    prizeTitle: prize.title,
+                    prizeTitle: prize!.title,
                     examTitle: exam.title,
                     date: now,
                     totalQuestions: totalQuestions,
@@ -225,7 +236,7 @@ class _ExamResultsViewState extends State<ExamResultsView> {
               ] else if (hasWon) ...[
                 // Fallback if exam entity is missing for some reason
                 Text(
-                  "لقد فزت بجائزة: ${prize.title}",
+                  "لقد فزت بجائزة: ${prize!.title}",
                   style: Theme.of(context).textTheme.displayLarge?.copyWith(
                         color: Colors.orange,
                         fontWeight: FontWeight.bold,
@@ -268,8 +279,8 @@ class _ExamResultsViewState extends State<ExamResultsView> {
   }
 }
 
-// ─── Ramadan Coupon Card ───────────────────────────────────────────────────────
-class _RamadanCouponCard extends StatelessWidget {
+// ─── Modern Coupon Card ───────────────────────────────────────────────────────
+class _ModernCouponCard extends StatelessWidget {
   final String clientName;
   final String prizeTitle;
   final String examTitle;
@@ -277,7 +288,7 @@ class _RamadanCouponCard extends StatelessWidget {
   final int score;
   final DateTime date;
 
-  const _RamadanCouponCard({
+  const _ModernCouponCard({
     required this.clientName,
     required this.prizeTitle,
     required this.examTitle,
@@ -288,287 +299,232 @@ class _RamadanCouponCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    const Color brandOrange = CustomColors.mainColor;
-    const Color brandPurple = CustomColors.purble;
-    const Color lightGold = Color(0xFFFFD500);
-    const Color creamWhite = Color(0xFFFFFDE7);
+    const Color brandPeach = CustomColors.mainColor;
+    const Color brandDarkRose = CustomColors.purble;
+    final textTheme = Theme.of(context).textTheme;
 
     return Container(
       margin: const EdgeInsets.symmetric(horizontal: 4),
       decoration: BoxDecoration(
-        borderRadius: BorderRadius.circular(20),
+        borderRadius: BorderRadius.circular(24),
         gradient: const LinearGradient(
-          colors: [brandPurple, Color(0xFF7A3D56), brandPurple],
+          colors: [brandDarkRose, brandPeach],
           begin: Alignment.topLeft,
           end: Alignment.bottomRight,
         ),
-        border: Border.all(color: brandOrange, width: 2.5),
         boxShadow: [
           BoxShadow(
-            color: brandOrange.withOpacity(0.3),
-            blurRadius: 10,
-            spreadRadius: 2,
+            color: brandPeach.withOpacity(0.3),
+            blurRadius: 15,
+            offset: const Offset(0, 8),
           ),
         ],
       ),
       child: ClipRRect(
-        borderRadius: BorderRadius.circular(18),
+        borderRadius: BorderRadius.circular(24),
         child: Stack(
           children: [
-            // ── Subtle geometric pattern overlay ──────────────────────────
-            Positioned.fill(
-              child: CustomPaint(
-                painter: _IslamicPatternPainter(
-                    color: brandOrange.withOpacity(0.07)),
+            // Decorative shapes for a modern look
+            Positioned(
+              top: -30,
+              right: -30,
+              child: Container(
+                width: 120,
+                height: 120,
+                decoration: BoxDecoration(
+                  color: Colors.white.withOpacity(0.1),
+                  shape: BoxShape.circle,
+                ),
+              ),
+            ),
+            Positioned(
+              bottom: -20,
+              left: -20,
+              child: Container(
+                width: 100,
+                height: 100,
+                decoration: BoxDecoration(
+                  color: Colors.white.withOpacity(0.05),
+                  shape: BoxShape.circle,
+                ),
               ),
             ),
 
-            // ── Content ──────────────────────────────────────────────────
+            // Content
             Padding(
-              padding: const EdgeInsets.fromLTRB(20, 0, 20, 20),
+              padding: const EdgeInsets.all(24),
               child: Column(
                 mainAxisSize: MainAxisSize.min,
                 children: [
-                  // ── Arched Header ──────────────────────────────────────
-                  Container(
-                    width: double.infinity,
-                    padding: const EdgeInsets.symmetric(vertical: 14),
-                    decoration: BoxDecoration(
-                      gradient: const LinearGradient(
-                        colors: [
-                          brandOrange,
-                          lightGold,
-                          brandOrange,
-                        ],
-                      ),
-                      borderRadius: const BorderRadius.only(
-                        bottomLeft: Radius.circular(60),
-                        bottomRight: Radius.circular(60),
-                      ),
-                      boxShadow: [
-                        BoxShadow(
-                          color: brandOrange.withOpacity(0.3),
-                          blurRadius: 8,
-                          offset: const Offset(0, 3),
-                        ),
-                      ],
-                    ),
-                    child: Column(
-                      children: [
-                        // Stars + Crescent row
-                        const Row(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          children: [
-                            Text('✦',
-                                style: TextStyle(
-                                    color: brandPurple, fontSize: 14)),
-                            SizedBox(width: 6),
-                            Text('🌙', style: TextStyle(fontSize: 22)),
-                            SizedBox(width: 6),
-                            Text('✦',
-                                style: TextStyle(
-                                    color: brandPurple, fontSize: 14)),
-                          ],
-                        ),
-                        const SizedBox(height: 4),
-                        Text(
-                          'رمضان كريم',
-                          style: Theme.of(context)
-                              .textTheme
-                              .headlineMedium
-                              ?.copyWith(
-                            color: brandPurple,
-                            fontWeight: FontWeight.w900,
-                            fontSize: 22,
-                            shadows: [
-                              Shadow(
-                                  color: Colors.black.withOpacity(0.2),
-                                  blurRadius: 4),
-                            ],
-                          ),
-                          textDirection: TextDirection.rtl,
-                        ),
-                        const SizedBox(height: 2),
-                        Text(
-                          'كوبون جائزة',
-                          style: Theme.of(context)
-                              .textTheme
-                              .displaySmall
-                              ?.copyWith(
-                                color: brandPurple.withOpacity(0.85),
-                                fontWeight: FontWeight.w600,
-                                fontSize: 13,
-                              ),
-                          textDirection: TextDirection.rtl,
-                        ),
-                      ],
-                    ),
-                  ),
-
-                  const SizedBox(height: 12),
-
-                  // ── Logo ──
+                  // Logo & Header
                   Image.asset(
                     AppConstants.appLogo,
-                    height: MediaQuery.of(context).size.height * 0.15,
+                    height: 50,
                   ),
+                  const SizedBox(height: 24),
 
-                  // const SizedBox(height: 6),
-                  //
-                  // // ── App Name label ──
-                  // Text(
-                  //   AppConstants.appName,
-                  //   style: Theme.of(context).textTheme.displayLarge?.copyWith(
-                  //         color: lightGold,
-                  //         fontWeight: FontWeight.w700,
-                  //         fontSize: 13,
-                  //         letterSpacing: 1.5,
-                  //       ),
-                  //   textDirection: TextDirection.rtl,
-                  // ),
-
-                  const SizedBox(height: 6),
-
-                  // ── Exam title ─────────────────────────────────────────
-                  Text(
-                    examTitle,
-                    style: Theme.of(context).textTheme.displayMedium?.copyWith(
-                          color: Colors.white,
+                  // Glass Section
+                  ClipRRect(
+                    borderRadius: BorderRadius.circular(20),
+                    child: BackdropFilter(
+                      filter: ui.ImageFilter.blur(sigmaX: 10, sigmaY: 10),
+                      child: Container(
+                        width: double.infinity,
+                        padding: const EdgeInsets.all(20),
+                        decoration: BoxDecoration(
+                          color: Colors.white.withOpacity(0.15),
+                          borderRadius: BorderRadius.circular(20),
+                          border: Border.all(
+                            color: Colors.white.withOpacity(0.2),
+                          ),
                         ),
-                    textAlign: TextAlign.center,
-                    textDirection: TextDirection.rtl,
+                        child: Column(
+                          children: [
+                            Text(
+                              examTitle,
+                              style: textTheme.displayMedium?.copyWith(
+                                color: Colors.white,
+                                fontSize: 16,
+                                fontWeight: FontWeight.w500,
+                              ),
+                              textAlign: TextAlign.center,
+                            ),
+                            const SizedBox(height: 8),
+                            Text(
+                              totalQuestions > 0
+                                  ? "$score / $totalQuestions"
+                                  : "$score",
+                              style: textTheme.displayLarge?.copyWith(
+                                color: Colors.white,
+                                fontSize: 32,
+                                fontWeight: FontWeight.bold,
+                              ),
+                            ),
+                            const SizedBox(height: 16),
+                            const Divider(color: Colors.white24),
+                            const SizedBox(height: 16),
+                            Text(
+                              'مُهدى إلى',
+                              style: textTheme.displaySmall?.copyWith(
+                                color: Colors.white70,
+                                fontSize: 12,
+                              ),
+                            ),
+                            Text(
+                              clientName,
+                              style: textTheme.headlineLarge?.copyWith(
+                                color: Colors.white,
+                                fontSize: 22,
+                                fontWeight: FontWeight.bold,
+                              ),
+                              textAlign: TextAlign.center,
+                            ),
+                          ],
+                        ),
+                      ),
+                    ),
                   ),
 
-                  const SizedBox(height: 12),
-                  Text(
-                    totalQuestions > 0 ? "$score / $totalQuestions" : "$score",
-                    style: Theme.of(context).textTheme.displayLarge?.copyWith(
-                          color: Colors.white,
-                          fontWeight: FontWeight.bold,
+                  const SizedBox(height: 24),
+
+                  // Prize Section (Glassified)
+                  ClipRRect(
+                    borderRadius: BorderRadius.circular(20),
+                    child: BackdropFilter(
+                      filter: ui.ImageFilter.blur(sigmaX: 12, sigmaY: 12),
+                      child: Container(
+                        width: double.infinity,
+                        padding: const EdgeInsets.symmetric(
+                            vertical: 20, horizontal: 16),
+                        decoration: BoxDecoration(
+                          color: Colors.white.withOpacity(0.1),
+                          borderRadius: BorderRadius.circular(20),
+                          border: Border.all(
+                            color: Colors.white.withOpacity(0.2),
+                            width: 1.5,
+                          ),
+                          boxShadow: [
+                            BoxShadow(
+                              color: Colors.black.withOpacity(0.05),
+                              blurRadius: 20,
+                              offset: const Offset(0, 10),
+                            ),
+                          ],
                         ),
+                        child: Text(
+                          prizeTitle,
+                          style: textTheme.headlineMedium?.copyWith(
+                            color: Colors.white,
+                            fontSize: 22,
+                            fontWeight: FontWeight.w900,
+                            shadows: [
+                              Shadow(
+                                color: Colors.black.withOpacity(0.3),
+                                offset: const Offset(0, 2),
+                                blurRadius: 4,
+                              ),
+                            ],
+                          ),
+                          textAlign: TextAlign.center,
+                        ),
+                      ),
+                    ),
                   ),
-                  // ── Decorative divider ─────────────────────────────────
+
+                  const SizedBox(height: 24),
+
+                  // Tear-off line
                   Row(
                     children: [
+                      _CircleNotch(isLeft: true),
                       Expanded(
-                          child: Divider(
-                              color: brandOrange.withOpacity(0.5),
-                              thickness: 1)),
-                      Padding(
-                        padding: const EdgeInsets.symmetric(horizontal: 8),
-                        child: Text('✦',
-                            style: TextStyle(color: brandOrange, fontSize: 12)),
+                        child: DashedLine(color: Colors.white38),
                       ),
-                      Expanded(
-                          child: Divider(
-                              color: brandOrange.withOpacity(0.5),
-                              thickness: 1)),
+                      _CircleNotch(isLeft: false),
                     ],
-                  ),
-
-                  const SizedBox(height: 12),
-
-                  // ── Winner name ────────────────────────────────────────
-                  Text(
-                    'يُهدى إلى',
-                    style: Theme.of(context).textTheme.displayMedium?.copyWith(
-                          color: brandOrange.withOpacity(0.8),
-                          fontWeight: FontWeight.w600,
-                        ),
-                    textDirection: TextDirection.rtl,
-                  ),
-                  const SizedBox(height: 4),
-                  Text(
-                    clientName,
-                    style: Theme.of(context).textTheme.headlineLarge?.copyWith(
-                          color: lightGold,
-                          fontSize: 24,
-                          fontWeight: FontWeight.w900,
-                        ),
-                    textAlign: TextAlign.center,
-                    textDirection: TextDirection.rtl,
                   ),
 
                   const SizedBox(height: 16),
 
-                  // ── Prize ribbon ───────────────────────────────────────
-                  Container(
-                    width: double.infinity,
-                    padding: const EdgeInsets.symmetric(
-                        horizontal: 16, vertical: 12),
-                    decoration: BoxDecoration(
-                      gradient: const LinearGradient(
-                        colors: [
-                          brandOrange,
-                          lightGold,
-                          brandOrange,
-                        ],
-                      ),
-                      borderRadius: BorderRadius.circular(10),
-                      boxShadow: [
-                        BoxShadow(
-                          color: brandOrange.withOpacity(0.3),
-                          blurRadius: 8,
-                          spreadRadius: 1,
-                        ),
-                      ],
-                    ),
-                    child: Text(
-                      prizeTitle,
-                      style:
-                          Theme.of(context).textTheme.headlineSmall?.copyWith(
-                                color: brandPurple,
-                                fontSize: 18,
-                                fontWeight: FontWeight.w900,
-                              ),
-                      textAlign: TextAlign.center,
-                      textDirection: TextDirection.rtl,
-                    ),
-                  ),
-
-                  const SizedBox(height: 18),
-
-                  // ── Notched separator (mimics tear-off coupon edge) ────
-                  Row(
-                    children: [
-                      const _SemiCircleCut(fromLeft: true),
-                      Expanded(
-                        child: DashedLine(color: brandOrange.withOpacity(0.5)),
-                      ),
-                      const _SemiCircleCut(fromLeft: false),
-                    ],
-                  ),
-
-                  const SizedBox(height: 12),
-
-                  // ── Terms ──────────────────────────────────────────────
-                  Text(
-                    'هذا الكوبون متاح لمدة شهر من تاريخه\nاستخدام الكوبون مرة واحدة فقط لحامله أو أحد معارفه\nمسموح باستخدام كوبون واحد فقط في المرة الواحدة\nالحد الأدنى لاستخدامه عند الاشتراك في باقة ٣ شهور',
-                    style: Theme.of(context).textTheme.displaySmall?.copyWith(
-                          color: creamWhite.withOpacity(0.70),
-                          fontSize: 9.5,
-                          height: 1.7,
-                        ),
-                    textAlign: TextAlign.center,
-                    textDirection: TextDirection.rtl,
-                  ),
-
-                  const SizedBox(height: 8),
-
-                  // ── Date ───────────────────────────────────────────────
+                  // Footer / Date
                   Text(
                     '${date.day}/${date.month}/${date.year}',
-                    style: Theme.of(context).textTheme.displaySmall?.copyWith(
-                          color: brandOrange.withOpacity(0.7),
-                          fontSize: 11,
-                          fontWeight: FontWeight.w500,
-                        ),
+                    style: textTheme.displaySmall?.copyWith(
+                      color: Colors.white60,
+                      fontSize: 11,
+                    ),
+                  ),
+                  const SizedBox(height: 4),
+                  Text(
+                    'صالح لمدة شهر من تاريخه • استخدام مرة واحدة فقط\nالحد الأدنى للاستخدام عند الاشتراك في باقة ٣ شهور',
+                    style: textTheme.displaySmall?.copyWith(
+                      color: Colors.white38,
+                      fontSize: 10,
+                    ),
+                    textAlign: TextAlign.center,
                   ),
                 ],
               ),
             ),
           ],
         ),
+      ),
+    );
+  }
+}
+
+class _CircleNotch extends StatelessWidget {
+  final bool isLeft;
+  const _CircleNotch({required this.isLeft});
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      width: 20,
+      height: 20,
+      decoration: BoxDecoration(
+        color: Colors.white, // This creates the "cut" effect against the white background of the page
+        shape: BoxShape.circle,
       ),
     );
   }
@@ -587,11 +543,12 @@ class DashedLine extends StatelessWidget {
       const dashGap = 4.0;
       final count = (constraints.maxWidth / (dashWidth + dashGap)).floor();
       return Row(
+        mainAxisAlignment: MainAxisAlignment.center,
         children: List.generate(
           count,
           (_) => Container(
             width: dashWidth,
-            height: 1.5,
+            height: 1,
             margin: const EdgeInsets.only(right: dashGap),
             color: color,
           ),
@@ -601,59 +558,3 @@ class DashedLine extends StatelessWidget {
   }
 }
 
-// ─── Semi-circle notch widget ─────────────────────────────────────────────────
-class _SemiCircleCut extends StatelessWidget {
-  final bool fromLeft;
-
-  const _SemiCircleCut({required this.fromLeft});
-
-  @override
-  Widget build(BuildContext context) {
-    return Container(
-      width: 14,
-      height: 14,
-      decoration: BoxDecoration(
-        color: CustomColors.mainColor,
-        shape: BoxShape.circle,
-        border: Border.all(
-            color: CustomColors.mainColor.withOpacity(0.4), width: 1),
-      ),
-    );
-  }
-}
-
-// ─── Islamic geometric pattern painter ───────────────────────────────────────
-class _IslamicPatternPainter extends CustomPainter {
-  final Color color;
-
-  _IslamicPatternPainter({required this.color});
-
-  @override
-  void paint(Canvas canvas, Size size) {
-    final math.Random random = math.Random(42); // Seed for consistency
-    const double step = 50.0;
-
-    for (double y = 0; y < size.height; y += step) {
-      for (double x = 0; x < size.width; x += step) {
-        final String emoji = random.nextBool() ? '🌙' : '🏆';
-        final textPainter = TextPainter(
-          text: TextSpan(
-            text: emoji,
-            style: TextStyle(
-              fontSize: 14,
-              color: color.withOpacity(0.1), // Ensure it stays subtle
-            ),
-          ),
-          textDirection: TextDirection.rtl,
-        )..layout();
-
-        final offset =
-            Offset(x - textPainter.width / 2, y - textPainter.height / 2);
-        textPainter.paint(canvas, offset);
-      }
-    }
-  }
-
-  @override
-  bool shouldRepaint(covariant CustomPainter oldDelegate) => false;
-}

@@ -48,6 +48,9 @@ class PrizeEntity {
   final int maxScore;
   final ExamAvailability availability;
   final List<String> packageIds;
+  /// Denormalized display names for the packages in [packageIds].
+  /// Empty for [ExamAvailability.nonSubscribers] prizes.
+  final List<String> packageNames;
 
   PrizeEntity({
     required this.id,
@@ -57,6 +60,7 @@ class PrizeEntity {
     required this.maxScore,
     required this.availability,
     required this.packageIds,
+    this.packageNames = const [],
   });
 }
 

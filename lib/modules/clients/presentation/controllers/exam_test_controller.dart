@@ -58,83 +58,90 @@ class ExamTestController extends GetxController {
     try {
       isLoading.value = true;
 
-      // Calculation check
       final user = UserController.to.currentUser.value;
+
+      // ── Bug fix #1: Only block re-submission for real client submissions
+      // (isAdminTest == false). Admin test submissions must not prevent the
+      // real client from taking the exam.
       if (user != null) {
         final submissions = await _repository.getSubmissions(user.id);
-        if (submissions.any((s) => s.examId == exam.id)) {
+        if (submissions.any(
+            (s) => s.examId == exam.id && s.isAdminTest == false)) {
           showCustomSnackbar(
-              title: 'Alert',
+              title: 'تنبيه',
               message: 'لقد قمت بتأدية هذا الاختبار بالفعل',
               successful: false);
-          Get.offAllNamed('/'); // Go back to home
+          Get.offAllNamed('/');
           return;
         }
       }
 
-      // Calculate score
+      // ── Calculate score (number of correct answers)
       int correctCount = 0;
       for (int i = 0; i < exam.questions.length; i++) {
         if (answers[i] == exam.questions[i].correctAnswerIndex) {
           correctCount++;
         }
       }
-
       final score = correctCount;
 
-      // Find Won Prize
+      // ── Bug fix #2: Full prize resolution per spec (Section 5.2)
+      // Determine subscription state from the client profile.
+      final userPackage = user?.package;
+      final isSubscriber =
+          userPackage != null && userPackage.id.isNotEmpty;
+      final clientPackageId = isSubscriber ? userPackage.id : null;
+
       PrizeEntity? wonPrize;
 
-      if (user != null) {
-        final isSubscribed = user.package != null;
-        final userPackageId = user.package?.id;
+      for (final prize in exam.prizes) {
+        // Step 1 – Score range check
+        if (score < prize.minScore || score > prize.maxScore) continue;
 
-        for (final prize in exam.prizes) {
-          if (score >= prize.minScore && score <= prize.maxScore) {
-            // Check availability
-            bool eligible = false;
-            if (prize.availability == ExamAvailability.all) {
-              eligible = true;
-            } else if (isSubscribed &&
-                prize.availability == ExamAvailability.subscribers) {
-              eligible = true;
-            } else if (!isSubscribed &&
-                prize.availability == ExamAvailability.nonSubscribers) {
-              eligible = true;
-            }
+        // Step 2 – Availability + package membership check
+        final av = prize.availability;
 
-            // Check Package IDs if applicable
-            if (eligible &&
-                (prize.availability == ExamAvailability.subscribers ||
-                    prize.availability == ExamAvailability.all)) {
-              if (prize.packageIds.isNotEmpty &&
-                  !prize.packageIds.contains(userPackageId)) {
-                eligible = false;
-              }
-            }
-
-            if (eligible) {
-              wonPrize = prize;
-              break; // Take the first eligible prize found for the score
-            }
+        if (av == ExamAvailability.nonSubscribers) {
+          // Prize is for non-subscribers only
+          if (!isSubscriber) {
+            wonPrize = prize;
+            break;
+          }
+        } else if (av == ExamAvailability.subscribers) {
+          // Prize requires active subscription AND package in the list
+          if (isSubscriber &&
+              prize.packageIds.contains(clientPackageId)) {
+            wonPrize = prize;
+            break;
+          }
+        } else {
+          // ExamAvailability.all — any client qualifies if score matches,
+          // but respect packageIds if the list is non-empty.
+          if (prize.packageIds.isEmpty ||
+              (isSubscriber &&
+                  prize.packageIds.contains(clientPackageId)) ||
+              !isSubscriber) {
+            wonPrize = prize;
+            break;
           }
         }
       }
 
-      // Create Submission
+      // ── Bug fix #3: Store the *prize's* package IDs/names in the submission
+      // (comma-joined), not the user's own package.
       final submission = ExamSubmissionModel(
-        id: '', // Firestore sets this
+        id: '',
         examId: exam.id,
         examTitle: exam.title,
         clientId: user?.id ?? 'anonymous',
         clientName: user?.name ?? 'Anonymous',
         score: score,
         totalQuestions: totalQuestions,
-        packageId: user?.package?.id,
-        packageName: user?.package?.name,
-        prizeWon: wonPrize?.title, // Dashboard likely wants the name
+        packageId: wonPrize?.packageIds.join(', '),
+        packageName: wonPrize?.packageNames.join(', '),
+        prizeWon: wonPrize?.title,
         submittedAt: DateTime.now(),
-        isAdminTest: false, // Defaulting to false for clients
+        isAdminTest: false,
         answers: answers.toList(),
       );
 

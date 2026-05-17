@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:get/get.dart';
 import '../../../../components/custom_snack_bar.dart';
 import '../../../../controller/user_controller.dart';
@@ -25,7 +27,9 @@ class ExamsController extends GetxController {
     try {
       isLoading.value = true;
       final fetchedExams = await _repository.getExams();
+
       allExams.assignAll(fetchedExams);
+      log(allExams.toString(),name: "EXAMSSSS");
       final user = UserController.to.currentUser.value;
       if (user == null) {
         allAccessibleExams.value = [];
@@ -42,6 +46,7 @@ class ExamsController extends GetxController {
         }
       }).toList();
     } catch (e) {
+      log("ERRRRRRR$e");
       showCustomSnackbar(
           title: 'Error',
           message: 'Failed to load exams: $e',
@@ -58,6 +63,7 @@ class ExamsController extends GetxController {
 
       userSubmissions.value = await _repository.getSubmissions(user.id);
     } catch (e) {
+      log(e.toString());
       showCustomSnackbar(
           title: 'Error',
           message: 'Failed to load your results: $e',
