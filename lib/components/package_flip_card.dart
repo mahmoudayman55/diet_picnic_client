@@ -249,28 +249,7 @@ class _PackageFlipCardState extends State<PackageFlipCard>
                           _GlassPanel(
                             child: Column(
                               children: [
-                                // Small label
-                                Container(
-                                  padding: EdgeInsets.symmetric(
-                                      horizontal: sw * 0.03, vertical: sh * 0.004),
-                                  decoration: BoxDecoration(
-                                    color: Colors.white.withOpacity(0.18),
-                                    borderRadius: BorderRadius.circular(20),
-                                    border: Border.all(
-                                        color: Colors.white.withOpacity(0.3)),
-                                  ),
-                                  child: Text(
-                                    "الباقة",
-                                    style: Theme.of(context)
-                                        .textTheme
-                                        .displayMedium!
-                                        .copyWith(
-                                          color: Colors.white,
-                                          letterSpacing: 1.5,
-                                        ),
-                                  ),
-                                ),
-                                SizedBox(height: sh * 0.008),
+
                                 Text(
                                   widget.title,
                                   textAlign: TextAlign.center,
@@ -304,24 +283,7 @@ class _PackageFlipCardState extends State<PackageFlipCard>
                             child: Column(
                               crossAxisAlignment: CrossAxisAlignment.start,
                               children: [
-                                Row(
-                                  children: [
-                                    Icon(Icons.info_outline_rounded,
-                                        color: Colors.white70, size: sw * 0.035),
-                                    SizedBox(width: sw * 0.015),
-                                    Text(
-                                      "نبذة",
-                                      style: Theme.of(context)
-                                          .textTheme
-                                          .displayLarge!
-                                          .copyWith(
-                                            color: Colors.white,
-                                            letterSpacing: 1.2,
-                                          ),
-                                    ),
-                                  ],
-                                ),
-                                SizedBox(height: sh * 0.008),
+
                                 Text(
                                   widget.smallDesc,
                                   maxLines: 10,
@@ -436,22 +398,23 @@ class _PackageFlipCardState extends State<PackageFlipCard>
 
   // ── Back face ───────────────────────────────────────────────────────────────
   Widget _buildBack(BuildContext context, double angle, double sw, double sh) {
+    final bool isDark = Theme.of(context).brightness == Brightness.dark;
     return Transform(
       transform: Matrix4.identity()..rotateY(pi),
       alignment: Alignment.center,
       child: Container(
         decoration: BoxDecoration(
-          color: Colors.white,
+          color: isDark ? CustomColors.darkCard : CustomColors.lightCard,
           borderRadius: BorderRadius.circular(28),
           boxShadow: [
             BoxShadow(
-              color: Colors.black.withOpacity(0.10),
+              color: isDark ? Colors.black.withOpacity(0.4) : Colors.black.withOpacity(0.08),
               blurRadius: 20,
               offset: const Offset(0, 8),
             ),
           ],
           border: Border.all(
-              color: widget.gradient.first.withOpacity(0.2), width: 2),
+              color: widget.gradient.first.withOpacity(isDark ? 0.3 : 0.15), width: 2),
         ),
         child: ClipRRect(
           borderRadius: BorderRadius.circular(26),
@@ -461,7 +424,7 @@ class _PackageFlipCardState extends State<PackageFlipCard>
               Positioned.fill(
                 child: CustomPaint(
                   painter: _DotPatternPainter(
-                    color: widget.gradient.first.withOpacity(0.04),
+                    color: widget.gradient.first.withOpacity(isDark ? 0.06 : 0.04),
                   ),
                 ),
               ),
@@ -473,7 +436,7 @@ class _PackageFlipCardState extends State<PackageFlipCard>
                   width: sw * 0.25,
                   height: sw * 0.25,
                   decoration: BoxDecoration(
-                    color: widget.gradient.first.withOpacity(0.06),
+                    color: widget.gradient.first.withOpacity(isDark ? 0.09 : 0.06),
                     shape: BoxShape.circle,
                   ),
                 ),
@@ -488,7 +451,7 @@ class _PackageFlipCardState extends State<PackageFlipCard>
                         CircleAvatar(
                           radius: sw * 0.05,
                           backgroundColor:
-                              widget.gradient.first.withOpacity(0.12),
+                              widget.gradient.first.withOpacity(isDark ? 0.20 : 0.12),
                           child: Icon(Icons.info_outline,
                               color: widget.gradient.first, size: sw * 0.05),
                         ),
@@ -506,7 +469,7 @@ class _PackageFlipCardState extends State<PackageFlipCard>
                       ],
                     ),
                     SizedBox(height: sh * 0.018),
-                    Divider(color: widget.gradient.first.withOpacity(0.2)),
+                    Divider(color: widget.gradient.first.withOpacity(isDark ? 0.25 : 0.15)),
                     SizedBox(height: sh * 0.012),
                     Expanded(
                       child: SingleChildScrollView(
@@ -516,7 +479,7 @@ class _PackageFlipCardState extends State<PackageFlipCard>
                               .textTheme
                               .displayMedium!
                               .copyWith(
-                                color: Colors.black87,
+                                color: isDark ? Colors.white.withOpacity(0.9) : CustomColors.textBlack87,
                                 height: 1.7,
                               ),
                         ),
@@ -527,14 +490,12 @@ class _PackageFlipCardState extends State<PackageFlipCard>
                     // ── Coupon-style tear-off line ─────────────────────
                     Row(
                       children: [
-                        _Notch(color: widget.gradient.first.withOpacity(0.15)),
                         SizedBox(width: sw * 0.01),
                         Expanded(
                           child: _DashedDivider(
-                              color: widget.gradient.first.withOpacity(0.3)),
+                              color: widget.gradient.first.withOpacity(isDark ? 0.35 : 0.18)),
                         ),
                         SizedBox(width: sw * 0.01),
-                        _Notch(color: widget.gradient.first.withOpacity(0.15)),
                       ],
                     ),
 
@@ -550,7 +511,7 @@ class _PackageFlipCardState extends State<PackageFlipCard>
                               decoration: BoxDecoration(
                                 borderRadius: BorderRadius.circular(sw * 0.035),
                                 border: Border.all(
-                                    color: widget.gradient.first.withOpacity(0.4)),
+                                    color: widget.gradient.first.withOpacity(isDark ? 0.5 : 0.3)),
                               ),
                               child: Text(
                                 "رجوع",
@@ -583,7 +544,7 @@ class _PackageFlipCardState extends State<PackageFlipCard>
                                 borderRadius: BorderRadius.circular(sw * 0.035),
                                 boxShadow: [
                                   BoxShadow(
-                                    color: widget.gradient.first.withOpacity(0.35),
+                                    color: widget.gradient.first.withOpacity(isDark ? 0.45 : 0.3),
                                     blurRadius: 8,
                                     offset: const Offset(0, 4),
                                   ),
@@ -650,11 +611,9 @@ class _SectionSeparator extends StatelessWidget {
       padding: EdgeInsets.symmetric(vertical: sh * 0.008),
       child: Row(
         children: [
-          _Notch(color: color),
-          SizedBox(width: sw * 0.01),
+          SizedBox(width: sw * 0.03),
           Expanded(child: _DashedDivider(color: color)),
-          SizedBox(width: sw * 0.01),
-          _Notch(color: color),
+          SizedBox(width: sw * 0.03),
         ],
       ),
     );

@@ -5,6 +5,8 @@ import 'package:diet_picnic_client/controller/home_controller.dart';
 import 'package:diet_picnic_client/controller/offer_packages_controller.dart';
 import 'package:diet_picnic_client/core/app_constants.dart';
 import 'package:diet_picnic_client/core/custom_colors.dart';
+import 'package:diet_picnic_client/core/constants/app_gradients.dart';
+import 'package:diet_picnic_client/models/package_model.dart';
 import 'package:diet_picnic_client/view/package_type_view.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -18,7 +20,6 @@ class OfferPackagesView extends StatefulWidget {
 
 class _OfferPackagesViewState extends State<OfferPackagesView> {
   final PageController _pageController = PageController(viewportFraction: 0.85);
-  final RxInt _currentIndex = 0.obs;
 
   @override
   void dispose() {
@@ -47,7 +48,12 @@ class _OfferPackagesViewState extends State<OfferPackagesView> {
         // Empty state
         if (packages.isEmpty) {
           return RefreshIndicator(
-            onRefresh: () async => controller.getPackagesByIds(),
+            onRefresh: () async {
+              await Future.wait([
+                controller.getPackagesByIds(),
+                homeController.fetchOffers(),
+              ]);
+            },
             child: ListView(
               physics: const AlwaysScrollableScrollPhysics(),
               children: [
@@ -78,16 +84,22 @@ class _OfferPackagesViewState extends State<OfferPackagesView> {
 
         // Current package based on page index
         final currentPackage =
-            packages[_currentIndex.value.clamp(0, packages.length - 1)];
+            packages[controller.currentIndex.value.clamp(0, packages.length - 1)];
 
         // Sub-offers for the current package (visible only, any parent offer)
         final relatedSubOffers = homeController.allSubOffers
             .where((sub) =>
                 sub.packageId == currentPackage.id && sub.isVisible)
-            .toList();
+            .toList()
+          ..sort((a, b) => a.order.compareTo(b.order));
 
         return RefreshIndicator(
-          onRefresh: () async => controller.getPackagesByIds(),
+          onRefresh: () async {
+            await Future.wait([
+              controller.getPackagesByIds(),
+              homeController.fetchOffers(),
+            ]);
+          },
           child: CustomScrollView(
             physics: const AlwaysScrollableScrollPhysics(),
             slivers: [
@@ -102,14 +114,13 @@ class _OfferPackagesViewState extends State<OfferPackagesView> {
                         controller: _pageController,
                         physics: const BouncingScrollPhysics(),
                         onPageChanged: (index) {
-                          _currentIndex.value = index;
+                          controller.currentIndex.value = index;
                         },
                         itemCount: packages.length,
                         itemBuilder: (context, index) {
                           final pkg = packages[index];
                           final List<Color> gradient =
-                              CustomColors.packageGradients[
-                                  index % CustomColors.packageGradients.length];
+                              AppGradients.getGradient(pkg.gradientIndex);
 
                           return AnimatedBuilder(
                             animation: _pageController,
@@ -161,10 +172,11 @@ class _OfferPackagesViewState extends State<OfferPackagesView> {
                               "العروض المتاحة",
                               style: Theme.of(context)
                                   .textTheme
-                                  .titleSmall
+                                  .headlineMedium
                                   ?.copyWith(fontWeight: FontWeight.bold),
                             ),
                             const Spacer(),
+
                             Container(
                               padding: EdgeInsets.symmetric(
                                   horizontal: screenW * 0.025,
@@ -175,7 +187,7 @@ class _OfferPackagesViewState extends State<OfferPackagesView> {
                                 borderRadius: BorderRadius.circular(20),
                               ),
                               child: Text(
-                                "${relatedSubOffers.length} عرض",
+                                "${relatedSubOffers.length}  عرض",
                                 style: Theme.of(context)
                                     .textTheme
                                     .labelSmall!
@@ -198,7 +210,7 @@ class _OfferPackagesViewState extends State<OfferPackagesView> {
                           itemBuilder: (context, index) {
                             final sub = relatedSubOffers[index];
                             final List<Color> packageGradient =
-                                CustomColors.packageGradients[_currentIndex.value % CustomColors.packageGradients.length];
+                                AppGradients.getGradient(currentPackage.gradientIndex);
                             return buildSubOfferCard(
                                 context, sub, packageGradient, screenW, screenH);
                           },

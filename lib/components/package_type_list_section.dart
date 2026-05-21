@@ -4,11 +4,31 @@ import 'package:sizer/sizer.dart';
 import '../core/app_constants.dart';
 import 'package_type_card.dart';
 
-class PackageTypeListSection extends StatelessWidget {
-  double screenHeight;
-  double screenWidth;
+class PackageTypeListSection extends StatefulWidget {
+  final double screenHeight;
+  final double screenWidth;
 
-  PackageTypeListSection(this.screenHeight,this.screenWidth, {super.key});
+  const PackageTypeListSection(this.screenHeight, this.screenWidth, {super.key});
+
+  @override
+  State<PackageTypeListSection> createState() => _PackageTypeListSectionState();
+}
+
+class _PackageTypeListSectionState extends State<PackageTypeListSection> {
+  late final PageController _pageController;
+  int _currentPage = 0;
+
+  @override
+  void initState() {
+    super.initState();
+    _pageController = PageController(viewportFraction: 0.85);
+  }
+
+  @override
+  void dispose() {
+    _pageController.dispose();
+    super.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -17,7 +37,7 @@ class PackageTypeListSection extends StatelessWidget {
         'title': 'التحديات الجماعية',
         'description':
             'تحدي مخصص لإنقاص الوزن بصورة صحية مع مجموعة هتساعدك وتشجعك وتحديات يومية تغير من عاداتنا',
-        'gradient': [const Color(0xFF6A11CB), const Color(0xFF2575FC)],
+        'gradient': [const Color(0xFFDD2476), const Color(0xFFFF512F)],
         'image': 'assets/images/coop.png',
         'type': 'group',
       },
@@ -25,7 +45,7 @@ class PackageTypeListSection extends StatelessWidget {
         'title': 'المتابعات الفردية',
         'description':
             'متابعة خاصة مع الدكاترة مناسبة للي بيواجهو مشاكل في ثبات الوزن والفئات الخاصة والتغذية العلاجية',
-        'gradient': [const Color(0xFFFF512F), const Color(0xFFDD2476)],
+        'gradient': [const Color(0xFF6A11CB), const Color(0xFF2575FC)],
         'image': 'assets/images/indv.png',
         'type': 'individual',
       },
@@ -46,32 +66,49 @@ class PackageTypeListSection extends StatelessWidget {
           padding: const EdgeInsets.symmetric(horizontal: 4.0),
           child: Text(
             "اختر باقتك المفضلة",
-            style: Theme.of(context).textTheme.headlineSmall?.copyWith(
-                  fontWeight: FontWeight.bold,
-                ),
+            style: Theme.of(context).textTheme.headlineMedium,
           ),
         ),
         const SizedBox(height: 16),
         SizedBox(
-          height: screenHeight*0.3, // Sufficient height for the card
-          child: ListView.builder(
-            scrollDirection: Axis.horizontal,
+          height: widget.screenHeight * 0.3, // Sufficient height for the card
+          child: PageView.builder(
+            controller: _pageController,
             itemCount: packageTypes.length,
-            padding: const EdgeInsets.only(left: 4, right: 4),
+            onPageChanged: (index) {
+              setState(() {
+                _currentPage = index;
+              });
+            },
             itemBuilder: (context, index) {
               final pkg = packageTypes[index];
-              return Container(
-                width: screenWidth*0.6,
-                margin: const EdgeInsets.only(left: 12),
-                child: PackageTypeCard(
-                  title: pkg['title'],
-                  description: pkg['description'],
-                  gradient: pkg['gradient'],
-                  image: pkg['image'],
-                  onTap: () {
-                    Get.toNamed(AppConstants.packageTypePage,
-                        arguments: pkg['type']);
-                  },
+              return AnimatedBuilder(
+                animation: _pageController,
+                builder: (context, child) {
+                  double value = 1.0;
+                  if (_pageController.position.haveDimensions) {
+                    value = (_pageController.page! - index).abs();
+                    value = (1 - (value * 0.08)).clamp(0.0, 1.0);
+                  } else {
+                    value = index == 0 ? 1.0 : 0.92;
+                  }
+                  return Transform.scale(
+                    scale: value,
+                    child: child,
+                  );
+                },
+                child: Padding(
+                  padding: const EdgeInsets.all(8),
+                  child: PackageTypeCard(
+                    title: pkg['title'],
+                    description: pkg['description'],
+                    gradient: pkg['gradient'],
+                    image: pkg['image'],
+                    onTap: () {
+                      Get.toNamed(AppConstants.packageTypePage,
+                          arguments: pkg['type']);
+                    },
+                  ),
                 ),
               );
             },

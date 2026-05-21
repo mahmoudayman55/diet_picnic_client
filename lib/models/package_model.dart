@@ -81,6 +81,7 @@ class PackageModel {
 
   final String type; // 'individual' or 'group'
   List<PackageGroup> groups;
+  final int gradientIndex;
 
   PackageModel({
     required this.id,
@@ -97,6 +98,7 @@ class PackageModel {
     this.superEliteImage,
     this.type = 'individual',
     this.groups = const [],
+    this.gradientIndex = 0,
   });
 
   @override
@@ -121,6 +123,7 @@ class PackageModel {
             .map((e) => PackageGroup.fromJson(e as Map<String, dynamic>))
             .toList(),
         description: json['description'] ?? "",
+        gradientIndex: json['gradientIndex'] ?? 0,
       );
 
   Map<String, dynamic> toJson() => {
@@ -137,5 +140,42 @@ class PackageModel {
     'type': type,
     'description': description,
     'groups': groups.map((e) => e.toJson()).toList(),
+    'gradientIndex': gradientIndex,
   };
+
+  PackageModel copyWith({
+    String? id,
+    int? order,
+    String? name,
+    String? description,
+    String? about,
+    String? target,
+    bool? isAvailable,
+    String? baseImage,
+    String? coverImage,
+    String? vipImage,
+    String? eliteImage,
+    String? superEliteImage,
+    String? type,
+    List<PackageGroup>? groups,
+    int? gradientIndex,
+  }) {
+    return PackageModel(
+      id: id ?? this.id,
+      order: order ?? this.order,
+      name: name ?? this.name,
+      description: description ?? this.description,
+      about: about ?? this.about,
+      target: target ?? this.target,
+      isAvailable: isAvailable ?? this.isAvailable,
+      baseImage: baseImage ?? this.baseImage,
+      coverImage: coverImage ?? this.coverImage,
+      vipImage: vipImage ?? this.vipImage,
+      eliteImage: eliteImage ?? this.eliteImage,
+      superEliteImage: superEliteImage ?? this.superEliteImage,
+      type: type ?? this.type,
+      groups: groups ?? this.groups,
+      gradientIndex: gradientIndex ?? this.gradientIndex,
+    );
+  }
 }

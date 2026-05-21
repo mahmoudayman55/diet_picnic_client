@@ -303,6 +303,10 @@ class _ModernCouponCard extends StatelessWidget {
     const Color brandDarkRose = CustomColors.purble;
     final textTheme = Theme.of(context).textTheme;
 
+    const celebrationEmojis = [
+      "🏆", "🎉", "✨", "🥳", "🎈", "🏅", "👑", "🎁", "💖", "⭐", "🌟", "👏", "🎊", "🎯"
+    ];
+
     return Container(
       margin: const EdgeInsets.symmetric(horizontal: 4),
       decoration: BoxDecoration(
@@ -350,6 +354,75 @@ class _ModernCouponCard extends StatelessWidget {
               ),
             ),
 
+            // Organized repeating watermark emoji pattern (Grid distributed)
+            ...List.generate(40, (index) {
+              final int col = index % 5;
+              final int row = index ~/ 5;
+
+              final double left = col * 68.0 + 15.0;
+              final double top = row * 62.0 + 20.0;
+
+              final emoji = celebrationEmojis[index % celebrationEmojis.length];
+
+              return Positioned(
+                top: top,
+                left: left,
+                child: Opacity(
+                  opacity: 0.05,
+                  child: Transform.rotate(
+                    angle: -0.3,
+                    child: Text(
+                      emoji,
+                      style: const TextStyle(fontSize: 18),
+                    ),
+                  ),
+                ),
+              );
+            }),
+
+            // Decorative sparkles and confetti emojis absolute-positioned
+            Positioned(
+              top: 15,
+              left: 20,
+              child: Transform.rotate(
+                angle: -0.2,
+                child: const Text(
+                  "🎉",
+                  style: TextStyle(fontSize: 24),
+                ),
+              ),
+            ),
+            Positioned(
+              top: 75,
+              right: 15,
+              child: Transform.rotate(
+                angle: 0.3,
+                child: const Text(
+                  "✨",
+                  style: TextStyle(fontSize: 20),
+                ),
+              ),
+            ),
+            Positioned(
+              bottom: 120,
+              left: 15,
+              child: const Text(
+                "✨",
+                style: TextStyle(fontSize: 22),
+              ),
+            ),
+            Positioned(
+              bottom: 80,
+              right: 25,
+              child: Transform.rotate(
+                angle: -0.4,
+                child: const Text(
+                  "🎉",
+                  style: TextStyle(fontSize: 24),
+                ),
+              ),
+            ),
+
             // Content
             Padding(
               padding: const EdgeInsets.all(24),
@@ -361,7 +434,42 @@ class _ModernCouponCard extends StatelessWidget {
                     AppConstants.appLogo,
                     height: 50,
                   ),
-                  const SizedBox(height: 24),
+                  const SizedBox(height: 16),
+
+                  // Celebrate Icon / Trophy
+                  Container(
+                    padding: const EdgeInsets.all(12),
+                    decoration: BoxDecoration(
+                      color: Colors.white.withOpacity(0.2),
+                      shape: BoxShape.circle,
+                      border: Border.all(
+                        color: Colors.white.withOpacity(0.3),
+                        width: 1.5,
+                      ),
+                      boxShadow: [
+                        BoxShadow(
+                          color: Colors.black.withOpacity(0.1),
+                          blurRadius: 8,
+                          offset: const Offset(0, 4),
+                        ),
+                      ],
+                    ),
+                    child: const Text(
+                      "🏆",
+                      style: TextStyle(fontSize: 32),
+                    ),
+                  ),
+                  const SizedBox(height: 8),
+                  Text(
+                    "بطاقة الفوز بالجائزة",
+                    style: textTheme.displayMedium?.copyWith(
+                      color: Colors.white,
+                      fontSize: 16,
+                      fontWeight: FontWeight.bold,
+                      letterSpacing: 1.2,
+                    ),
+                  ),
+                  const SizedBox(height: 20),
 
                   // Glass Section
                   ClipRRect(
@@ -451,21 +559,38 @@ class _ModernCouponCard extends StatelessWidget {
                             ),
                           ],
                         ),
-                        child: Text(
-                          prizeTitle,
-                          style: textTheme.headlineMedium?.copyWith(
-                            color: Colors.white,
-                            fontSize: 22,
-                            fontWeight: FontWeight.w900,
-                            shadows: [
-                              Shadow(
-                                color: Colors.black.withOpacity(0.3),
-                                offset: const Offset(0, 2),
-                                blurRadius: 4,
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            const Text(
+                              "🎁",
+                              style: TextStyle(fontSize: 24),
+                            ),
+                            const SizedBox(width: 8),
+                            Expanded(
+                              child: Text(
+                                prizeTitle,
+                                style: textTheme.headlineMedium?.copyWith(
+                                  color: Colors.white,
+                                  fontSize: 22,
+                                  fontWeight: FontWeight.w900,
+                                  shadows: [
+                                    Shadow(
+                                      color: Colors.black.withOpacity(0.3),
+                                      offset: const Offset(0, 2),
+                                      blurRadius: 4,
+                                    ),
+                                  ],
+                                ),
+                                textAlign: TextAlign.center,
                               ),
-                            ],
-                          ),
-                          textAlign: TextAlign.center,
+                            ),
+                            const SizedBox(width: 8),
+                            const Text(
+                              "🎁",
+                              style: TextStyle(fontSize: 24),
+                            ),
+                          ],
                         ),
                       ),
                     ),
@@ -476,11 +601,11 @@ class _ModernCouponCard extends StatelessWidget {
                   // Tear-off line
                   Row(
                     children: [
-                      _CircleNotch(isLeft: true),
+
                       Expanded(
                         child: DashedLine(color: Colors.white38),
                       ),
-                      _CircleNotch(isLeft: false),
+
                     ],
                   ),
 

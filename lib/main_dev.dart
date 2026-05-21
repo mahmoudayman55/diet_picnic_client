@@ -39,9 +39,11 @@ Future<void> main() async {
   //   WindowManager.instance.setMaximumSize(const Size(800, 800));
   // }
   try {
-    await Firebase.initializeApp(
-      options: DefaultFirebaseOptions.currentPlatform,
-    );
+    if (Firebase.apps.isEmpty) {
+      await Firebase.initializeApp(
+        options: DefaultFirebaseOptions.currentPlatform,
+      );
+    }
   } on FirebaseException catch (e) {
     if (e.code != 'duplicate-app') rethrow;
   }

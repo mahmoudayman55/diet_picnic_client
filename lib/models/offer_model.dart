@@ -31,7 +31,8 @@ class SubOffer {
     name: json['name']??offerName,
     mainOfferId: json['offer_id'],
     newPrice: double.parse(json['new_price'].toString()),
-    oldPrice: double.parse(json['old_price'].toString()), order: json['order'],
+    oldPrice: double.parse(json['old_price'].toString()),
+    order: json['order'] ?? 0,
     isVisible: json['isVisible'] ?? true,
   );
 
@@ -44,6 +45,8 @@ class SubOffer {
         'new_price': newPrice,
         'old_price': oldPrice,
         'level': level,
+        'order': order,
+        'isVisible': isVisible,
       };
 }
 

@@ -1,6 +1,8 @@
 import 'dart:ui';
 import 'package:diet_picnic_client/components/package_flip_card.dart';
 import 'package:diet_picnic_client/core/app_constants.dart';
+import 'package:diet_picnic_client/core/constants/app_gradients.dart';
+import 'package:diet_picnic_client/models/package_model.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
@@ -8,6 +10,7 @@ import '../components/custom_app_bar.dart';
 import '../components/package_horizontal_card.dart';
 import '../components/subscription_dialog.dart';
 import '../controller/home_controller.dart';
+import '../controller/package_type_controller.dart';
 import '../core/custom_colors.dart';
 
 class PackageTypeView extends StatefulWidget {
@@ -19,7 +22,6 @@ class PackageTypeView extends StatefulWidget {
 
 class _PackageTypeViewState extends State<PackageTypeView> {
   final PageController _pageController = PageController(viewportFraction: 0.85);
-  final RxInt _currentIndex = 0.obs;
 
   @override
   void dispose() {
@@ -29,14 +31,9 @@ class _PackageTypeViewState extends State<PackageTypeView> {
 
   @override
   Widget build(BuildContext context) {
-    final String type = Get.arguments as String;
-    final String title = type == 'group'
-        ? 'التحديات الجماعية'
-        : type == 'individual'
-            ? 'المتابعات الفردية'
-            : 'استشارة هاتفية';
-
+    final controller = Get.find<PackageTypeController>();
     final homeController = Get.find<HomeController>();
+    final String title = controller.title;
     final size = MediaQuery.of(context).size;
     final screenW = size.width;
     final screenH = size.height;
@@ -45,19 +42,23 @@ class _PackageTypeViewState extends State<PackageTypeView> {
       appBar: CustomAppBar(title: title),
       body: Obx(() {
         // Show full screen loading only if we don't have packages yet
-        if (homeController.isLoadingPackages.value &&
-            homeController.packages.isEmpty) {
+        if (controller.isLoadingPackages.value &&
+            controller.packages.isEmpty) {
           return const Center(
             child: CircularProgressIndicator(),
           );
         }
 
-        final filteredPackages =
-            homeController.packages.where((p) => p.type == type).toList();
+        final packages = controller.packages;
 
-        if (filteredPackages.isEmpty) {
+        if (packages.isEmpty) {
           return RefreshIndicator(
-            onRefresh: () => homeController.fetchPackages(),
+            onRefresh: () async {
+              await Future.wait([
+                controller.fetchPackages(),
+                homeController.fetchOffers(),
+              ]);
+            },
             child: ListView(
               physics: const AlwaysScrollableScrollPhysics(),
               children: [
@@ -88,14 +89,20 @@ class _PackageTypeViewState extends State<PackageTypeView> {
 
         // Get sub-offers for the current package from allSubOffers
         // (includes suboffers from unavailable offers too)
-        final currentPackage = filteredPackages[
-            _currentIndex.value.clamp(0, filteredPackages.length - 1)];
+        final currentPackage = packages[
+            controller.currentIndex.value.clamp(0, packages.length - 1)];
         final relatedSubOffers = homeController.allSubOffers
             .where((sub) => sub.packageId == currentPackage.id && sub.isVisible)
-            .toList();
+            .toList()
+          ..sort((a, b) => a.order.compareTo(b.order));
 
         return RefreshIndicator(
-          onRefresh: () => homeController.fetchPackages(),
+          onRefresh: () async {
+            await Future.wait([
+              controller.fetchPackages(),
+              homeController.fetchOffers(),
+            ]);
+          },
           child: CustomScrollView(
             physics: const AlwaysScrollableScrollPhysics(),
             slivers: [
@@ -110,14 +117,13 @@ class _PackageTypeViewState extends State<PackageTypeView> {
                         controller: _pageController,
                         physics: const BouncingScrollPhysics(),
                         onPageChanged: (index) {
-                          _currentIndex.value = index;
+                          controller.currentIndex.value = index;
                         },
-                        itemCount: filteredPackages.length,
+                        itemCount: packages.length,
                         itemBuilder: (context, index) {
-                          final pkg = filteredPackages[index];
+                          final pkg = packages[index];
                           final List<Color> gradient =
-                              CustomColors.packageGradients[
-                                  index % CustomColors.packageGradients.length];
+                              AppGradients.getGradient(pkg.gradientIndex);
 
                           return AnimatedBuilder(
                             animation: _pageController,
@@ -165,7 +171,7 @@ class _PackageTypeViewState extends State<PackageTypeView> {
                               "العروض المتاحة",
                               style: Theme.of(context)
                                   .textTheme
-                                  .titleSmall
+                                  .headlineMedium
                                   ?.copyWith(fontWeight: FontWeight.bold),
                             ),
                             const Spacer(),
@@ -174,7 +180,7 @@ class _PackageTypeViewState extends State<PackageTypeView> {
                                   horizontal: screenW * 0.025,
                                   vertical: screenH * 0.004),
                               decoration: BoxDecoration(
-                                color: CustomColors.mainColor.withOpacity(0.1),
+                                color: AppGradients.getGradient(currentPackage.gradientIndex)[1],
                                 borderRadius: BorderRadius.circular(20),
                               ),
                               child: Text(
@@ -183,7 +189,7 @@ class _PackageTypeViewState extends State<PackageTypeView> {
                                     .textTheme
                                     .labelSmall!
                                     .copyWith(
-                                      color: CustomColors.mainColor,
+                                      color: Colors.white,
                                       fontWeight: FontWeight.bold,
                                     ),
                               ),
@@ -202,9 +208,7 @@ class _PackageTypeViewState extends State<PackageTypeView> {
                           itemBuilder: (context, index) {
                             final sub = relatedSubOffers[index];
                             final List<Color> packageGradient =
-                                CustomColors.packageGradients[
-                                    _currentIndex.value %
-                                        CustomColors.packageGradients.length];
+                                AppGradients.getGradient(currentPackage.gradientIndex);
                             return buildSubOfferCard(context, sub,
                                 packageGradient, screenW, screenH);
                           },
@@ -230,20 +234,25 @@ Widget buildSubOfferCard(
   double screenW,
   double screenH,
 ) {
+  final bool hasOffer = sub.newPrice != -1;
   final Color bg = gradient[1];
   final textTheme = Theme.of(context).textTheme;
+
   return GestureDetector(
     onTap: () => SubscriptionDialog.show(context, sub.name, bg),
     child: Container(
       width: screenW * 0.42,
       margin: EdgeInsets.only(
-          right: screenW * 0.03, bottom: screenH * 0.004, top: screenH * 0.004),
+          right: screenW * 0.03,
+          bottom: screenH * 0.004,
+          top: screenH * 0.004),
       decoration: BoxDecoration(
+        // Dim the card slightly when there is no active offer
         color: bg,
         borderRadius: BorderRadius.circular(16),
         boxShadow: [
           BoxShadow(
-            color: bg.withOpacity(0.25),
+            color: bg.withOpacity(hasOffer ? 0.25 : 0.12),
             blurRadius: 6,
             offset: const Offset(0, 3),
           ),
@@ -256,57 +265,78 @@ Widget buildSubOfferCard(
           crossAxisAlignment: CrossAxisAlignment.start,
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
-            // Discount badge
-            Container(
-              padding:
-                  EdgeInsets.symmetric(horizontal: screenW * 0.02, vertical: 2),
-              decoration: BoxDecoration(
-                color: Colors.white,
-                borderRadius: BorderRadius.circular(6),
-              ),
-              child: Text(
-                "وفر ${(100 - (sub.newPrice / sub.oldPrice * 100)).toInt()}%",
-                style: textTheme.labelSmall!.copyWith(
-                  color: bg,
-                  fontWeight: FontWeight.bold,
+            // ── Top badge ───────────────────────────────────────────────
+            if (hasOffer)
+              // Discount percentage badge
+              Container(
+                padding: EdgeInsets.symmetric(
+                    horizontal: screenW * 0.02, vertical: 2),
+                decoration: BoxDecoration(
+                  color: Colors.white,
+                  borderRadius: BorderRadius.circular(6),
                 ),
-              ),
-            ),
-            // Name
+                child: Text(
+                  "وفر ${(100 - (sub.newPrice / sub.oldPrice * 100)).toInt()}%",
+                  style: textTheme.labelSmall!.copyWith(
+                    color: bg,
+                    fontWeight: FontWeight.bold,
+                  ),
+                ),
+              )
+            else
+              const SizedBox.shrink(),
+
+            // ── Name ────────────────────────────────────────────────────
             Text(
               sub.name,
               maxLines: 2,
               overflow: TextOverflow.ellipsis,
-              style: textTheme.displayMedium!.copyWith(
-                color: Colors.white,
+              style: (hasOffer
+                      ? textTheme.displayMedium!
+                      : textTheme.headlineMedium!)
+                  .copyWith(
+                color: hasOffer ? Colors.white : Colors.white.withOpacity(0.9),
                 fontWeight: FontWeight.w600,
                 height: 1.3,
               ),
             ),
-            // Price row
-            Row(
-              crossAxisAlignment: CrossAxisAlignment.baseline,
-              textBaseline: TextBaseline.alphabetic,
-              children: [
-                Text(
-                  "${sub.newPrice} EGP",
-                  style: textTheme.displayLarge!.copyWith(
-                    color: Colors.white,
-                    fontWeight: FontWeight.bold,
-                  ),
-                ),
-                SizedBox(width: screenW * 0.015),
-                Text(
-                  "${sub.oldPrice}",
-                  style: const TextStyle(
+
+            // ── Price row ────────────────────────────────────────────────
+            if (hasOffer)
+              // Offer active: show new price prominently + old price struck
+              Row(
+                crossAxisAlignment: CrossAxisAlignment.baseline,
+                textBaseline: TextBaseline.alphabetic,
+                children: [
+                  Text(
+                    "${sub.newPrice} EGP",
+                    style: textTheme.displayLarge!.copyWith(
                       color: Colors.white,
-                      fontSize: 15,
+                      fontWeight: FontWeight.bold,
+                    ),
+                  ),
+                  SizedBox(width: screenW * 0.015),
+                  Text(
+                    "${sub.oldPrice}",
+                    style: const TextStyle(
+                      color: Colors.white70,
+                      fontSize: 13,
                       decoration: TextDecoration.lineThrough,
-                      decorationColor: Colors.white,
-                      decorationThickness: 1),
+                      decorationColor: Colors.white70,
+                      decorationThickness: 1.2,
+                    ),
+                  ),
+                ],
+              )
+            else
+              // No offer: show price cleanly without any strikethrough
+              Text(
+                "${sub.oldPrice} EGP",
+                style: textTheme.headlineMedium!.copyWith(
+                  color: Colors.white.withOpacity(0.9),
+                  fontWeight: FontWeight.bold,
                 ),
-              ],
-            ),
+              ),
           ],
         ),
       ),

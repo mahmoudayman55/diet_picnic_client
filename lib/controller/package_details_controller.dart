@@ -68,7 +68,7 @@ class PackageDetailsController extends GetxController {
           .toList();
 
       subOffers.assignAll(validSubOffers);
-      subOffers.sort((a, b) => (a.order ?? 0).compareTo(b.order ?? 0));
+      subOffers.sort((a, b) => a.order.compareTo(b.order));
 
     } catch (e) {
       showCustomSnackbar(

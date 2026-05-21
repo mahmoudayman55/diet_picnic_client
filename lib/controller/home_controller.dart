@@ -18,7 +18,6 @@ class HomeController extends GetxController {
   var offers = <OfferModel>[].obs;
   var allSubOffers = <SubOffer>[].obs;
   var isLoadingOffers = false.obs;
-  var isLoadingPackages = false.obs;
   OfferModel? offer;
 
   /// قائمة الريفيوهات
@@ -62,7 +61,6 @@ class HomeController extends GetxController {
     super.onInit();
     UserController.to.restoreUser();
     fetchOffers();
-    fetchPackages();
     fetchReviews();
   }
 
@@ -71,11 +69,15 @@ class HomeController extends GetxController {
     if (allSubOffers.isNotEmpty) allSubOffers.clear();
     isLoadingOffers.value = true;
     try {
-      // جلب كل العروض (بدون فلتر isAvailable) لضمان جلب subOffers الخاصة بالعروض غير المتاحة
-      final offersSnapshot = await firestore.collection('offers').get();
-
-      // جلب كل الـ sub_offers مرة واحدة
-      final subSnapshot = await firestore.collection('sub_offers').get();
+      QuerySnapshot<Map<String, dynamic>> offersSnapshot;
+      QuerySnapshot<Map<String, dynamic>> subSnapshot;
+      try {
+        offersSnapshot = await firestore.collection('offers').get(const GetOptions(source: Source.server));
+        subSnapshot = await firestore.collection('sub_offers').get(const GetOptions(source: Source.server));
+      } catch (_) {
+        offersSnapshot = await firestore.collection('offers').get();
+        subSnapshot = await firestore.collection('sub_offers').get();
+      }
 
       List<OfferModel> loadedOffers = [];
       List<SubOffer> loadedAllSubOffers = [];
@@ -125,54 +127,6 @@ class HomeController extends GetxController {
       );
     } finally {
       isLoadingOffers.value = false;
-    }
-  }
-
-  /// القائمة اللي هتخزن فيها كل الباقات
-  var packages = <PackageModel>[].obs;
-
-  /// دالة جلب الباقات مع الجروبات الخاصة بيها
-  Future<void> fetchPackages() async {
-    log("getting packages");
-    try {
-      isLoadingPackages.value = true;
-      if (packages.isNotEmpty) {
-        packages.clear();
-      }
-
-      final snapshot = await firestore
-          .collection('packages')
-          .where('isAvailable', isEqualTo: true)
-          .get();
-
-      for (final doc in snapshot.docs) {
-        final data = doc.data();
-        final packageId = doc.id;
-
-        // 🟢 هات الجروبات المرتبطة بالباقة
-        final groupSnapshot = await firestore
-            .collection('groups')
-            .where('packageId', isEqualTo: packageId)
-            .get();
-
-        final List<PackageGroup> groups = groupSnapshot.docs.map((groupDoc) {
-          final groupData = groupDoc.data();
-          return PackageGroup.fromJson(groupData);
-        }).toList();
-
-        // 🟢 كون الباقة مع الجروبات
-        final package = PackageModel.fromJson(data, packageId)..groups = groups;
-        packages.add(package);
-      }
-      packages.value.sort((a, b) => a.order.compareTo(b.order));
-    } catch (e) {
-      showCustomSnackbar(
-        title: "خطأ",
-        message: "فشل في جلب الباقات: $e",
-        successful: false,
-      );
-    } finally {
-      isLoadingPackages.value = false;
     }
   }
 }

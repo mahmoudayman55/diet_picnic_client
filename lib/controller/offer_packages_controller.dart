@@ -19,17 +19,19 @@ class OfferPackagesController extends GetxController {
   /// Observables
   var isLoading = false.obs;
   var offerPackages = <PackageModel>[].obs;
+  var currentIndex = 0.obs;
 
   late OfferModel offer;
 
   /// 🟢 Get Packages by IDs
   Future<void> getPackagesByIds() async {
     try {
+      offerPackages.clear();
+      currentIndex.value = 0;
       isLoading.value = true;
 
       // IDs are derived from offer if not passed
       List<String> packageIds = offer.getPackageIds();
-      offerPackages.clear();
       if (packageIds.isEmpty) {
         isLoading.value = false;
         return;
@@ -45,10 +47,18 @@ class OfferPackagesController extends GetxController {
           i + chunkSize > packageIds.length ? packageIds.length : i + chunkSize,
         );
 
-        final snapshot = await firestore
-            .collection('packages')
-            .where(FieldPath.documentId, whereIn: chunk)
-            .get();
+        QuerySnapshot<Map<String, dynamic>> snapshot;
+        try {
+          snapshot = await firestore
+              .collection('packages')
+              .where(FieldPath.documentId, whereIn: chunk)
+              .get(const GetOptions(source: Source.server));
+        } catch (_) {
+          snapshot = await firestore
+              .collection('packages')
+              .where(FieldPath.documentId, whereIn: chunk)
+              .get();
+        }
 
         final fetchedPackages = snapshot.docs
             .map((doc) => PackageModel.fromJson(doc.data(), doc.id))
@@ -62,8 +72,22 @@ class OfferPackagesController extends GetxController {
         for (var pkg in allFetchedPackages) pkg.id: pkg
       }.values.toList();
 
-      offerPackages.addAll(uniquePackages);
-      offerPackages.sort((a, b) => a.order.compareTo(b.order));
+      const typeOrder = {
+        'group': 0,
+        'individual': 1,
+        'consultation': 2,
+      };
+
+      uniquePackages.sort((a, b) {
+        final weightA = typeOrder[a.type] ?? 99;
+        final weightB = typeOrder[b.type] ?? 99;
+        if (weightA != weightB) {
+          return weightA.compareTo(weightB);
+        }
+        return a.order.compareTo(b.order);
+      });
+
+      offerPackages.assignAll(uniquePackages);
       log(offerPackages.length.toString(), name: "OFFERSCHECK");
     } catch (e) {
       showCustomSnackbar(

@@ -1,3 +1,4 @@
+import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:get/get.dart';
@@ -7,10 +8,11 @@ import '../core/custom_colors.dart';
 
 class SubscriptionDialog {
   static void show(BuildContext context, String offerName, Color themeColor) {
+    final bool isDark = Theme.of(context).brightness == Brightness.dark;
     showDialog(
       context: context,
       builder: (context) => AlertDialog(
-        backgroundColor: Colors.white,
+        backgroundColor: isDark ? CustomColors.darkCard : Colors.white,
         shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
         contentPadding: const EdgeInsets.all(0),
         content: Column(
@@ -22,7 +24,7 @@ class SubscriptionDialog {
               width: double.infinity,
               decoration: BoxDecoration(
                 gradient: LinearGradient(
-                  colors: [themeColor, themeColor.withOpacity(0.7)],
+                  colors: [themeColor, themeColor.withOpacity(isDark ? 0.8 : 0.7)],
                   begin: Alignment.topLeft,
                   end: Alignment.bottomRight,
                 ),
@@ -52,9 +54,10 @@ class SubscriptionDialog {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  const Text(
+                  Text(
                     "يمكنك التحويل عبر الوسائل التالية:",
                     style: TextStyle(
+                      color: isDark ? Colors.white.withOpacity(0.9) : CustomColors.textBlack87,
                       fontWeight: FontWeight.bold,
                       fontSize: 14,
                       fontFamily: 'Tajawal',
@@ -81,6 +84,7 @@ class SubscriptionDialog {
                             icon: const Icon(Icons.copy_all, color: Colors.white),
                           );
                         },
+                        isDark,
                       ),
                       _buildPaymentOption(
                         "InstaPay",
@@ -98,22 +102,31 @@ class SubscriptionDialog {
                             );
                           }
                         },
+                        isDark,
                       ),
                     ],
                   ),
                   const SizedBox(height: 24),
-                  const Text(
+                  Text(
                     "اتبع الخطوات التالية:",
                     style: TextStyle(
+                      color: isDark ? Colors.white.withOpacity(0.9) : CustomColors.textBlack87,
                       fontWeight: FontWeight.bold,
                       fontSize: 14,
                       fontFamily: 'Tajawal',
                     ),
                   ),
+
                   const SizedBox(height: 12),
-                  _buildStep(1, "حول المبلغ المطلوب عبر إحدى الوسائل المتاحة.", themeColor),
-                  _buildStep(2, "أرسل صورة التحويل (سكرين شوت) إلى واتساب رقم: ${AppConstants.phoneNumber} مع ذكر اسم العرض ($offerName).", themeColor),
-                  _buildStep(3, "ابدأ بتغيير حياتك مع دايت بيكنك!", themeColor),
+                  _buildStep(1, "حول المبلغ المطلوب عبر إحدى الوسائل المتاحة.", themeColor, isDark),
+                  _buildStep(
+                    2,
+                    "أرسل صورة التحويل (سكرين شوت) إلى واتساب رقم: ${AppConstants.phoneNumber} مع ذكر اسم العرض ($offerName).",
+                    themeColor,
+                    isDark,
+                    onPhoneTap: () => _launchWhatsApp(offerName),
+                  ),
+                  _buildStep(3, "ابدأ بتغيير حياتك مع دايت بيكنك!", themeColor, isDark),
                   const SizedBox(height: 24),
                   SizedBox(
                     width: double.infinity,
@@ -147,7 +160,7 @@ class SubscriptionDialog {
     );
   }
 
-  static Widget _buildPaymentOption(String name, String imagePath, VoidCallback onTap) {
+  static Widget _buildPaymentOption(String name, String imagePath, VoidCallback onTap, bool isDark) {
     return GestureDetector(
       onTap: onTap,
       child: Column(
@@ -157,23 +170,24 @@ class SubscriptionDialog {
             height: 60,
             padding: const EdgeInsets.all(8),
             decoration: BoxDecoration(
-              color: Colors.white,
+              color: isDark ? const Color(0xFF333333) : Colors.white,
               borderRadius: BorderRadius.circular(12),
               boxShadow: [
                 BoxShadow(
-                  color: Colors.black.withOpacity(0.05),
+                  color: isDark ? Colors.black.withOpacity(0.2) : Colors.black.withOpacity(0.05),
                   blurRadius: 5,
                   offset: const Offset(0, 2),
                 ),
               ],
-              border: Border.all(color: Colors.grey.shade100),
+              border: Border.all(color: isDark ? Colors.transparent : Colors.grey.shade100),
             ),
             child: Image.asset(imagePath, fit: BoxFit.contain),
           ),
           const SizedBox(height: 8),
           Text(
             name,
-            style: const TextStyle(
+            style: TextStyle(
+              color: isDark ? Colors.white.withOpacity(0.9) : CustomColors.textBlack87,
               fontSize: 12,
               fontWeight: FontWeight.bold,
               fontFamily: 'Tajawal',
@@ -184,7 +198,7 @@ class SubscriptionDialog {
     );
   }
 
-  static Widget _buildStep(int number, String text, Color themeColor) {
+  static Widget _buildStep(int number, String text, Color themeColor, bool isDark, {VoidCallback? onPhoneTap}) {
     return Padding(
       padding: const EdgeInsets.only(bottom: 12),
       child: Row(
@@ -209,18 +223,56 @@ class SubscriptionDialog {
           ),
           const SizedBox(width: 12),
           Expanded(
-            child: Text(
-              text,
-              style: const TextStyle(
-                fontSize: 13,
-                height: 1.4,
-                fontFamily: 'Tajawal',
-              ),
-            ),
+            child: onPhoneTap != null && text.contains(AppConstants.phoneNumber)
+                ? RichText(
+                    text: TextSpan(
+                      style: TextStyle(
+                        color: isDark ? Colors.white.withOpacity(0.85) : CustomColors.textBlack87,
+                        fontSize: 13,
+                        height: 1.4,
+                        fontFamily: 'Tajawal',
+                      ),
+                      children: _buildTextSpansWithClickablePhone(text, AppConstants.phoneNumber, themeColor, onPhoneTap),
+                    ),
+                  )
+                : Text(
+                    text,
+                    style: TextStyle(
+                      color: isDark ? Colors.white.withOpacity(0.85) : CustomColors.textBlack87,
+                      fontSize: 13,
+                      height: 1.4,
+                      fontFamily: 'Tajawal',
+                    ),
+                  ),
           ),
         ],
       ),
     );
+  }
+
+  static List<InlineSpan> _buildTextSpansWithClickablePhone(
+      String text, String phoneNumber, Color themeColor, VoidCallback onTap) {
+    final parts = text.split(phoneNumber);
+    final List<InlineSpan> spans = [];
+
+    for (int i = 0; i < parts.length; i++) {
+      spans.add(TextSpan(text: parts[i]));
+      if (i < parts.length - 1) {
+        spans.add(
+          TextSpan(
+            text: phoneNumber,
+            style: TextStyle(
+              color: themeColor,
+              fontWeight: FontWeight.bold,
+              decoration: TextDecoration.underline,
+              decorationColor: themeColor,
+            ),
+            recognizer: TapGestureRecognizer()..onTap = onTap,
+          ),
+        );
+      }
+    }
+    return spans;
   }
 
   static void _launchWhatsApp(String offerName) async {

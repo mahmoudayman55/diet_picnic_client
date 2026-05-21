@@ -11,6 +11,7 @@ import 'package:diet_picnic_client/controller/offer_details_controller.dart';
 import 'package:diet_picnic_client/controller/offer_packages_controller.dart';
 import 'package:diet_picnic_client/controller/on_boarding_controller.dart';
 import 'package:diet_picnic_client/controller/package_details_controller.dart';
+import 'package:diet_picnic_client/controller/package_type_controller.dart';
 import 'package:diet_picnic_client/controller/register_controller.dart';
 import 'package:diet_picnic_client/controller/user_controller.dart';
 import 'package:diet_picnic_client/controller/videos_controller.dart';
@@ -210,6 +211,9 @@ class GetRoutes {
     ),
     GetPage(
       name: AppConstants.packageTypePage,
+      binding: BindingsBuilder(() {
+        Get.put(PackageTypeController());
+      }),
       page: () => const PackageTypeView(),
     ),
   ];

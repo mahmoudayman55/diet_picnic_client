@@ -37,9 +37,15 @@ Future<void> main() async {
   //   WindowManager.instance.setMinimumSize(const Size(800, 800));
   //   WindowManager.instance.setMaximumSize(const Size(800, 800));
   // }
-  await Firebase.initializeApp(
-    options: DefaultFirebaseOptions.currentPlatform,
-  );
+  try {
+    if (Firebase.apps.isEmpty) {
+      await Firebase.initializeApp(
+        options: DefaultFirebaseOptions.currentPlatform,
+      );
+    }
+  } on FirebaseException catch (e) {
+    if (e.code != 'duplicate-app') rethrow;
+  }
   await UserStorage.init();
 
   // Initialize notification service

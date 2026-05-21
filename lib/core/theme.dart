@@ -121,6 +121,12 @@ class Themes {
       fontSize: 12.0.sp,
       color: CustomColors.textBlack,
     ),
+    headlineSmall: TextStyle(
+      fontFamily: AppConstants.fontFamily,
+      fontWeight: FontWeight.w500,
+      fontSize: 12.0.sp,
+      color: CustomColors.textBlack,
+    ),
     displayLarge: TextStyle(
       fontFamily: AppConstants.fontFamily,
       fontWeight: FontWeight.w600,
